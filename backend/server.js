@@ -351,6 +351,53 @@ app.get("/orders/:email", async (req, res) => {
   res.json(await Order.find({ userEmail: req.params.email }));
 });
 
+/* ================= REVIEWS ================= */
+
+// GET REVIEWS FOR A PRODUCT
+app.get("/reviews/:productId", async (req, res) => {
+  try {
+    const reviews = await Review.find({ productId: req.params.productId }).sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch reviews" });
+  }
+});
+
+// POST A NEW REVIEW
+app.post("/reviews", upload.array("images", 5), async (req, res) => {
+  try {
+    const { productId, userEmail, userName, rating, comment } = req.body;
+    
+    // Save images if any
+    const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+
+    // Create review
+    const review = await Review.create({
+      productId,
+      userEmail,
+      userName,
+      rating: Number(rating),
+      comment,
+      images
+    });
+
+    // Update Product averageRating and ratingCount
+    const allReviews = await Review.find({ productId });
+    const count = allReviews.length;
+    const avg = allReviews.reduce((sum, r) => sum + r.rating, 0) / count;
+
+    await Product.findByIdAndUpdate(productId, {
+      averageRating: avg,
+      ratingCount: count
+    });
+
+    res.json(review);
+  } catch (err) {
+    console.error("Review Error:", err);
+    res.status(500).json({ message: "Failed to submit review" });
+  }
+});
+
 /* ================= SUPPORT ================= */
 
 // SUBMIT SUPPORT REQUEST

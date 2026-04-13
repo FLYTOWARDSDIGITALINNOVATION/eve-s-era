@@ -35,13 +35,15 @@ const RemoveProductPage = () => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
 
         try {
+            const token = localStorage.getItem("token");
             const res = await fetch(`http://localhost:5000/admin/product/${productId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                    "user-email": user.email // Sending email in header for auth check
+                    "Authorization": `Bearer ${token}`,
+                    "user-email": user.email // Keeping for backward compatibility
                 },
-                body: JSON.stringify({ email: user.email }) // Double safety matching backend logic
+                body: JSON.stringify({ email: user.email })
             });
 
             if (res.ok) {

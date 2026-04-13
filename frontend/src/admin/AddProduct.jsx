@@ -22,6 +22,7 @@ const AddProduct = () => {
   }, []);
 
   const handleSubmit = async () => {
+    const token = localStorage.getItem("token");
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("category", form.category);
@@ -32,11 +33,14 @@ const AddProduct = () => {
 
     const res = await fetch("http://localhost:5000/admin/product", {
       method: "POST",
-      body: formData, // ❌ NO headers
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData,
     });
 
     const data = await res.json();
-    alert(data.message);
+    alert(data.message || "Product added successfully!");
   };
 
   return (
