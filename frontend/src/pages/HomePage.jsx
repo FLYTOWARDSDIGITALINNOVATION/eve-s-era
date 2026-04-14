@@ -1,8 +1,8 @@
-
 import Header from "../components/Header";
 import FlashSaleBar from "../components/FlashSaleBar";
 import Hero from "../components/Hero";
 import ProductCard from "../components/ProductCard";
+import Footer from "../components/Footer";
 import { FaStar } from "react-icons/fa";
 import "./HomePage.css";
 import React, { useState, useEffect } from "react";
@@ -141,6 +141,7 @@ useEffect(() => {
           </div>
         </main>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaCloudUploadAlt, FaTimes, FaArrowLeft, FaPaperPlane, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 import "./CustomerService.css";
 
 const CustomerService = () => {
@@ -212,6 +213,7 @@ const CustomerService = () => {
                     )}
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

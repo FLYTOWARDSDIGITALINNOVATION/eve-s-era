@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
+import Footer from "../components/Footer";
 import {
   FaUserCircle, FaBoxOpen, FaMapMarkerAlt,
   FaSignOutAlt, FaEdit, FaPlus,
@@ -272,6 +273,7 @@ const Profile = () => {
 
         </main>
       </div>
+      <Footer />
     </div>
   );
 };

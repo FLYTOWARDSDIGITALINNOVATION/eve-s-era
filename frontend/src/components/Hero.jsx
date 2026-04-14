@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import fashionHero from "../assets/hero_fashion_white-removebg-preview.png";
-import heroMens from "../assets/hero_mens_white-removebg-preview.png";
-import heroKids from "../assets/hero_kids_white-removebg-preview.png";
-import heroShoes from "../assets/hero_shoes_white-removebg-preview.png";
-import heroWatch from "../assets/hero_watch_white-removebg-preview.png";
+import tshirt1 from "../assets/tshirt1.png";
+import tshirt2 from "../assets/tshirt2.png";
+import tshirt3 from "../assets/tshirt3.png";
+import tshirt4 from "../assets/tshirt4.png";
 import "./hero.css";
 
 const slides = [
-  { id: 1, img: fashionHero, title: "Perfect Style", subtitle: "New Trends", discount: "Up to 50% OFF" },
-  { id: 2, img: heroMens, title: "Urban Streetwear", subtitle: "Cool & Casual", discount: "New Arrivals" },
-  { id: 3, img: heroKids, title: "Kids Collection", subtitle: "Playful Styles", discount: "Flat 20% OFF" },
-  { id: 4, img: heroShoes, title: "Premium Footwear", subtitle: "Run in Style", discount: "Best Sellers" },
-  { id: 5, img: heroWatch, title: "Luxury Timepieces", subtitle: "Classic Elegance", discount: "Exclusive Deals" }
+  { id: 1, img: tshirt1, title: "Classic Comfort", subtitle: "Round Neck Series", discount: "Premium Quality" },
+  { id: 2, img: tshirt2, title: "Urban Edge", subtitle: "Oversized Fit", discount: "New Collection" },
+  { id: 3, img: tshirt3, title: "Signature Style", subtitle: "Polo Essentials", discount: "Timeless Design" },
+  { id: 4, img: tshirt4, title: "Daily Minimal", subtitle: "Essential Wear", discount: "Best Sellers" }
 ];
 
 function Hero() {

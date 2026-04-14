@@ -86,20 +86,40 @@
 
 /* Logo */
 .logo-brand {
-  font-size: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 22px; /* Slightly reduced */
   font-weight: 800;
-  color: var(--white);
-  background: var(--primary-dark);
-  padding: 3px 9px;
-  border-radius: 8px;
+  color: #000000; /* Black text */
+  background: #ffffff; /* White box */
+  padding: 6px 18px; /* Reduced vertical padding */
+  border-radius: 12px; /* Slightly tighter radius */
   text-decoration: none;
   letter-spacing: -0.5px;
-  box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.3);
-  transition: transform 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Softer shadow */
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.brand-logo-img {
+  height: 28px; /* Reduced from 38px to fix 'oversized' look */
+  width: auto;
+  mix-blend-mode: multiply; 
+  transition: transform 0.3s ease;
+  display: block; /* Ensure no baseline gaps */
 }
 
 .logo-brand:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.logo-brand:hover .brand-logo-img {
+  transform: rotate(-10deg) scale(1.1);
+}
+
+.logo-brand:hover .brand-logo-img {
+  transform: rotate(-10deg) scale(1.1);
 }
 
 /* Search Bar */

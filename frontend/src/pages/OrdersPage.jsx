@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaStar, FaBoxOpen, FaArrowLeft, FaCheck } from "react-icons/fa";
+import Footer from "../components/Footer";
 import "./OrdersPage.css";
 
 const OrdersPage = () => {
@@ -92,125 +93,128 @@ const OrdersPage = () => {
     const stages = ["Ordered", "Shipped", "Delivered"];
 
     return (
-        <div className="orders-container">
-            {/* BACK BUTTON */}
-            <button className="back-home-btn" onClick={() => navigate("/home")}>
-                <FaArrowLeft /> Back to Shop
-            </button>
+        <div className="orders-page-wrapper">
+            <div className="orders-container">
+                {/* BACK BUTTON */}
+                <button className="back-home-btn" onClick={() => navigate("/home")}>
+                    <FaArrowLeft /> Back to Shop
+                </button>
 
-            <h2 className="orders-heading">My Orders</h2>
+                <h2 className="orders-heading">My Orders</h2>
 
-            {orders.length === 0 ? (
-                <div className="empty-state">
-                    <FaBoxOpen size={50} />
-                    <h3>No orders found</h3>
-                    <p>You haven't purchased anything yet.</p>
-                </div>
-            ) : (
-                <div className="orders-list">
-                    {orders.map((order) => {
-                        const currentStageIndex = stages.indexOf(order.status || "Ordered");
-                        return (
-                            <div key={order._id} className="order-card">
-                                <div className="order-header">
-                                    <span>Ordered on {new Date(order.createdAt).toLocaleDateString()}</span>
-                                    <span>Order ID: {order._id.slice(-6).toUpperCase()}</span>
-                                </div>
+                {orders.length === 0 ? (
+                    <div className="empty-state">
+                        <FaBoxOpen size={50} />
+                        <h3>No orders found</h3>
+                        <p>You haven't purchased anything yet.</p>
+                    </div>
+                ) : (
+                    <div className="orders-list">
+                        {orders.map((order) => {
+                            const currentStageIndex = stages.indexOf(order.status || "Ordered");
+                            return (
+                                <div key={order._id} className="order-card">
+                                    <div className="order-header">
+                                        <span>Ordered on {new Date(order.createdAt).toLocaleDateString()}</span>
+                                        <span>Order ID: {order._id.slice(-6).toUpperCase()}</span>
+                                    </div>
 
-                                {/* Visual Stepper */}
-                                <div className="order-stepper">
-                                    {stages.map((stage, index) => (
-                                        <div key={stage} className={`step ${index <= currentStageIndex ? "active completed" : ""}`}>
-                                            <div className="step-circle">
-                                                {index < currentStageIndex ? <FaCheck size={12}/> : index + 1}
+                                    {/* Visual Stepper */}
+                                    <div className="order-stepper">
+                                        {stages.map((stage, index) => (
+                                            <div key={stage} className={`step ${index <= currentStageIndex ? "active completed" : ""}`}>
+                                                <div className="step-circle">
+                                                    {index < currentStageIndex ? <FaCheck size={12}/> : index + 1}
+                                                </div>
+                                                <div className="step-label">{stage}</div>
+                                                {index < stages.length - 1 && <div className="step-line"></div>}
                                             </div>
-                                            <div className="step-label">{stage}</div>
-                                            {index < stages.length - 1 && <div className="step-line"></div>}
+                                        ))}
+                                    </div>
+
+                                    <div className="order-details">
+                                        <div className="product-info">
+                                            <span className="product-name">{order.productName}</span>
+                                            <span className="product-qty">Quantity: {order.quantity}</span>
+                                            <div className="order-dates">
+                                                {order.shippedAt && (
+                                                    <span className="date-info shipped">
+                                                        Shipped: {new Date(order.shippedAt).toLocaleDateString()}
+                                                    </span>
+                                                )}
+                                                {order.deliveredAt && (
+                                                    <span className="date-info delivered">
+                                                        Delivered: {new Date(order.deliveredAt).toLocaleDateString()}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
-                                    ))}
-                                </div>
+                                        <div className="order-meta">
+                                            <div className="order-price">₹{order.price}</div>
+                                            <span className={`order-status status-${order.status?.toLowerCase() || 'ordered'}`}>
+                                                {order.status || "Ordered"}
+                                            </span>
+                                        </div>
+                                    </div>
 
-                                <div className="order-details">
-                                    <div className="product-info">
-                                        <span className="product-name">{order.productName}</span>
-                                        <span className="product-qty">Quantity: {order.quantity}</span>
-                                        <div className="order-dates">
-                                            {order.shippedAt && (
-                                                <span className="date-info shipped">
-                                                    Shipped: {new Date(order.shippedAt).toLocaleDateString()}
-                                                </span>
+                                    <div className="order-actions">
+                                        <button className="rate-btn" onClick={() => handleOpenModal(order)}>
+                                            <FaStar /> Rate & Review
+                                        </button>
+
+                                        <div className="demo-controls">
+                                            {order.status === "Ordered" && (
+                                                <button className="demo-btn ship" onClick={() => updateOrderStatus(order._id, "Shipped")}>
+                                                    Ship Item
+                                                </button>
                                             )}
-                                            {order.deliveredAt && (
-                                                <span className="date-info delivered">
-                                                    Delivered: {new Date(order.deliveredAt).toLocaleDateString()}
-                                                </span>
+                                            {order.status === "Shipped" && (
+                                                <button className="demo-btn deliver" onClick={() => updateOrderStatus(order._id, "Delivered")}>
+                                                    Mark Delivered
+                                                </button>
                                             )}
                                         </div>
                                     </div>
-                                    <div className="order-meta">
-                                        <div className="order-price">₹{order.price}</div>
-                                        <span className={`order-status status-${order.status?.toLowerCase() || 'ordered'}`}>
-                                            {order.status || "Ordered"}
-                                        </span>
-                                    </div>
                                 </div>
+                            );
+                        })}
+                    </div>
+                )}
 
-                                <div className="order-actions">
-                                    <button className="rate-btn" onClick={() => handleOpenModal(order)}>
-                                        <FaStar /> Rate & Review
-                                    </button>
-
-                                    <div className="demo-controls">
-                                        {order.status === "Ordered" && (
-                                            <button className="demo-btn ship" onClick={() => updateOrderStatus(order._id, "Shipped")}>
-                                                Ship Item
-                                            </button>
-                                        )}
-                                        {order.status === "Shipped" && (
-                                            <button className="demo-btn deliver" onClick={() => updateOrderStatus(order._id, "Delivered")}>
-                                                Mark Delivered
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
+                {/* Review Modal */}
+                {selectedOrder && (
+                    <div className="modal-overlay" onClick={handleCloseModal}>
+                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                            <h3 className="modal-title">Rate {selectedOrder.productName}</h3>
+                            <div className="star-rating">
+                                {[...Array(5)].map((_, index) => {
+                                    const val = index + 1;
+                                    return (
+                                        <FaStar
+                                            key={index}
+                                            className={`star-icon ${val <= (hover || rating) ? "filled" : ""}`}
+                                            onClick={() => setRating(val)}
+                                            onMouseEnter={() => setHover(val)}
+                                            onMouseLeave={() => setHover(null)}
+                                        />
+                                    );
+                                })}
                             </div>
-                        );
-                    })}
-                </div>
-            )}
-
-            {/* Review Modal */}
-            {selectedOrder && (
-                <div className="modal-overlay" onClick={handleCloseModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h3 className="modal-title">Rate {selectedOrder.productName}</h3>
-                        <div className="star-rating">
-                            {[...Array(5)].map((_, index) => {
-                                const val = index + 1;
-                                return (
-                                    <FaStar
-                                        key={index}
-                                        className={`star-icon ${val <= (hover || rating) ? "filled" : ""}`}
-                                        onClick={() => setRating(val)}
-                                        onMouseEnter={() => setHover(val)}
-                                        onMouseLeave={() => setHover(null)}
-                                    />
-                                );
-                            })}
-                        </div>
-                        <textarea
-                            className="review-input"
-                            placeholder="How was your experience with this product?"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                        />
-                        <div className="modal-actions">
-                            <button className="cancel-btn" onClick={handleCloseModal}>Cancel</button>
-                            <button className="submit-btn" onClick={handleSubmitReview}>Submit</button>
+                            <textarea
+                                className="review-input"
+                                placeholder="How was your experience with this product?"
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                            />
+                            <div className="modal-actions">
+                                <button className="cancel-btn" onClick={handleCloseModal}>Cancel</button>
+                                <button className="submit-btn" onClick={handleSubmitReview}>Submit</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
+            <Footer />
         </div>
     );
 };

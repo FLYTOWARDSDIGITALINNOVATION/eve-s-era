@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
 import ProductCard from '../components/ProductCard';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { ChevronLeft } from "lucide-react"; 
 import './WishlistPage.css';
 
@@ -51,6 +52,7 @@ const WishlistPage = () => {
           </>
         )}
       </main>
+      <Footer />
     </div>
   );
 };

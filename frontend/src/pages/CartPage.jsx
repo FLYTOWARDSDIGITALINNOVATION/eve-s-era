@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { Trash2, ChevronLeft } from "lucide-react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "./CartPage.css";
 
 const CartPage = () => {
@@ -135,9 +136,9 @@ const CartPage = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };
 
 export default CartPage;
-

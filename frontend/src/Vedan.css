@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@400;600&display=swap');
 
 :root {
-  --primary: #7c3aed; /* Exact Figma Purple */
-  --primary-hover: #6d28d9;
+  --primary: #000000; /* VEDAN Black */
+  --primary-hover: #222222;
+  --accent: #8b3dff;
   --bg-light: #f8fafc;
-  --text-dark: #1e293b;
+  --text-dark: #0f172a;
   --text-muted: #64748b;
   --white: #ffffff;
   --border: #e2e8f0;

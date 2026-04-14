@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { FaStar, FaShoppingCart, FaArrowLeft } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import "./ProductDetailPage.css";
@@ -296,6 +297,7 @@ const ProductDetailPage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
