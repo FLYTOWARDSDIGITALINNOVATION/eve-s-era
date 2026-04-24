@@ -227,63 +227,145 @@ app.listen(5000, () => console.log("Server running on port 5000"));
 
 // SIGNUP
 app.post("/signup", async (req, res) => {
-  const { name, email, password } = req.body;
-  const hashed = await bcrypt.hash(password, 10);
-  await User.create({ name, email, password: hashed });
-  res.json({ message: "Signup successful" });
+  try {
+    const { name, email, password } = req.body;
+    const hashed = await bcrypt.hash(password, 10);
+    await User.create({ name, email, password: hashed });
+    res.json({ message: "Signup successful" });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+    console.error("Signup Error:", err);
+    res.status(500).json({ message: "Signup failed" });
+  }
 });
 
 // LOGIN
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
-  if (!user) return res.status(401).json({ message: "Invalid credentials" });
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
-  const token = jwt.sign(
-    { id: user._id, isAdmin: user.isAdmin },
-    "SECRET_KEY",
-    { expiresIn: "1d" }
-  );
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      "SECRET_KEY",
+      { expiresIn: "1d" }
+    );
 
-  res.json({
-    token,
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    },
-  });
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
+    });
+  } catch (err) {
+    console.error("Login Error:", err);
+    res.status(500).json({ message: "Login failed" });
+  }
+});
+
+/* ================= CART ================= */
+
+app.get("/cart/:email", async (req, res) => {
+  try {
+    const cart = await Cart.find({ userEmail: req.params.email });
+    res.json(cart);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch cart" });
+  }
+});
+
+app.post("/cart", async (req, res) => {
+  try {
+    const { userEmail, productId, name, price, img, qty } = req.body;
+    
+    let item = await Cart.findOne({ userEmail, productId });
+    if (item) {
+      item.qty += qty;
+      await item.save();
+    } else {
+      item = await Cart.create({ userEmail, productId, name, price, img, qty });
+    }
+    res.json(item);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to add to cart" });
+  }
+});
+
+app.post("/cart/update-qty", async (req, res) => {
+  try {
+    const { userEmail, productId, qty } = req.body;
+    await Cart.findOneAndUpdate({ userEmail, productId }, { qty });
+    res.json({ message: "Quantity updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update quantity" });
+  }
+});
+
+app.delete("/cart/:email/:productId", async (req, res) => {
+  try {
+    await Cart.findOneAndDelete({ 
+      userEmail: req.params.email, 
+      productId: req.params.productId 
+    });
+    res.json({ message: "Item removed from cart" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to remove from cart" });
+  }
 });
 
 /* ================= ADMIN ================= */
 
 // CATEGORY
 app.post("/admin/category", verifyAdmin, async (req, res) => {
-  const category = await Category.create({ name: req.body.name });
-  res.json(category);
+  try {
+    const category = await Category.create({ name: req.body.name });
+    res.json(category);
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "Category already exists" });
+    }
+    res.status(500).json({ message: "Failed to create category" });
+  }
 });
 
 app.get("/categories", async (req, res) => {
-  res.json(await Category.find());
+  try {
+    res.json(await Category.find());
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch categories" });
+  }
 });
 
 // PRODUCT
 app.post("/admin/product", verifyAdmin, upload.single("image"), async (req, res) => {
-  const product = await Product.create({
-    ...req.body,
-    image: req.file ? `/uploads/${req.file.filename}` : "",
-  });
-  res.json(product);
+  try {
+    const product = await Product.create({
+      ...req.body,
+      image: req.file ? `/uploads/${req.file.filename}` : "",
+    });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to create product" });
+  }
 });
 
 app.delete("/admin/product/:id", verifyAdmin, async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
-  res.json({ message: "Product deleted" });
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ message: "Product deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete product" });
+  }
 });
 
 // ✅ ADMIN ORDERS (ALL ORDERS, NO LIMIT)
