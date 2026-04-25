@@ -248,9 +248,11 @@
 
 .cat-links {
   display: flex;
-  gap: 30px;
+  gap: 15px;
   overflow-x: auto;
   scrollbar-width: none;
+  padding: 5px 0;
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
 }
 
 .cat-links::-webkit-scrollbar {
@@ -260,49 +262,60 @@
 .cat-item {
   text-decoration: none;
   color: var(--text-dark);
-  font-size: 14px;
+  font-size: 13px; /* Slightly smaller font */
   font-weight: 600;
   white-space: nowrap;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 4px 8px;
-  border-radius: 12px;
+  padding: 4px 14px 4px 4px; /* Reduced vertical padding */
+  border-radius: 100px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  height: 38px; /* Fixed height to fit well in 48px container */
 }
 
 .cat-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  font-size: 20px;
-  background: linear-gradient(135deg, #ffffff, #f3f4f6);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.05),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+  width: 30px; /* Reduced from 42px */
+  height: 30px; /* Reduced from 42px */
+  border-radius: 50%;
+  font-size: 16px; /* Slightly smaller icon */
+  background: #fff;
+  box-shadow: 
+    0 2px 5px rgba(0, 0, 0, 0.05);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   position: relative;
-  overflow: hidden;
+  z-index: 1;
 }
 
-/* Category Specific Vibrancy */
+/* Category Specific Themes & Hover */
 .cat-item:hover {
+  background: #fff;
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.1);
+  transform: translateY(-2px);
   color: var(--primary-dark);
-  background: rgba(124, 58, 237, 0.05);
 }
 
 .cat-item:hover .cat-icon-wrapper {
-  transform: translateY(-4px) scale(1.1) rotate(-3deg);
-  box-shadow:
-    0 8px 15px rgba(124, 58, 237, 0.2),
-    0 4px 6px rgba(124, 58, 237, 0.1);
-  border-color: var(--primary-color);
-  background: white;
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
+
+/* Specific Category Color Pulses */
+.cat-icon-wrapper.men { background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #2563eb; }
+.cat-icon-wrapper.women { background: linear-gradient(135deg, #fdf2f8, #fce7f3); color: #db2777; }
+.cat-icon-wrapper.kids { background: linear-gradient(135deg, #f0fdf4, #dcfce7); color: #16a34a; }
+.cat-icon-wrapper.tshirt { background: linear-gradient(135deg, #f5f3ff, #ede9fe); color: #7c3aed; }
+.cat-icon-wrapper.polo-tshirt { background: linear-gradient(135deg, #fff7ed, #ffedd5); color: #ea580c; }
+.cat-icon-wrapper.rount-neck { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); color: #0284c7; }
+.cat-icon-wrapper.oversized-t-shirts { background: linear-gradient(135deg, #fff1f2, #ffe4e6); color: #e11d48; }
+.cat-icon-wrapper.sale { background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #dc2626; }
 
 /* Mobile Responsiveness */
 .mobile-toggle {
