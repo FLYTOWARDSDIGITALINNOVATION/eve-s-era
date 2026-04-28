@@ -71,7 +71,7 @@ const AddProduct = () => {
 
         <input
           type="number"
-          placeholder="Price"
+          placeholder="Price (₹)"
           onChange={(e) => setForm({ ...form, price: e.target.value })}
         />
 

@@ -368,6 +368,19 @@ app.delete("/admin/product/:id", verifyAdmin, async (req, res) => {
   }
 });
 
+app.put("/admin/product/:id", verifyAdmin, upload.single("image"), async (req, res) => {
+  try {
+    const updateData = { ...req.body };
+    if (req.file) {
+      updateData.image = `/uploads/${req.file.filename}`;
+    }
+    const product = await Product.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update product" });
+  }
+});
+
 // ✅ ADMIN ORDERS (ALL ORDERS, NO LIMIT)
 app.get("/admin/orders", verifyAdmin, async (req, res) => {
   try {
@@ -400,9 +413,15 @@ app.put("/admin/orders/:id", verifyAdmin, async (req, res) => {
 
 // PRODUCTS
 app.get("/products", async (req, res) => res.json(await Product.find()));
-app.get("/products/:id", async (req, res) =>
-  res.json(await Product.findById(req.params.id))
-);
+app.get("/products/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Invalid product ID or server error" });
+  }
+});
 // PRODUCTS BY CATEGORY
 app.get("/products/category/:category", async (req, res) => {
   try {

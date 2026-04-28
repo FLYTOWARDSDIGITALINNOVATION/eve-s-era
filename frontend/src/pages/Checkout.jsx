@@ -175,7 +175,7 @@ const Checkout = () => {
                   <div className="method-details">
                     <span className="method-title">Express Shipping <span className="method-time">2-3 business days</span></span>
                   </div>
-                  <span className="method-price">$9.99</span>
+                  <span className="method-price">₹9.99</span>
                 </label>
 
                 <label className={`method-option ${selectedShipping === 'overnight' ? 'active' : ''}`}>
@@ -189,7 +189,7 @@ const Checkout = () => {
                   <div className="method-details">
                     <span className="method-title">Overnight Shipping <span className="method-time">Next business day</span></span>
                   </div>
-                  <span className="method-price">$24.99</span>
+                  <span className="method-price">₹24.99</span>
                 </label>
               </div>
             </section>
@@ -317,7 +317,7 @@ const Checkout = () => {
                     <div className="sp-details">
                       <p className="sp-name">{item.name}</p>
                       <p className="sp-qty">Qty: {item.qty}</p>
-                      <p className="sp-price">${item.price.toFixed(2)}</p>
+                      <p className="sp-price">₹{item.price.toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
@@ -326,22 +326,22 @@ const Checkout = () => {
               <div className="summary-totals">
                 <div className="total-row">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>₹{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="total-row">
                   <span>Shipping</span>
                   <span className={shippingCost === 0 ? "free" : ""}>
-                    {shippingCost === 0 ? "FREE" : `$${shippingCost.toFixed(2)}`}
+                    {shippingCost === 0 ? "FREE" : `₹${shippingCost.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="total-row">
                   <span>Tax (8%)</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>₹{tax.toFixed(2)}</span>
                 </div>
                 <hr />
                 <div className="total-row final">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>₹{total.toFixed(2)}</span>
                 </div>
               </div>
 

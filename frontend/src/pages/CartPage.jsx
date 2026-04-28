@@ -92,7 +92,7 @@ const CartPage = () => {
                         </div>
 
                         <span className="current-price">
-                          ${(Number(item.unitPrice || item.price) * Number(item.qty)).toFixed(2)}
+                          ₹{(Number(item.unitPrice || item.price) * Number(item.qty)).toFixed(2)}
                         </span>
 
 
@@ -110,19 +110,19 @@ const CartPage = () => {
 
                 <div className="summary-row">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>₹{subtotal.toFixed(2)}</span>
                 </div>
 
                 <div className="summary-row">
                   <span>Tax</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>₹{tax.toFixed(2)}</span>
                 </div>
 
                 <hr />
 
                 <div className="summary-row total">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>₹{total.toFixed(2)}</span>
                 </div>
 
                 <button

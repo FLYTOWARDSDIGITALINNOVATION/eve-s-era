@@ -147,7 +147,7 @@ const AdminOrdersPage = () => {
                       </td>
                       <td>{o.productName || 'Unknown Product'}</td>
                       <td>{o.quantity || 0}</td>
-                      <td>${o.price || 0}</td>
+                      <td>₹{o.price || 0}</td>
                       <td>{o.createdAt ? new Date(o.createdAt).toLocaleString() : 'N/A'}</td>
                       <td>
                         <select

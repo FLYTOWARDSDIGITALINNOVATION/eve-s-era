@@ -124,6 +124,30 @@
     font-weight: 600;
 }
 
+.rp-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.rp-edit-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #e0e7ff;
+    color: #4f46e5;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rp-edit-btn:hover {
+    background: #c7d2fe;
+    transform: translateY(-1px);
+}
+
 .rp-delete-btn {
     display: flex;
     align-items: center;

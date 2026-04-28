@@ -17,6 +17,7 @@ import AddProduct from "./admin/AddProduct";
 import RemoveProductPage from "./admin/RemoveProductPage";
 import AdminOrdersPage from "./admin/AdminOrdersPage";
 import AdminSupportPage from "./admin/AdminSupportPage"; // ✅ Import Admin Support
+import EditProduct from "./admin/EditProduct"; // ✅ Import Edit Product
 import OrdersPage from "./pages/OrdersPage"; // ✅ Import Orders Page
 import CustomerService from "./pages/CustomerService"; // ✅ Import Customer Service Page
 import Profile from "./pages/Profile";
@@ -44,7 +45,7 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/add-category" element={<AddCategory />} />
             <Route path="/admin/add-product" element={<AddProduct />} />
-            <Route path="/admin/remove-product" element={<RemoveProductPage />} />
+            <Route path="/admin/edit-product/:id" element={<EditProduct />} />
             <Route path="/admin/remove-product" element={<RemoveProductPage />} />
             <Route path="/admin/orders" element={<AdminOrdersPage />} />
             <Route path="/admin/support" element={<AdminSupportPage />} />

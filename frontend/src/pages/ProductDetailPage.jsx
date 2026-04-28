@@ -166,7 +166,7 @@ const ProductDetailPage = () => {
             </div>
 
             <div className="detail-price">
-              <span className="price">${product.price}</span>
+              <span className="price">₹{product.price}</span>
             </div>
 
             <p className="detail-description">
