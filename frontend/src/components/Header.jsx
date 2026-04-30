@@ -47,10 +47,7 @@ const Header = ({ onSearch }) => {
       <div className="top-banner">
         <div className="container banner-flex">
           <div className="delivery-loc">
-            <FaMapMarkerAlt className="loc-icon" />
-            <span>
-              Deliver to: <strong>New York 10001</strong>
-            </span>
+            {/* Delivery info removed */}
           </div>
           <div className="top-links">
             <Link to="/customer-service">Customer Service</Link>
@@ -176,5 +173,3 @@ const Header = ({ onSearch }) => {
 };
 
 export default Header;
-
-
