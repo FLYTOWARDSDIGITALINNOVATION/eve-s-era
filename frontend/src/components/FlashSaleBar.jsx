@@ -8,12 +8,12 @@ const FlashSaleBar = () => {
             <div className="container flash-content">
                 <div className="flash-item">
                     <FaBolt />
-                    <span>Flash Sale: Up to 70% OFF on Fashion</span>
+                    <span>Flash Sale: Exclusive Deals are Live - Shop Now!</span>
                 </div>
                 <div className="divider">|</div>
                 <div className="flash-item">
                     <FaTruck />
-                    <span>Free Shipping on Orders Over $50</span>
+                    <span>Free Shipping</span>
                 </div>
                 <div className="divider">|</div>
                 <div className="flash-item">

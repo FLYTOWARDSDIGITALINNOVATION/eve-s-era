@@ -47,14 +47,12 @@ const Footer = () => {
                     <FaTruck className="trust-icon" />
                     <div className="trust-text">
                         <h6>Free Shipping</h6>
-                        <p>On orders above ₹999</p>
                     </div>
                 </div>
                 <div className="trust-item">
                     <FaSyncAlt className="trust-icon" />
                     <div className="trust-text">
                         <h6>Easy Returns</h6>
-                        <p>15-day return policy</p>
                     </div>
                 </div>
                 <div className="trust-item">

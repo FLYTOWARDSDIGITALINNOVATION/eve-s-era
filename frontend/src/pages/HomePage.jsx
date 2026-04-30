@@ -114,7 +114,7 @@ useEffect(() => {
           {/* Special Offer Banner */}
           <div className="sidebar-banner">
             <h3>Special Offer!</h3>
-            <p>Get 15% off on your first order. Use code: <strong>FIRST15</strong></p>
+            <p>Exclusive offers are live! Grab your favorites now before they are gone.</p>
           </div>
         </aside>
 
