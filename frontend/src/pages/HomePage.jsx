@@ -38,15 +38,29 @@ const HomePage = () => {
   });
 
   useEffect(() => {
+    // Fetch Products
     fetch(`${API_BASE_URL}/products`)
       .then(res => res.json())
       .then(data => setProducts(data))
-      .catch(err => console.error("Failed to fetch products", err));
+      .catch(err => console.error("Failed to fetch products:", err));
 
+    // Fetch Categories
     fetch(`${API_BASE_URL}/categories`)
-      .then(res => res.json())
-      .then(data => setCategories(data))
-      .catch(err => console.error("Failed to fetch categories", err));
+      .then(res => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then(data => {
+        console.log("HomePage Categories Fetched:", data);
+        if (Array.isArray(data)) {
+          setCategories(data);
+        } else {
+          console.error("Categories data is not an array:", data);
+        }
+      })
+      .catch(err => {
+        console.error("Failed to fetch categories:", err);
+      });
   }, []);
 
   return (
