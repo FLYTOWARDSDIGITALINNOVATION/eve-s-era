@@ -80,7 +80,7 @@
 }
 
 .highlight-text {
-  background: linear-gradient(120deg, #fff 0%, #a855f7 100%);
+  background: linear-gradient(120deg, #7c3aed 0%, #a855f7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
