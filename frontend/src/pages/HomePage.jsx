@@ -13,7 +13,7 @@ const HomePage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState([]);
-
+  const [categories, setCategories] = useState([]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategories(prev => {
@@ -26,23 +26,28 @@ const HomePage = () => {
   };
 
   // Filter products based on selected categories (OR logic) and search term
-const filteredProducts = products.filter(product => {
-  const matchesCategory =
-    selectedCategories.length === 0 ||
-    selectedCategories.includes(product.category);
+  const filteredProducts = products.filter(product => {
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(product.category);
 
-  const matchesSearch =
-    product.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-  return matchesCategory && matchesSearch;
-});
+    return matchesCategory && matchesSearch;
+  });
 
-useEffect(() => {
-  fetch(`${API_BASE_URL}/products`)
-    .then(res => res.json())
-    .then(data => setProducts(data))
-    .catch(err => console.error("Failed to fetch products", err));
-}, []);
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/products`)
+      .then(res => res.json())
+      .then(data => setProducts(data))
+      .catch(err => console.error("Failed to fetch products", err));
+
+    fetch(`${API_BASE_URL}/categories`)
+      .then(res => res.json())
+      .then(data => setCategories(data))
+      .catch(err => console.error("Failed to fetch categories", err));
+  }, []);
 
   return (
     <div className="homepage">
@@ -59,15 +64,15 @@ useEffect(() => {
             <div className="filter-group">
               <h4>Categories</h4>
               <div className="checkbox-list">
-                {['Men', 'Women', 'Kids', 'Accessories', 'Footwear', 'Watches', 'Sports', 'Sale'].map(cat => (
-                  <label key={cat} className="checkbox-item">
+                {categories.map(cat => (
+                  <label key={cat._id} className="checkbox-item">
                     <input
                       type="checkbox"
-                      checked={selectedCategories.includes(cat)}
-                      onChange={() => handleCategoryChange(cat)}
+                      checked={selectedCategories.includes(cat.name)}
+                      onChange={() => handleCategoryChange(cat.name)}
                     />
                     <span className="checkmark"></span>
-                    {cat}
+                    {cat.name}
                   </label>
                 ))}
               </div>
@@ -148,6 +153,3 @@ useEffect(() => {
 };
 
 export default HomePage;
-
-
-
