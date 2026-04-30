@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Package, Clock } from "lucide-react";
@@ -34,7 +35,7 @@ const AdminOrdersPage = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      let url = "http://localhost:5000/admin/orders";
+      let url = `${API_BASE_URL}/admin/orders`;
       if (fromDate && toDate) {
         url += `?from=${fromDate}&to=${toDate}`;
       }
@@ -74,7 +75,7 @@ const AdminOrdersPage = () => {
   const updateStatus = async (id, status) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`http://localhost:5000/admin/orders/${id}`, {
+    await fetch(`${API_BASE_URL}/admin/orders/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -173,3 +174,6 @@ const AdminOrdersPage = () => {
 };
 
 export default AdminOrdersPage;
+
+
+

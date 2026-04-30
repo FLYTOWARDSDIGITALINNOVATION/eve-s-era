@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./AddProduct.css"; // Reuse styling
@@ -20,12 +21,12 @@ const EditProduct = () => {
 
   useEffect(() => {
     // Fetch categories
-    fetch("http://localhost:5000/categories")
+    fetch(`${API_BASE_URL}/categories`)
       .then((res) => res.json())
       .then((data) => setCategories(data));
 
     // Fetch product details
-    fetch(`http://localhost:5000/products/${id}`)
+    fetch(`${API_BASE_URL}/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setForm({
@@ -55,7 +56,7 @@ const EditProduct = () => {
       formData.append("image", image);
     }
 
-    const res = await fetch(`http://localhost:5000/admin/product/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/admin/product/${id}`, {
       method: "PUT",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -112,7 +113,7 @@ const EditProduct = () => {
         <label>Current Image</label>
         {currentImage && (
             <img 
-                src={`http://localhost:5000${currentImage}`} 
+                src={`${API_BASE_URL}${currentImage}`} 
                 alt="current" 
                 style={{ width: '100px', borderRadius: '8px', marginBottom: '10px' }} 
             />
@@ -141,3 +142,6 @@ const EditProduct = () => {
 };
 
 export default EditProduct;
+
+
+

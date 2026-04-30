@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 // src/context/CartContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
@@ -10,7 +11,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     if (userEmail) {
-      fetch(`http://localhost:5000/cart/${userEmail}`)
+      fetch(`${API_BASE_URL}/cart/${userEmail}`)
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data)) {
@@ -42,7 +43,7 @@ export const CartProvider = ({ children }) => {
 
     if (userEmail) {
       try {
-        await fetch("http://localhost:5000/cart", {
+        await fetch(`${API_BASE_URL}/cart`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -67,7 +68,7 @@ export const CartProvider = ({ children }) => {
 
     if (userEmail) {
       try {
-        await fetch(`http://localhost:5000/cart/${userEmail}/${id}`, {
+        await fetch(`${API_BASE_URL}/cart/${userEmail}/${id}`, {
           method: "DELETE"
         });
       } catch (err) {
@@ -92,7 +93,7 @@ export const CartProvider = ({ children }) => {
 
     if (userEmail) {
       try {
-        await fetch("http://localhost:5000/cart/update-qty", {
+        await fetch(`${API_BASE_URL}/cart/update-qty`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -115,3 +116,6 @@ export const CartProvider = ({ children }) => {
 };
 
 export const useCart = () => useContext(CartContext);
+
+
+

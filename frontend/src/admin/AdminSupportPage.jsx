@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaPaperPlane, FaCloudUploadAlt, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ const AdminSupportPage = () => {
     const fetchChats = async () => {
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch("http://localhost:5000/support/admin", {
+            const res = await fetch(`${API_BASE_URL}/support/admin`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await res.json();
@@ -39,7 +40,7 @@ const AdminSupportPage = () => {
 
         try {
             const token = localStorage.getItem("token");
-            await fetch(`http://localhost:5000/support/${activeChat._id}/message`, {
+            await fetch(`${API_BASE_URL}/support/${activeChat._id}/message`, {
                 method: "PUT",
                 headers: { Authorization: `Bearer ${token}` }, // Form data, no content-type
                 body: formData
@@ -51,7 +52,7 @@ const AdminSupportPage = () => {
             fetchChats();
 
             // Optimistic update or refetch
-            const res = await fetch("http://localhost:5000/support/admin", {
+            const res = await fetch(`${API_BASE_URL}/support/admin`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await res.json();
@@ -128,7 +129,7 @@ const AdminSupportPage = () => {
                                     <div key={idx} className={`message-bubble ${msg.sender}`}>
                                         <div className="message-content">
                                             {msg.text}
-                                            {msg.image && <img src={`http://localhost:5000${msg.image}`} alt="attachment" />}
+                                            {msg.image && <img src={`${API_BASE_URL}${msg.image}`} alt="attachment" />}
                                         </div>
                                         <span className="message-time">
                                             {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -167,3 +168,6 @@ const AdminSupportPage = () => {
 };
 
 export default AdminSupportPage;
+
+
+

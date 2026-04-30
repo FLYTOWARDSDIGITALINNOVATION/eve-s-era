@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 // src/pages/Profile.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -50,9 +51,9 @@ const Profile = () => {
   // ✅ LOAD PROFILE DATA (WITH FALLBACK)
   useEffect(() => {
     Promise.all([
-      fetch(`http://localhost:5000/user/${userEmail}`).then(r => r.json()).catch(() => null),
-      fetch(`http://localhost:5000/orders/${userEmail}`).then(r => r.json()).catch(() => []),
-      fetch(`http://localhost:5000/wishlist/${userEmail}`).then(r => r.json()).catch(() => [])
+      fetch(`${API_BASE_URL}/user/${userEmail}`).then(r => r.json()).catch(() => null),
+      fetch(`${API_BASE_URL}/orders/${userEmail}`).then(r => r.json()).catch(() => []),
+      fetch(`${API_BASE_URL}/wishlist/${userEmail}`).then(r => r.json()).catch(() => [])
     ])
       .then(([userData, ordersData, wishlistData]) => {
         // ✅ CRITICAL FIX: fallback to localStorage user
@@ -77,7 +78,7 @@ const Profile = () => {
   const handleAddAddress = async () => {
     if (!addressText) return alert("Address required");
 
-    const res = await fetch("http://localhost:5000/user/address", {
+    const res = await fetch(`${API_BASE_URL}/user/address`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -99,7 +100,7 @@ const Profile = () => {
       return alert("Passwords do not match");
     }
 
-    const res = await fetch("http://localhost:5000/user/update-password", {
+    const res = await fetch(`${API_BASE_URL}/user/update-password`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -279,3 +280,6 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
+

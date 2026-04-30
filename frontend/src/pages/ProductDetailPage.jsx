@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -16,7 +17,7 @@ const ProductDetailPage = () => {
 
   // Fetch product from API
   useEffect(() => {
-    fetch(`http://localhost:5000/products/${id}`)
+    fetch(`${API_BASE_URL}/products/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Product not found");
         return res.json();
@@ -50,7 +51,7 @@ const ProductDetailPage = () => {
 
   const fetchReviews = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/reviews/${id}`);
+      const res = await fetch(`${API_BASE_URL}/reviews/${id}`);
       const data = await res.json();
       if (Array.isArray(data)) setReviews(data);
     } catch (err) {
@@ -81,7 +82,7 @@ const ProductDetailPage = () => {
     });
 
     try {
-      const res = await fetch("http://localhost:5000/reviews", {
+      const res = await fetch(`${API_BASE_URL}/reviews`, {
         method: "POST",
         body: formData,
       });
@@ -91,7 +92,7 @@ const ProductDetailPage = () => {
         setUserRating(5);
         setUploadImages([]);
         fetchReviews();
-        fetch(`http://localhost:5000/products/${id}`)
+        fetch(`${API_BASE_URL}/products/${id}`)
           .then(res => res.json())
           .then(data => setProduct(data));
       }
@@ -141,7 +142,7 @@ const ProductDetailPage = () => {
         <div className="detail-grid">
           <div className="product-image-section">
             <img
-              src={`http://localhost:5000${product.image}` || "https://via.placeholder.com/600"}
+              src={`${API_BASE_URL}${product.image}` || "https://via.placeholder.com/600"}
               alt={product.name}
               className="main-detail-img"
             />
@@ -283,9 +284,9 @@ const ProductDetailPage = () => {
                         {rev.images.map((img, i) => (
                           <img
                             key={i}
-                            src={`http://localhost:5000${img}`}
+                            src={`${API_BASE_URL}${img}`}
                             alt="review"
-                            onClick={() => window.open(`http://localhost:5000${img}`, "_blank")}
+                            onClick={() => window.open(`${API_BASE_URL}${img}`, "_blank")}
                           />
                         ))}
                       </div>
@@ -303,3 +304,5 @@ const ProductDetailPage = () => {
 };
 
 export default ProductDetailPage;
+
+

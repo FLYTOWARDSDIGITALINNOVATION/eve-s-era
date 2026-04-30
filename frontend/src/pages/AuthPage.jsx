@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
@@ -66,7 +67,7 @@ const AuthPage = () => {
             return;
         }
         try {
-            const res = await fetch("http://localhost:5000/signup", {
+            const res = await fetch(`${API_BASE_URL}/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email, password })
@@ -89,7 +90,7 @@ const AuthPage = () => {
         e.preventDefault();
         setError("");
         try {
-            const res = await fetch("http://localhost:5000/login", {
+            const res = await fetch(`${API_BASE_URL}/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
@@ -388,3 +389,6 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
+
+
+

@@ -9,6 +9,10 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const app = express();
+const fs = require("fs");
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
@@ -223,7 +227,8 @@ app.delete("/admin/support/:id", verifyAdmin, async (req, res) => {
 });
 
 /* ================= SERVER ================= */
-app.listen(5000, () => console.log("Server running on port 5000"));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // SIGNUP
 app.post("/signup", async (req, res) => {

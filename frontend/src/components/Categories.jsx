@@ -1,10 +1,11 @@
+import API_BASE_URL from '../api';
 import { useEffect, useState } from "react";
 
 export default function Categories() {
   const [dbCategories, setDbCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/categories")
+    fetch(`${API_BASE_URL}/categories`)
       .then((res) => res.json())
       .then((data) => setDbCategories(data))
       .catch((err) => console.error("Category fetch error:", err));
@@ -32,3 +33,6 @@ export default function Categories() {
     </div>
   );
 }
+
+
+

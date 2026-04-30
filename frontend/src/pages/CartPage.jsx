@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -58,7 +59,7 @@ const CartPage = () => {
                 // ✅ IMAGE FIX: Handle relative paths from backend
                 let imageSrc = item.img || item.image || "https://via.placeholder.com/120";
                 if (imageSrc.startsWith("/")) {
-                  imageSrc = `http://localhost:5000${imageSrc}`;
+                  imageSrc = `${API_BASE_URL}${imageSrc}`;
                 }
 
                 return (
@@ -142,3 +143,6 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
+
+

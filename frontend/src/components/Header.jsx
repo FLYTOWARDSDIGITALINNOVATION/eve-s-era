@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -31,7 +32,7 @@ const Header = ({ onSearch }) => {
   const { wishlist } = useWishlist();
   const { cart } = useCart(); // ✅ cart count
   useEffect(() => {
-    fetch("http://localhost:5000/categories")
+    fetch(`${API_BASE_URL}/categories`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched Categories:", data); // Debugging line
@@ -175,3 +176,5 @@ const Header = ({ onSearch }) => {
 };
 
 export default Header;
+
+

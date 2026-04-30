@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import Header from "../components/Header";
 import FlashSaleBar from "../components/FlashSaleBar";
 import Hero from "../components/Hero";
@@ -37,7 +38,7 @@ const filteredProducts = products.filter(product => {
 });
 
 useEffect(() => {
-  fetch("http://localhost:5000/products")
+  fetch(`${API_BASE_URL}/products`)
     .then(res => res.json())
     .then(data => setProducts(data))
     .catch(err => console.error("Failed to fetch products", err));
@@ -147,3 +148,6 @@ useEffect(() => {
 };
 
 export default HomePage;
+
+
+

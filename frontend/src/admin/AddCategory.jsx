@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AddCategory.css";
@@ -12,7 +13,7 @@ const AddCategory = () => {
 
   // Fetch categories
   const fetchCategories = async () => {
-    const res = await fetch("http://localhost:5000/categories");
+    const res = await fetch(`${API_BASE_URL}/categories`);
     const data = await res.json();
     setCategories(data);
   };
@@ -28,7 +29,7 @@ const AddCategory = () => {
     const token = localStorage.getItem("token");
 
     if (editId) {
-      await fetch(`http://localhost:5000/admin/category/${editId}`, {
+      await fetch(`${API_BASE_URL}/admin/category/${editId}`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
@@ -38,7 +39,7 @@ const AddCategory = () => {
       });
       setEditId(null);
     } else {
-      await fetch("http://localhost:5000/admin/category", {
+      await fetch(`${API_BASE_URL}/admin/category`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -61,7 +62,7 @@ const AddCategory = () => {
   // Delete
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:5000/admin/category/${id}`, {
+    await fetch(`${API_BASE_URL}/admin/category/${id}`, {
       method: "DELETE",
       headers: { 
         "Content-Type": "application/json",
@@ -122,3 +123,6 @@ const AddCategory = () => {
 };
 
 export default AddCategory;
+
+
+

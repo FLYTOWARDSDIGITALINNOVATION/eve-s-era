@@ -1,3 +1,4 @@
+import API_BASE_URL from '../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CheckCircle, Truck, ArrowRight, Star } from 'lucide-react';
@@ -43,7 +44,7 @@ const OrderSuccess = () => {
     formData.append("comment", comment);
 
     try {
-      const res = await fetch("http://localhost:5000/reviews", {
+      const res = await fetch(`${API_BASE_URL}/reviews`, {
         method: "POST",
         body: formData,
       });
@@ -168,3 +169,5 @@ const OrderSuccess = () => {
 };
 
 export default OrderSuccess;
+
+
