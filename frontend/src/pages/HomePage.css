@@ -173,6 +173,18 @@
 }
 
 /* Sidebar Banner */
+.cat-filter-icon {
+  margin: 0 8px;
+  font-size: 1.1rem;
+}
+
+.no-cat-text {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  font-style: italic;
+  padding: 10px 0;
+}
+
 .sidebar-banner {
   background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
   padding: 24px;

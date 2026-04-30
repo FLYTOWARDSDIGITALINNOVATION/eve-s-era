@@ -64,17 +64,36 @@ const HomePage = () => {
             <div className="filter-group">
               <h4>Categories</h4>
               <div className="checkbox-list">
-                {categories.map(cat => (
-                  <label key={cat._id} className="checkbox-item">
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(cat.name)}
-                      onChange={() => handleCategoryChange(cat.name)}
-                    />
-                    <span className="checkmark"></span>
-                    {cat.name}
-                  </label>
-                ))}
+                {categories.length > 0 ? (
+                  categories.map(cat => {
+                    const name = (cat.name || "").toLowerCase();
+                    const getIcon = (catName) => {
+                      if (catName.includes("men")) return "👕";
+                      if (catName.includes("women")) return "👗";
+                      if (catName.includes("kid")) return "👶";
+                      if (catName.includes("shoe") || catName.includes("foot")) return "👟";
+                      if (catName.includes("watch")) return "⌚";
+                      if (catName.includes("sport")) return "⚽";
+                      if (catName.includes("sale")) return "🔥";
+                      if (catName.includes("bag") || catName.includes("access")) return "👜";
+                      return "📦";
+                    };
+                    return (
+                      <label key={cat._id} className="checkbox-item">
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(cat.name)}
+                          onChange={() => handleCategoryChange(cat.name)}
+                        />
+                        <span className="checkmark"></span>
+                        <span className="cat-filter-icon">{getIcon(name)}</span>
+                        {cat.name}
+                      </label>
+                    );
+                  })
+                ) : (
+                  <p className="no-cat-text">No categories found</p>
+                )}
               </div>
             </div>
 
