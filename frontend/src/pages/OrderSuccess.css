@@ -38,7 +38,7 @@
 }
 
 .truck-icon {
-    color: #7c3aed;
+    color: var(--accent-color);
 }
 
 @keyframes driveBy {
@@ -52,7 +52,7 @@
 }
 
 .btn-primary {
-    background: #7c3aed;
+    background: var(--accent-color);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -103,7 +103,7 @@
     display: block;
     width: 15px;
     height: 2px;
-    background: #7c3aed;
+    background: var(--accent-color);
     margin: 3px;
     border-radius: 2px;
     opacity: 0.6;

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { FaStar, FaShoppingCart, FaArrowLeft } from "react-icons/fa";
+import { FaStar, FaShoppingCart, FaArrowLeft, FaGem, FaLeaf, FaTruck, FaShieldAlt, FaUndo } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import "./ProductDetailPage.css";
 
@@ -14,25 +14,8 @@ const ProductDetailPage = () => {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  // Fetch product from API
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/products/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Product not found");
-        return res.json();
-      })
-      .then((data) => {
-        setProduct(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch product:", err);
-        setLoading(false);
-      });
-  }, [id]);
-
-  const [selectedSize, setSelectedSize] = useState("M");
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   // Review State
@@ -44,6 +27,33 @@ const ProductDetailPage = () => {
 
   // User info for reviews
   const user = JSON.parse(localStorage.getItem("user"));
+
+  // Fetch product from API
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/products/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Product not found");
+        return res.json();
+      })
+      .then((data) => {
+        setProduct(data);
+        if (data.sizes && data.sizes.length > 0) {
+          setSelectedSize(data.sizes[0]);
+        } else {
+          setSelectedSize("M");
+        }
+        if (data.colors && data.colors.length > 0) {
+          setSelectedColor(data.colors[0]);
+        } else {
+          setSelectedColor("Pink");
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch product:", err);
+        setLoading(false);
+      });
+  }, [id]);
 
   useEffect(() => {
     fetchReviews();
@@ -103,14 +113,13 @@ const ProductDetailPage = () => {
     }
   };
 
-  const sizes = ["S", "M", "L", "XL", "XXL"];
-
   const handleAddToCart = () => {
     if (product) {
       addToCart({
         ...product,
         qty: quantity,
         size: selectedSize,
+        color: selectedColor,
       });
     }
   };
@@ -121,35 +130,74 @@ const ProductDetailPage = () => {
         ...product,
         qty: quantity,
         size: selectedSize,
+        color: selectedColor,
       });
       navigate("/checkout");
     }
   };
 
-  if (loading) return <div className="container" style={{ marginTop: '100px' }}>Loading...</div>;
-  if (!product) return <div className="container" style={{ marginTop: '100px' }}>Product not found</div>;
+  if (loading) {
+    return (
+      <div className="homepage">
+        <Header />
+        <div className="loading-state" style={{ padding: '120px 0' }}>
+          <div className="spinner-pink"></div>
+          <p>Revealing Eves Era design details...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="homepage">
+        <Header />
+        <div className="empty-state">
+          <div className="empty-icon">🔍</div>
+          <h3>Product is unavailable</h3>
+          <p>The product you are looking for has sold out or is no longer listed.</p>
+          <button className="reset-empty-btn" onClick={() => navigate("/home")}>Back to Shop</button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const isManufactured = product.businessModel === "manufactured";
+  const sizes = product.sizes && product.sizes.length > 0 ? product.sizes : ["S", "M", "L", "XL"];
+  const colors = product.colors && product.colors.length > 0 ? product.colors : ["Pink", "Rose", "Dusty Mauve"];
 
   return (
-    <div className="product-detail-page">
+    <div className="product-detail-page animate-fade-in">
       <Header />
 
       <div className="container detail-container">
-        {/* Updated Modern Back Button */}
+        {/* Custom luxury pink return path button */}
         <button className="back-btn" onClick={() => navigate(-1)}>
-          <FaArrowLeft size={14} /> Back to Shop
+          <FaArrowLeft size={12} /> Return to collection
         </button>
 
         <div className="detail-grid">
+          {/* Main Showcase Image */}
           <div className="product-image-section">
+            <div className={`detail-model-tag ${isManufactured ? "manufactured" : "resell"}`}>
+              {isManufactured ? <FaGem /> : <FaLeaf />}
+              <span>{isManufactured ? "Eves Era Original" : "Certified Resell"}</span>
+            </div>
             <img
-              src={`${API_BASE_URL}${product.image}` || "https://via.placeholder.com/600"}
+              src={`${API_BASE_URL}${product.image}`}
               alt={product.name}
               className="main-detail-img"
+              onError={(e) => {
+                e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80";
+              }}
             />
           </div>
 
+          {/* Luxury Specifications Area */}
           <div className="product-info-section">
-            <span className="detail-tag">{product.tag || "New"}</span>
+            <span className="detail-tag-category">{product.category || "Boutique"}</span>
             <h1 className="detail-title">{product.name}</h1>
 
             <div className="detail-rating">
@@ -157,25 +205,53 @@ const ProductDetailPage = () => {
                 {[...Array(5)].map((_, i) => (
                   <FaStar
                     key={i}
-                    className={i < Math.round(product.averageRating || 0) ? "star-filled" : "star-empty"}
+                    size={16}
+                    color={i < Math.round(product.averageRating || 0) ? "#FFC107" : "#E2E8F0"}
                   />
                 ))}
               </div>
               <span className="reviews">
-                ({product.ratingCount || 0} ratings)
+                ({product.ratingCount || 0} reviews)
               </span>
             </div>
 
-            <div className="detail-price">
-              <span className="price">₹{product.price}</span>
+            <div className="detail-price-box">
+              <span className="price-lbl">₹{product.price}</span>
+              {product.stock && product.stock <= 3 && (
+                <span className="stock-warning">⚠️ Only {product.stock} items remaining!</span>
+              )}
             </div>
 
             <p className="detail-description">
-              {product.description || `Elevate your style with this premium quality ${product.name.toLowerCase()}.`}
+              {product.description || `Indulge in the pristine details of our luxury ${product.name.toLowerCase()}. Expertly selected to bring you the premium boutique feel that characterizes Eve's Era.`}
             </p>
 
+            {/* Colors picker */}
             <div className="selection-group">
-              <h4>Select Size</h4>
+              <span className="sel-title">Select Color variant:</span>
+              <div className="color-dots-list">
+                {colors.map((c) => (
+                  <button
+                    key={c}
+                    className={`color-dot-btn ${selectedColor === c ? "active" : ""}`}
+                    onClick={() => setSelectedColor(c)}
+                    style={{
+                      background: c.toLowerCase().includes("pink") ? "#F8D7DA" : 
+                                  c.toLowerCase().includes("rose") ? "#F4B6C2" : 
+                                  c.toLowerCase().includes("mauve") ? "#C48B9F" : 
+                                  c.toLowerCase().includes("charcoal") || c.toLowerCase().includes("gray") ? "#333333" : 
+                                  c.toLowerCase().includes("white") ? "#FFFFFF" : "#E2E8F0"
+                    }}
+                    title={c}
+                  />
+                ))}
+                <span className="selected-color-lbl">{selectedColor}</span>
+              </div>
+            </div>
+
+            {/* Sizes picker */}
+            <div className="selection-group">
+              <span className="sel-title">Select Size:</span>
               <div className="size-options">
                 {sizes.map((size) => (
                   <button
@@ -189,38 +265,75 @@ const ProductDetailPage = () => {
               </div>
             </div>
 
+            {/* Quantity */}
             <div className="selection-group">
-              <h4>Quantity</h4>
+              <span className="sel-title">Quantity:</span>
               <div className="quantity-control">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                <span>{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                <button className="qty-adj-btn" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                <span className="qty-val">{quantity}</span>
+                <button className="qty-adj-btn" onClick={() => setQuantity(quantity + 1)}>+</button>
               </div>
             </div>
 
+            {/* CTA action buttons */}
             <div className="action-buttons">
               <button className="add-to-cart-outline" onClick={handleAddToCart}>
-                <FaShoppingCart /> Add to Cart
+                <FaShoppingCart /> Add to Bag
               </button>
               <button className="buy-now-btn" onClick={handleBuyNow}>
                 Buy Now
               </button>
             </div>
+
+            {/* Premium Delivery Trust widgets */}
+            <div className="trust-ribbon">
+              <div className="trust-item">
+                <FaTruck />
+                <span>Express Delivery</span>
+              </div>
+              <div className="trust-item">
+                <FaShieldAlt />
+                <span>100% Vetted Quality</span>
+              </div>
+              <div className="trust-item">
+                <FaUndo />
+                <span>15-Day Free Returns</span>
+              </div>
+            </div>
           </div>
         </div>
 
+        {/* Manufacturing details segment */}
+        {isManufactured && (
+          <div className="manufacturing-details-block animate-fade-in">
+            <div className="mfg-icon-box">🎀</div>
+            <div className="mfg-content">
+              <h3>Original Atelier Manufacturing</h3>
+              <p>This item is designed and tailored directly by <strong>Eve's Era</strong>. We utilize 100% organic cottons, pure Mulberry silks, and ethically harvested wool. By manufacturing in-house, we eliminate retail markup and guarantee beautiful, sustainable tailoring.</p>
+              <div className="specs-list-mini">
+                <div className="spec-pill">🧵 Material: {product.materials || "Mulberry Silk & Organic Cotton"}</div>
+                <div className="spec-pill">📍 Atelier: Eves Era Boutique Studio</div>
+                <div className="spec-pill">🌱 Ecology: 100% Carbon Offset Production</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Customer Reviews Section */}
         <div className="review-section">
-          <h2>Customer Reviews</h2>
+          <h2>Customer Testimonials</h2>
           <div className="reviews-layout">
+            {/* Review form */}
             <div className="review-form-card">
-              <h3>Write a Review</h3>
+              <h3>Share Your Experience</h3>
               <form onSubmit={handleSubmitReview}>
                 <div className="rating-input">
-                  <label>Rating:</label>
+                  <label>Select Rating:</label>
                   <div className="star-selector">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <FaStar
                         key={star}
+                        size={20}
                         className={star <= userRating ? "star-filled" : "star-empty"}
                         onClick={() => setUserRating(star)}
                       />
@@ -229,9 +342,9 @@ const ProductDetailPage = () => {
                 </div>
 
                 <div className="comment-input">
-                  <label>Comment:</label>
+                  <label>Your Review:</label>
                   <textarea
-                    placeholder="Share your experience..."
+                    placeholder="Describe size fit, material texture, and customer care..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     required
@@ -239,8 +352,8 @@ const ProductDetailPage = () => {
                 </div>
 
                 <div className="image-input">
-                  <label>Upload Images:</label>
-                  <input type="file" multiple accept="image/*" onChange={handleImageChange} />
+                  <label>Photos (Up to 5):</label>
+                  <input type="file" multiple accept="image/*" onChange={handleImageChange} className="file-input-pink" />
                   <div className="image-previews">
                     {uploadImages.map((img, i) => (
                       <img
@@ -254,17 +367,21 @@ const ProductDetailPage = () => {
                 </div>
 
                 <button type="submit" className="submit-review-btn" disabled={isSubmitting}>
-                  {isSubmitting ? "Submitting..." : "Post Review"}
+                  {isSubmitting ? "Posting..." : "Submit Review"}
                 </button>
               </form>
             </div>
 
+            {/* Reviews display list */}
             <div className="reviews-list">
               {reviews.length === 0 ? (
-                <p className="no-reviews">No reviews yet. Be the first to rate this product!</p>
+                <div className="empty-reviews-state">
+                  <span className="no-rev-emoji">💬</span>
+                  <p>No reviews yet. Be the first to tell others about this luxury fit!</p>
+                </div>
               ) : (
                 reviews.map((rev, index) => (
-                  <div key={index} className="review-item">
+                  <div key={index} className="review-item animate-fade-in">
                     <div className="review-header">
                       <div className="user-info">
                         <strong>{rev.userName}</strong>
@@ -274,7 +391,7 @@ const ProductDetailPage = () => {
                       </div>
                       <div className="review-rating">
                         {[...Array(5)].map((_, i) => (
-                          <FaStar key={i} className={i < rev.rating ? "star-filled" : "star-empty"} />
+                          <FaStar key={i} size={12} className={i < rev.rating ? "star-filled" : "star-empty"} />
                         ))}
                       </div>
                     </div>
@@ -285,7 +402,7 @@ const ProductDetailPage = () => {
                           <img
                             key={i}
                             src={`${API_BASE_URL}${img}`}
-                            alt="review"
+                            alt="review detail"
                             onClick={() => window.open(`${API_BASE_URL}${img}`, "_blank")}
                           />
                         ))}
@@ -304,5 +421,3 @@ const ProductDetailPage = () => {
 };
 
 export default ProductDetailPage;
-
-

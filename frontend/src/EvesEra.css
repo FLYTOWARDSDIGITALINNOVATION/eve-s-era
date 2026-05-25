@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: var(--accent-color); /* Dusty Mauve */
+  --primary-hover: var(--dark-pink);
+  --accent: var(--secondary-pink);
+  --bg-light: var(--background-color);
+  --text-dark: var(--text-color);
+  --text-muted: #6e5e62;
+  --white: #ffffff;
+  --border: rgba(244, 182, 194, 0.2);
+}
+
+/* Global Button Styles to fit Eve's Era Pink Boutique Theme */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--border-radius-sm);
+  font-weight: 600;
+  font-family: var(--font-family);
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dark);
+  padding: 12px 24px;
+  border-radius: var(--border-radius-sm);
+  font-weight: 600;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-outline:hover {
+  background: var(--light-pink);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}

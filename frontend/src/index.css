@@ -1,15 +1,123 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Color Palette - Soft Feminine Luxury Vibe */
+  --primary-color: #F8D7DA;       /* Blush Pink */
+  --secondary-pink: #F4B6C2;     /* Soft Rose */
+  --accent-color: #C48B9F;       /* Dusty Mauve */
+  --background-color: #FFF9F9;   /* Off White */
+  --text-color: #333333;         /* Charcoal Gray */
+  
+  --white: #FFFFFF;
+  --light-pink: #FFF0F2;
+  --dark-pink: #A36B7E;
+  
+  /* Styling Tokens */
+  --font-family: 'Poppins', sans-serif;
+  --font-title: 'Playfair Display', serif;
+  --font-accent: 'Montserrat', sans-serif;
+  
+  --border-radius: 16px;
+  --border-radius-sm: 8px;
+  --border-radius-lg: 24px;
+  
+  --transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  --shadow-sm: 0 4px 12px rgba(196, 139, 159, 0.08);
+  --shadow-md: 0 8px 24px rgba(196, 139, 159, 0.12);
+  --shadow-lg: 0 16px 40px rgba(196, 139, 159, 0.16);
+  
+  --max-width: 1280px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   margin: 0;
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: var(--text-color);
+  letter-spacing: -0.02em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+button {
+  font-family: var(--font-family);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: var(--transition);
+}
+
+input, select, textarea {
+  font-family: var(--font-family);
+  outline: none;
+  transition: var(--transition);
+}
+
+/* Custom Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--secondary-pink);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Utility Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Global Page Entry Animations */
+.animate-fade-in {
+  animation: fadeIn 0.6s var(--transition) forwards;
+}
+
+.float-effect {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Container Styling */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
 }

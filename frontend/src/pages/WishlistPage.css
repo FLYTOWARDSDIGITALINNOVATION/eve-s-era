@@ -46,10 +46,10 @@
 
 .classic-browse-btn:hover {
   background: #ffffff;
-  color: #7c3aed; /* Brand Purple */
-  border-color: #7c3aed;
+  color: var(--accent-color);
+  border-color: var(--accent-color);
   transform: translateX(-5px); /* Slide left on hover */
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.12);
+  box-shadow: var(--shadow-sm);
 }
 
 .classic-browse-btn:active {
@@ -115,7 +115,7 @@
 }
 
 .page-title span {
-  color: #7c3aed;
+  color: var(--accent-color);
   font-weight: 400;
 }
 

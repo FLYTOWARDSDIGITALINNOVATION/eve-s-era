@@ -1,23 +1,23 @@
 :root {
-  --primary-color: #000000;
-  --primary-hover: #1a1a1a;
-  --accent-color: #8b3dff; /* Brand accent */
-  --text-dark: #0f172a;
-  --text-gray: #64748b;
-  --bg-light: #f8fafc;
+  --primary-color: var(--accent-color);
+  --primary-hover: var(--dark-pink);
+  --accent-color: var(--secondary-pink);
+  --text-dark: #333333;
+  --text-gray: #6e5e62;
+  --bg-light: var(--background-color);
   --white: #ffffff;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.1);
-  --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(244, 182, 194, 0.2);
+  --shadow-premium: var(--shadow-lg);
+  --transition-smooth: var(--transition);
 }
 
 .auth-container {
   height: 100vh; /* Fixed height to prevent global scrolling */
   overflow: hidden;
   display: flex;
-  background-color: #f1f5f9;
-  font-family: 'Outfit', 'Inter', sans-serif;
+  background-color: var(--background-color);
+  font-family: var(--font-family);
 }
 
 .auth-content {
@@ -30,10 +30,10 @@
 .auth-branding {
   flex: 1.1;
   position: relative;
-  background: #000;
+  background: var(--dark-pink);
   background-image: 
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)),
-    url('../assets/vedan_branding.png');
+    linear-gradient(to bottom, rgba(18, 10, 12, 0.3), rgba(18, 10, 12, 0.8)),
+    url('../assets/fashion_hero.png');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -80,7 +80,7 @@
 }
 
 .highlight-text {
-  background: linear-gradient(120deg, #7c3aed 0%, #a855f7 100%);
+  background: linear-gradient(120deg, var(--accent-color) 0%, var(--secondary-pink) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
@@ -138,7 +138,7 @@
   right: 10%;
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, rgba(139, 61, 255, 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(244, 182, 194, 0.15) 0%, transparent 70%);
   z-index: 0;
 }
 

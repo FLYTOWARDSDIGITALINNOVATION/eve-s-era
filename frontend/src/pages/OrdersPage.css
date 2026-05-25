@@ -136,7 +136,7 @@
 }
 
 .rate-btn {
-    background: #6366f1;
+    background: var(--accent-color);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -150,7 +150,7 @@
 }
 
 .rate-btn:hover {
-    background: #4f46e5;
+    background: var(--dark-pink);
     transform: translateY(-1px);
 }
 
@@ -224,7 +224,7 @@
 }
 
 .review-input:focus {
-    border-color: #6366f1;
+    border-color: var(--accent-color);
     outline: none;
 }
 
@@ -351,14 +351,14 @@
 }
 
 .step.active .step-circle {
-    background: #6366f1;
+    background: var(--accent-color);
     color: white;
-    border-color: #6366f1;
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(196, 139, 159, 0.4);
 }
 
 .step.active .step-label {
-    color: #6366f1;
+    color: var(--accent-color);
 }
 
 .step.completed .step-circle {
@@ -480,16 +480,16 @@
 .back-home-btn svg {
     font-size: 0.9rem;
     transition: transform 0.4s ease;
-    color: #6366f1; /* Brand Purple only on the icon for focus */
+    color: var(--accent-color);
 }
 
 /* Hover Effects */
 .back-home-btn:hover {
     background: #ffffff;
-    color: #4f46e5; /* Text turns purple */
-    border-color: #4f46e5;
-    transform: translateY(-3px); /* Classic "lift" effect */
-    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.12); /* Soft purple glow */
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
 }
 
 .back-home-btn:hover svg {
@@ -510,7 +510,7 @@
     left: 50px;
     right: 25px;
     height: 1px;
-    background: #4f46e5;
+    background: var(--accent-color);
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.4s ease;

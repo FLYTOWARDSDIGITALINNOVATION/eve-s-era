@@ -1,9 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaShoppingBag, FaStar, FaShieldAlt, FaRocket } from 'react-icons/fa';
+import { FaShoppingBag, FaStar, FaShieldAlt, FaGem, FaLeaf, FaArrowRight } from 'react-icons/fa';
 import './LandingPage.css';
-import logo from "../assets/logo.png";
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -31,9 +30,13 @@ const LandingPage = () => {
         }
     };
 
+    const handleSelectModel = (model) => {
+        navigate(`/home?model=${model}`);
+    };
+
     return (
         <div className="landing-container">
-            {/* Background Decorations */}
+            {/* Background Soft Pink Decorations */}
             <div className="bg-gradient-circle circle-1"></div>
             <div className="bg-gradient-circle circle-2"></div>
 
@@ -43,8 +46,8 @@ const LandingPage = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
-                    <img src={logo} alt="VEDAN Logo" />
-                    <span>VEDAN</span>
+                    <span className="logo-emoji">🎀</span>
+                    <span>Eves Era</span>
                 </motion.div>
                 <div className="nav-actions">
                     <button className="nav-btn login-btn" onClick={() => navigate('/auth', { state: { isLogin: true } })}>Login</button>
@@ -60,46 +63,57 @@ const LandingPage = () => {
                     animate="visible"
                 >
                     <motion.div variants={itemVariants} className="hero-badge">
-                        ✨ Welcome to the Future of Shopping
+                        ✨ Soft Feminine Luxury Boutique
                     </motion.div>
                     
                     <motion.h1 variants={itemVariants} className="hero-title">
-                        Redefining the <br /> 
-                        <span className="text-gradient">Modern Lifestyle</span>
+                        Empowering Your <br />
+                        <span className="text-gradient">Signature Style</span>
                     </motion.h1>
 
                     <motion.p variants={itemVariants} className="hero-description">
-                        Step into a world of curated excellence. From premium fashion to timeless essentials, 
-                        VEDAN brings you the finest collections crafted for those who demand more.
+                        Step into curated elegance. Eve's Era brings you premium manufactured original silhouettes 
+                        alongside hand-selected high-end resell pieces. Seamlessly crafted, sustainably minded.
                     </motion.p>
 
-                    <motion.div variants={itemVariants} className="hero-cta-group">
+                    <motion.div variants={itemVariants} className="hero-cta-splits">
                         <button 
-                            className="cta-primary" 
-                            onClick={() => navigate('/auth', { state: { isLogin: false } })}
+                            className="cta-split manufactured-cta" 
+                            onClick={() => handleSelectModel('manufactured')}
                         >
-                            Create Account <FaRocket className="icon-right" />
+                            <span className="cta-icon"><FaGem /></span>
+                            <div className="cta-label-group">
+                                <strong>Eve's Era Originals</strong>
+                                <span>Premium Self-Manufactured</span>
+                            </div>
+                            <FaArrowRight className="arrow-right-icon" />
                         </button>
+
                         <button 
-                            className="cta-secondary"
-                            onClick={() => navigate('/auth', { state: { isLogin: true } })}
+                            className="cta-split resell-cta" 
+                            onClick={() => handleSelectModel('resell')}
                         >
-                            Existing Member? Login
+                            <span className="cta-icon"><FaLeaf /></span>
+                            <div className="cta-label-group">
+                                <strong>Resell Collection</strong>
+                                <span>Sustainably Curated</span>
+                            </div>
+                            <FaArrowRight className="arrow-right-icon" />
                         </button>
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="hero-features">
                         <div className="feature-item">
                             <FaStar className="feature-icon" />
-                            <span>Premium Quality</span>
+                            <span>In-House Tailoring</span>
                         </div>
                         <div className="feature-item">
                             <FaShieldAlt className="feature-icon" />
-                            <span>Secure Checkout</span>
+                            <span>Authenticity Assured</span>
                         </div>
                         <div className="feature-item">
                             <FaShoppingBag className="feature-icon" />
-                            <span>Exclusive Drops</span>
+                            <span>Circular Fashion</span>
                         </div>
                     </motion.div>
                 </motion.div>
@@ -111,28 +125,28 @@ const LandingPage = () => {
                     transition={{ duration: 1.2, ease: "easeOut" }}
                 >
                     <div className="floating-card card-1">
-                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=150&q=80" alt="Winter Collection" className="card-img" />
-                        <div className="card-info">
-                            <div className="card-dot"></div>
-                            <p>New Arrival: Winter Collection</p>
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=150&q=80" alt="Resell curation" className="card-img" />
+                        <div className="card-info-floating">
+                            <div className="card-dot-pink"></div>
+                            <p>Pre-loved luxury: 100% vetted</p>
                         </div>
                     </div>
                     <div className="floating-card card-2">
-                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=150&q=80" alt="Fashion" className="card-img" />
-                        <div className="card-info">
-                            <div className="card-dot green"></div>
-                            <p>Orders processed: 10k+</p>
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=150&q=80" alt="Manufacturing process" className="card-img" />
+                        <div className="card-info-floating">
+                            <div className="card-dot-pink dark"></div>
+                            <p>In-House Originals: Silk & Linen</p>
                         </div>
                     </div>
                     <div className="hero-main-visual">
-                        <div className="visual-circle"></div>
-                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80" alt="Fashion Model" className="hero-image-large" />
+                        <div className="visual-circle-pink"></div>
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500&q=80" alt="Eves Era Fashion Model" className="hero-image-large" />
                     </div>
                 </motion.div>
             </main>
 
             <footer className="landing-footer">
-                <p>&copy; 2024 VEDAN. All rights reserved. Crafted for excellence.</p>
+                <p>&copy; 2026 Eve's Era Boutique. All rights reserved. Handcrafted with love.</p>
             </footer>
         </div>
     );

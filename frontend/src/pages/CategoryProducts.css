@@ -4,7 +4,7 @@
 
 /* 🔙 Back Button */
 .back-btn {
-  background: #7c3aed;
+  background: var(--accent-color);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -14,13 +14,14 @@
 }
 
 .back-btn:hover {
-  background: #6d28d9;
+  background: var(--dark-pink);
 }
 
 .category-title {
   text-align: center;
   margin-bottom: 30px;
-  color: #4b2aad;
+  color: var(--text-color);
+  font-family: var(--font-title);
 }
 
 /* ✅ FIXED CLASS NAME */

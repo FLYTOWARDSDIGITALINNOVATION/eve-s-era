@@ -36,8 +36,8 @@ const Footer = () => {
             {/* 1. Scrolling Marquee */}
             <div className="footer-marquee">
                 <div className="marquee-content">
-                    <span>PREMIUM COMFORT • CRAFTED IN TIRUPUR • TIMELESS STYLE • VEDAN CLOTHING • PREMIUM COMFORT • CRAFTED IN TIRUPUR • TIMELESS STYLE • VEDAN CLOTHING • </span>
-                    <span>PREMIUM COMFORT • CRAFTED IN TIRUPUR • TIMELESS STYLE • VEDAN CLOTHING • PREMIUM COMFORT • CRAFTED IN TIRUPUR • TIMELESS STYLE • VEDAN CLOTHING • </span>
+                    <span>EVE'S ERA ORIGINALS • SUSTAINABLE COUTURE • HANDCRAFTED ATELIER • CURATED RESELL LUXURY • EVE'S ERA ORIGINALS • SUSTAINABLE COUTURE • HANDCRAFTED ATELIER • CURATED RESELL LUXURY • </span>
+                    <span>EVE'S ERA ORIGINALS • SUSTAINABLE COUTURE • HANDCRAFTED ATELIER • CURATED RESELL LUXURY • EVE'S ERA ORIGINALS • SUSTAINABLE COUTURE • HANDCRAFTED ATELIER • CURATED RESELL LUXURY • </span>
                 </div>
             </div>
 
@@ -66,27 +66,27 @@ const Footer = () => {
                     <FaAward className="trust-icon" />
                     <div className="trust-text">
                         <h6>Quality Assured</h6>
-                        <p>Premium cotton fabrics</p>
+                        <p>Premium & Sustainable Fabrics</p>
                     </div>
                 </div>
             </div>
 
             {/* Background Branding Watermark */}
-            <div className="footer-watermark">VEDAN</div>
+            <div className="footer-watermark">EVE'S ERA</div>
 
             <div className="footer-container">
                 <div className="footer-grid">
                     {/* Brand Section */}
                     <div className="footer-section brand-column">
                         <div className="footer-logo-group">
-                            <img src={logo} alt="VEDAN Logo" className="footer-logo-main" />
-                            <span className="footer-brand-title">VEDAN</span>
+                            <span className="footer-logo-icon">🎀</span>
+                            <span className="footer-brand-title">Eve's Era</span>
                         </div>
                         <p className="brand-mission">
-                            Elevating everyday essentials with premium comfort and timeless style, deeply rooted in the textile heritage of Tirupur.
+                            Crafting timeless luxury and sustainable couture. Discover our custom-manufactured originals and curated resell collections designed for the modern woman.
                         </p>
                         <div className="social-links-grid">
-                            <a href="https://instagram.com/vedan_clothing_" target="_blank" rel="noopener noreferrer" className="social-icon instagram">
+                            <a href="#" className="social-icon instagram">
                                 <FaInstagram />
                             </a>
                             <a href="#" className="social-icon facebook"><FaFacebookF /></a>
@@ -99,11 +99,11 @@ const Footer = () => {
                     <div className="footer-section links-column">
                         <h4 className="footer-heading">Collections</h4>
                         <ul className="footer-list">
-                            <li><Link to="/category/Round Neck">Round Neck T-shirts</Link></li>
-                            <li><Link to="/category/Oversized">Oversized T-shirts</Link></li>
-                            <li><Link to="/category/Polo">Polo T-shirts</Link></li>
-                            <li><Link to="/home">New Arrivals</Link></li>
-                            <li><Link to="/home">Best Sellers</Link></li>
+                            <li><Link to="/home?model=manufactured">Eves Era Originals</Link></li>
+                            <li><Link to="/home?model=resell">Resell Collection</Link></li>
+                            <li><Link to="/category/Women">Women's Wear</Link></li>
+                            <li><Link to="/category/Accessories">Accessories</Link></li>
+                            <li><Link to="/home">All New Arrivals</Link></li>
                         </ul>
                     </div>
 
@@ -136,9 +136,9 @@ const Footer = () => {
                                 <FaPhoneAlt />
                                 <span>+91 82485 18238</span>
                             </a>
-                            <a href="mailto:kganesh420kumar@gmail.com" className="contact-tile">
+                            <a href="mailto:support@evesera.com" className="contact-tile">
                                 <FaEnvelope />
-                                <span>kganesh420kumar@gmail.com</span>
+                                <span>support@evesera.com</span>
                             </a>
                         </div>
                     </div>
@@ -148,7 +148,7 @@ const Footer = () => {
 
                 <div className="footer-bottom">
                     <div className="footer-legal">
-                        <p>&copy; {new Date().getFullYear()} VEDAN Clothing. All rights reserved.</p>
+                        <p>&copy; {new Date().getFullYear()} Eve's Era. All rights reserved.</p>
                         <div className="legal-links">
                             <Link to="/customer-service">Privacy</Link>
                             <Link to="/customer-service">Terms</Link>
@@ -167,7 +167,7 @@ const Footer = () => {
 
                 <div className="footer-address">
                     <FaMapMarkerAlt />
-                    <span>Cotton Mill Road, Pappa Nagar, Near Balamurugan Mess, Tirupur 641 603</span>
+                    <span>Eve's Era Atelier, Premium Fashion Block, Tirupur 641 603</span>
                 </div>
             </div>
 

@@ -120,7 +120,7 @@ const OrderSuccess = () => {
               style={{
                 width: '100%',
                 padding: '12px',
-                background: '#6366f1',
+                background: 'var(--accent-color)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',

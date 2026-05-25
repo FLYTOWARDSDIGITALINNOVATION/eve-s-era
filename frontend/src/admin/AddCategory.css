@@ -3,10 +3,10 @@
   max-width: 800px;
   margin: 40px auto;
   padding: 30px;
-  background: #f5f3ff; /* light violet */
+  background: var(--light-pink);
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(139, 61, 255, 0.15);
-  font-family: "Poppins", sans-serif;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-family);
 }
 
 /* Back button */
@@ -15,7 +15,7 @@
   border: none;
   font-size: 16px;
   font-weight: 600;
-  color: #6d28d9;
+  color: var(--accent-color);
   cursor: pointer;
   margin-bottom: 20px;
 }
@@ -27,8 +27,9 @@
 /* Main title */
 .add-category-page h2 {
   text-align: center;
-  color: #4c1d95;
+  color: var(--text-color);
   margin-bottom: 25px;
+  font-family: var(--font-title);
 }
 
 /* Form container */
@@ -43,19 +44,19 @@
   flex: 1;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(244, 182, 194, 0.3);
   font-size: 15px;
   outline: none;
 }
 
 .category-form input:focus {
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(196, 139, 159, 0.2);
 }
 
 /* Add / Update button */
 .category-form button {
-  background: #8b5cf6;
+  background: var(--accent-color);
   color: white;
   border: none;
   padding: 12px 20px;
@@ -65,13 +66,14 @@
 }
 
 .category-form button:hover {
-  background: #7c3aed;
+  background: var(--dark-pink);
 }
 
 /* List title */
 .list-title {
   margin-bottom: 15px;
-  color: #4c1d95;
+  color: var(--text-color);
+  font-family: var(--font-title);
 }
 
 /* Category list */

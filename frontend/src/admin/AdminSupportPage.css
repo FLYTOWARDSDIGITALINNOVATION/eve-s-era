@@ -7,12 +7,12 @@
     height: 85vh;
     padding: 20px;
     margin: 20px auto;
-    background: #f8f9fa;
+    background: var(--light-pink);
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-family);
 }
 
 .chat-container {
@@ -63,14 +63,14 @@
 }
 
 .chat-item.active {
-    background: #eff6ff;
-    border-left: 4px solid #3b82f6;
+    background: var(--light-pink);
+    border-left: 4px solid var(--accent-color);
 }
 
 .chat-avatar.user-avatar {
     width: 45px;
     height: 45px;
-    background: #3b82f6;
+    background: var(--accent-color);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -161,7 +161,7 @@
 /* Admin Sender */
 .message-bubble.admin {
     align-self: flex-end;
-    background: #3b82f6;
+    background: var(--accent-color);
     color: white;
     border-bottom-right-radius: 2px;
 }
@@ -209,14 +209,14 @@
 }
 
 .chat-input-area input:focus {
-    border-color: #3b82f6;
+    border-color: var(--accent-color);
 }
 
 .send-btn,
 .attach-btn {
     background: none;
     border: none;
-    color: #3b82f6;
+    color: var(--accent-color);
     font-size: 1.3rem;
     cursor: pointer;
     padding: 8px;

@@ -1,4 +1,8 @@
 // server.js
+// Force Node.js to use Google DNS (fixes SRV lookup ECONNREFUSED on some ISPs)
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -55,10 +59,17 @@ const productSchema = new mongoose.Schema({
   price: Number,
   description: String,
   image: String,
+  businessModel: { type: String, enum: ["resell", "manufactured"], default: "resell" },
+  materials: { type: String, default: "" },
+  sizes: { type: [String], default: ["S", "M", "L", "XL"] },
+  colors: { type: [String], default: ["Pink", "Rose", "Dusty Mauve"] },
+  stock: { type: Number, default: 10 },
+  supplierName: { type: String, default: "" },
   averageRating: { type: Number, default: 0 },
   ratingCount: { type: Number, default: 0 },
 });
 const Product = mongoose.model("Product", productSchema);
+
 
 // ORDER
 const orderSchema = new mongoose.Schema({
@@ -354,12 +365,23 @@ app.get("/categories", async (req, res) => {
 // PRODUCT
 app.post("/admin/product", verifyAdmin, upload.single("image"), async (req, res) => {
   try {
-    const product = await Product.create({
-      ...req.body,
-      image: req.file ? `/uploads/${req.file.filename}` : "",
-    });
+    let data = { ...req.body };
+    if (req.file) {
+      data.image = `/uploads/${req.file.filename}`;
+    }
+    if (data.sizes && typeof data.sizes === "string") {
+      data.sizes = data.sizes.split(",").map(s => s.trim()).filter(Boolean);
+    }
+    if (data.colors && typeof data.colors === "string") {
+      data.colors = data.colors.split(",").map(c => c.trim()).filter(Boolean);
+    }
+    if (data.price) data.price = Number(data.price);
+    if (data.stock) data.stock = Number(data.stock);
+
+    const product = await Product.create(data);
     res.json(product);
   } catch (err) {
+    console.error("Create Product Error:", err);
     res.status(500).json({ message: "Failed to create product" });
   }
 });
@@ -375,16 +397,27 @@ app.delete("/admin/product/:id", verifyAdmin, async (req, res) => {
 
 app.put("/admin/product/:id", verifyAdmin, upload.single("image"), async (req, res) => {
   try {
-    const updateData = { ...req.body };
+    const data = { ...req.body };
     if (req.file) {
-      updateData.image = `/uploads/${req.file.filename}`;
+      data.image = `/uploads/${req.file.filename}`;
     }
-    const product = await Product.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (data.sizes && typeof data.sizes === "string") {
+      data.sizes = data.sizes.split(",").map(s => s.trim()).filter(Boolean);
+    }
+    if (data.colors && typeof data.colors === "string") {
+      data.colors = data.colors.split(",").map(c => c.trim()).filter(Boolean);
+    }
+    if (data.price) data.price = Number(data.price);
+    if (data.stock) data.stock = Number(data.stock);
+
+    const product = await Product.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(product);
   } catch (err) {
+    console.error("Update Product Error:", err);
     res.status(500).json({ message: "Failed to update product" });
   }
 });
+
 
 // ✅ ADMIN ORDERS (ALL ORDERS, NO LIMIT)
 app.get("/admin/orders", verifyAdmin, async (req, res) => {

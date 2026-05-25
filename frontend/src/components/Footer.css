@@ -1,35 +1,37 @@
 .vedan-footer {
-    background-color: #030303; /* Even Deeper Black */
-    color: #cbd5e1;
+    background-color: #120A0C; /* Very dark pink-tinted charcoal for luxury look */
+    color: #f1e4e6;
     padding: 0;
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--font-family);
     position: relative;
     overflow: hidden;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(244, 182, 194, 0.1);
 }
 
 /* 1. Scrolling Marquee */
 .footer-marquee {
-    background: #8b5cf6;
+    background: linear-gradient(90deg, var(--accent-color), var(--secondary-pink));
     padding: 15px 0;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
     z-index: 10;
+    box-shadow: var(--shadow-sm);
 }
 
 .marquee-content {
     display: inline-block;
-    animation: marquee 30s linear infinite;
+    animation: marquee 35s linear infinite;
 }
 
 .marquee-content span {
     display: inline-block;
     padding-left: 20px;
-    font-size: 0.9rem;
-    font-weight: 800;
+    font-size: 0.85rem;
+    font-weight: 600;
     color: #fff;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
+    font-family: var(--font-accent);
     text-transform: uppercase;
 }
 
@@ -44,8 +46,8 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     padding: 40px 60px;
-    background: rgba(255, 255, 255, 0.02);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.01);
+    border-bottom: 1px solid rgba(244, 182, 194, 0.05);
 }
 
 .trust-item {
@@ -56,20 +58,22 @@
 
 .trust-icon {
     font-size: 1.8rem;
-    color: #8b5cf6;
+    color: var(--secondary-pink);
 }
 
 .trust-text h6 {
     color: #fff;
     margin: 0;
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 600;
+    font-family: var(--font-title);
+    letter-spacing: 0.02em;
 }
 
 .trust-text p {
     margin: 4px 0 0;
     font-size: 0.8rem;
-    color: #64748b;
+    color: #c48b9f;
 }
 
 /* Background Watermark */
@@ -78,13 +82,14 @@
     top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 28vw;
-    font-weight: 900;
-    color: rgba(255, 255, 255, 0.015);
+    font-size: 20vw;
+    font-weight: 700;
+    color: rgba(248, 215, 218, 0.015);
     pointer-events: none;
     z-index: 0;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
     user-select: none;
+    font-family: var(--font-title);
 }
 
 .footer-container {
@@ -110,17 +115,17 @@
     margin-bottom: 25px;
 }
 
-.footer-logo-main {
-    height: 44px;
-    filter: invert(1);
+.footer-logo-icon {
+    font-size: 2rem;
 }
 
 .footer-brand-title {
     font-size: 1.8rem;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: 0.05em;
+    font-family: var(--font-title);
     color: #fff;
-    background: linear-gradient(135deg, #fff 0%, #a855f7 50%, #fff 100%);
+    background: linear-gradient(135deg, #fff 0%, var(--secondary-pink) 50%, #fff 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -134,9 +139,9 @@
 .brand-mission {
     font-size: 0.95rem;
     line-height: 1.7;
-    color: #94a3b8;
+    color: #d1b4bb;
     margin-bottom: 30px;
-    max-width: 300px;
+    max-width: 320px;
 }
 
 .social-links-grid {
@@ -156,11 +161,14 @@
     font-size: 1rem;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(244, 182, 194, 0.1);
 }
 
 .social-icon:hover {
     transform: translateY(-5px);
     color: #fff;
+    border-color: var(--secondary-pink);
+    box-shadow: var(--shadow-sm);
 }
 
 .social-icon.instagram:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
@@ -171,11 +179,12 @@
 /* Links Columns */
 .footer-heading {
     color: #fff;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 0.95rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     margin-bottom: 30px;
+    font-family: var(--font-accent);
 }
 
 .footer-list {
@@ -189,7 +198,7 @@
 }
 
 .footer-list a {
-    color: #64748b;
+    color: #bfa5aa;
     text-decoration: none;
     font-size: 0.9rem;
     transition: all 0.3s ease;
@@ -197,21 +206,21 @@
 }
 
 .footer-list a:hover {
-    color: #fff;
+    color: var(--primary-color);
     transform: translateX(5px);
 }
 
 /* Newsletter Column */
 .newsletter-text {
     font-size: 0.9rem;
-    color: #64748b;
+    color: #bfa5aa;
     margin-bottom: 20px;
 }
 
 .input-field-group {
     display: flex;
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(244, 182, 194, 0.1);
     padding: 6px;
     border-radius: 16px;
     backdrop-filter: blur(12px);
@@ -226,7 +235,7 @@
     inset: 0;
     padding: 1px;
     border-radius: 16px;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), transparent, rgba(139, 92, 246, 0.3));
+    background: linear-gradient(135deg, rgba(244, 182, 194, 0.3), transparent, rgba(244, 182, 194, 0.3));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -237,8 +246,8 @@
 
 .input-field-group:focus-within {
     background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(139, 92, 246, 0.5);
-    box-shadow: 0 0 25px rgba(139, 92, 246, 0.15), inset 0 0 10px rgba(139, 92, 246, 0.05);
+    border-color: rgba(244, 182, 194, 0.5);
+    box-shadow: 0 0 25px rgba(244, 182, 194, 0.15), inset 0 0 10px rgba(244, 182, 194, 0.05);
     transform: translateY(-2px);
 }
 
@@ -259,16 +268,16 @@
 }
 
 .input-field-group input::placeholder {
-    color: #475569;
+    color: #6e5e62;
     transition: color 0.3s ease;
 }
 
 .input-field-group input:focus::placeholder {
-    color: #64748b;
+    color: #9e8a8e;
 }
 
 .subscribe-btn {
-    background: #8b5cf6;
+    background: var(--accent-color);
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -278,7 +287,7 @@
 }
 
 .subscribe-btn:hover {
-    background: #7c3aed;
+    background: var(--dark-pink);
     transform: scale(1.05);
 }
 
@@ -294,7 +303,7 @@
     align-items: center;
     gap: 10px;
     font-size: 0.85rem;
-    color: #64748b;
+    color: #bfa5aa;
     text-decoration: none;
     transition: color 0.3s ease;
 }
@@ -304,13 +313,13 @@
 }
 
 .contact-tile svg {
-    color: #8b5cf6;
+    color: var(--secondary-pink);
 }
 
 /* Bottom Area */
 .footer-divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(244, 182, 194, 0.1);
     margin-bottom: 30px;
 }
 
@@ -329,7 +338,7 @@
 
 .footer-legal p {
     font-size: 0.85rem;
-    color: #475569;
+    color: #8c787c;
     margin: 0;
 }
 
@@ -340,7 +349,7 @@
 
 .legal-links a {
     font-size: 0.85rem;
-    color: #475569;
+    color: #8c787c;
     text-decoration: none;
     transition: color 0.3s ease;
 }
@@ -353,11 +362,11 @@
     display: flex;
     gap: 15px;
     font-size: 1.5rem;
-    color: #475569;
+    color: #8c787c;
 }
 
 .payment-methods svg:hover {
-    color: #94a3b8;
+    color: var(--primary-color);
 }
 
 .footer-address {
@@ -366,7 +375,7 @@
     justify-content: center;
     gap: 10px;
     font-size: 0.8rem;
-    color: #334155;
+    color: #6e5e62;
     text-align: center;
 }
 
@@ -377,7 +386,7 @@
     right: 30px;
     width: 45px;
     height: 45px;
-    background: #8b5cf6;
+    background: var(--accent-color);
     color: #fff;
     border: none;
     border-radius: 50%;
@@ -389,7 +398,7 @@
     visibility: hidden;
     transition: all 0.3s ease;
     z-index: 100;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .back-to-top.visible {
@@ -399,7 +408,7 @@
 
 .back-to-top:hover {
     transform: translateY(-5px);
-    background: #7c3aed;
+    background: var(--dark-pink);
 }
 
 /* Responsive */
@@ -443,7 +452,6 @@
         max-width: 100%;
     }
     .footer-watermark {
-        font-size: 40vw;
+        font-size: 30vw;
     }
 }
-

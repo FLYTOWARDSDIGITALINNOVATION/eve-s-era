@@ -154,8 +154,8 @@ const AuthPage = () => {
                     variants={brandingVariants}
                 >
                     <motion.div variants={itemVariants} className="branding-group">
-                        <img src={logo} alt="VEDAN Logo" className="branding-logo-main" />
-                        <h1 className="branding-name-main">VEDAN</h1>
+                        <span className="branding-logo-icon" style={{ fontSize: '1.8rem' }}>🎀</span>
+                        <h1 className="branding-name-main">Eve's Era</h1>
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="brand-badge" style={{
@@ -171,29 +171,29 @@ const AuthPage = () => {
                         backdropFilter: 'blur(5px)',
                         border: '1px solid rgba(255,255,255,0.1)'
                     }}>
-                        ESTA. 2024
+                        ESTD. 2026
                     </motion.div>
 
                     <motion.h2 variants={itemVariants} className="brand-headline">
-                        Elevate Your <br /> <span className="highlight-text">Lifestyle</span>
+                        Elevate Your <br /> <span className="highlight-text">Elegance</span>
                     </motion.h2>
 
                     <motion.p variants={itemVariants} className="brand-subtext">
-                        Discover the essence of premium fashion and timeless style crafted for the modern individual.
+                        Discover our custom-manufactured originals and curated resell collections designed for the modern woman.
                     </motion.p>
 
                     <motion.div variants={itemVariants} className="brand-stats">
                         <div className="stat-item">
-                            <h3>PREMIUM</h3>
-                            <p>Quality</p>
+                            <h3>BOUTIQUE</h3>
+                            <p>Originals</p>
                         </div>
                         <div className="stat-item">
-                            <h3>EXCLUSIVE</h3>
-                            <p>Collections</p>
+                            <h3>CURATED</h3>
+                            <p>Resell</p>
                         </div>
                         <div className="stat-item">
-                            <h3>GLOBAL</h3>
-                            <p>Shipping</p>
+                            <h3>ATELIER</h3>
+                            <p>Crafted</p>
                         </div>
                     </motion.div>
                 </motion.div>
@@ -305,7 +305,7 @@ const AuthPage = () => {
                                 >
                                     <motion.div variants={itemVariants}>
                                         <h2>Create Account</h2>
-                                        <p className="form-subtitle">Join the VEDAN community today</p>
+                                        <p className="form-subtitle">Join the Eve's Era community today</p>
                                     </motion.div>
 
                                     <form onSubmit={handleSignup}>
