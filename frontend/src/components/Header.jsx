@@ -67,9 +67,6 @@ const Header = ({ onSearch, onModelFilter }) => {
           </div>
           <div className="top-links">
             <Link to="/customer-service"><FaPhoneAlt size={10} /> Contact Support</Link>
-            {isAdmin && (
-              <Link to="/admin" className="admin-ribbon-btn">👑 Admin Dashboard</Link>
-            )}
           </div>
         </div>
       </div>

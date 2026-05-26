@@ -147,6 +147,7 @@
   display: flex;
   align-items: center;
   gap: 28px;
+  margin-top: 8px;
 }
 
 .icon-link {

@@ -33,43 +33,6 @@ const Footer = () => {
 
     return (
         <footer className="vedan-footer">
-            {/* 1. Scrolling Marquee */}
-            <div className="footer-marquee">
-                <div className="marquee-content">
-                    <span>EVE'S ERA ORIGINALS • SUSTAINABLE COUTURE • HANDCRAFTED ATELIER • CURATED RESELL LUXURY • EVE'S ERA ORIGINALS • SUSTAINABLE COUTURE • HANDCRAFTED ATELIER • CURATED RESELL LUXURY • </span>
-                    <span>EVE'S ERA ORIGINALS • SUSTAINABLE COUTURE • HANDCRAFTED ATELIER • CURATED RESELL LUXURY • EVE'S ERA ORIGINALS • SUSTAINABLE COUTURE • HANDCRAFTED ATELIER • CURATED RESELL LUXURY • </span>
-                </div>
-            </div>
-
-            {/* 2. Trust Bar */}
-            <div className="footer-trust-bar">
-                <div className="trust-item">
-                    <FaTruck className="trust-icon" />
-                    <div className="trust-text">
-                        <h6>Free Shipping</h6>
-                    </div>
-                </div>
-                <div className="trust-item">
-                    <FaSyncAlt className="trust-icon" />
-                    <div className="trust-text">
-                        <h6>Easy Returns</h6>
-                    </div>
-                </div>
-                <div className="trust-item">
-                    <FaShieldAlt className="trust-icon" />
-                    <div className="trust-text">
-                        <h6>Secure Payment</h6>
-                        <p>100% protected payments</p>
-                    </div>
-                </div>
-                <div className="trust-item">
-                    <FaAward className="trust-icon" />
-                    <div className="trust-text">
-                        <h6>Quality Assured</h6>
-                        <p>Premium & Sustainable Fabrics</p>
-                    </div>
-                </div>
-            </div>
 
             {/* Background Branding Watermark */}
             <div className="footer-watermark">EVE'S ERA</div>

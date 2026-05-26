@@ -119,9 +119,6 @@ const AdminDashboard = () => {
           <button className={`tab-menu-btn ${activeTab === "suppliers" ? "active" : ""}`} onClick={() => setActiveTab("suppliers")}>
             <FaUsers /> <span>Suppliers Registry</span>
           </button>
-          <button className={`tab-menu-btn ${activeTab === "atelier" ? "active" : ""}`} onClick={() => setActiveTab("atelier")}>
-            <FaTools /> <span>Atelier Reports</span>
-          </button>
           <button className={`tab-menu-btn ${activeTab === "support" ? "active" : ""}`} onClick={() => navigate("/admin/support")}>
             <FaInbox /> <span>Customer Support</span>
           </button>
@@ -334,33 +331,6 @@ const AdminDashboard = () => {
                 </div>
               )}
 
-              {/* TAB 4: ATELIER */}
-              {activeTab === "atelier" && (
-                <div className="overview-tab-view animate-fade-in">
-                  <h2>Original Atelier Production reports</h2>
-                  <p className="admin-subtitle">Tracking material quantities and tailor workstation logs.</p>
-
-                  <div className="metrics-cards-grid" style={{ marginBottom: '24px' }}>
-                    {materials.map((m, i) => (
-                      <div key={i} className="metric-card shadow-sm">
-                        <div className="m-card-header">
-                          <span className="m-icon mfg-col">🧵</span>
-                          <span className="m-title">{m.name}</span>
-                        </div>
-                        <h3>{m.stock}</h3>
-                        <p className="m-growth" style={{ color: m.status === 'Optimal' ? '#10B981' : '#F59E0B' }}>
-                          ● {m.status}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="atelier-note-box shadow-sm">
-                    <h4>📝 Head Designer Notes (Tailor workstation)</h4>
-                    <p>Atelier is running at high efficiency. Standard sizing templates for the organic silk blends have been validated. Upcoming collection scheduled for mid-June launch.</p>
-                  </div>
-                </div>
-              )}
             </>
           )}
         </main>

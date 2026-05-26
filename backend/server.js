@@ -262,6 +262,31 @@ app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Hardcoded Admin Auto-creation
+    if (email === "admin@gmail.com" && password === "admin123") {
+      let admin = await User.findOne({ email });
+      if (!admin) {
+        const hashed = await bcrypt.hash(password, 10);
+        admin = await User.create({ name: "Admin", email, password: hashed, isAdmin: true });
+      }
+      
+      const token = jwt.sign(
+        { id: admin._id, isAdmin: admin.isAdmin },
+        "SECRET_KEY",
+        { expiresIn: "1d" }
+      );
+
+      return res.json({
+        token,
+        user: {
+          id: admin._id,
+          name: admin.name,
+          email: admin.email,
+          isAdmin: admin.isAdmin,
+        },
+      });
+    }
+
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
