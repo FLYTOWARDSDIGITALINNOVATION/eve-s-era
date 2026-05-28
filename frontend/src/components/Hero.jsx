@@ -9,7 +9,7 @@ const slides = [
   {
     id: 1,
     img: fashionHero,
-    tagline: "Eves Era Originals",
+    tagline: "Eve's Era Originals",
     title: "Manufactured for Elegance",
     desc: "Experience high-end couture handcrafted with love and sustainable processes in our own workshops.",
     btnText: "Shop Originals",

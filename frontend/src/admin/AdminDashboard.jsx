@@ -6,6 +6,7 @@ import {
   FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift
 } from "react-icons/fa";
 import "./AdminDashboard.css";
+import logo from "../assets/eve's era.jpeg";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -90,9 +91,10 @@ const AdminDashboard = () => {
     <div className="admin-page animate-fade-in">
       {/* Top Ribbon Header */}
       <div className="admin-navbar">
-        <div className="admin-nav-logo" onClick={() => navigate("/home")}>
-          <span className="logo-sparkle">🎀</span>
-          <span>Eves Era Admin Center</span>
+        <div className="admin-nav-logo" onClick={() => navigate("/home")} style={{ marginLeft: '-15px' }}>
+          <div style={{ height: '80px', width: '80px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <img src={logo} alt="Eve's Era Admin" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
+          </div>
         </div>
         <div className="admin-nav-links">
           <button className="back-store-btn" onClick={() => navigate("/home")}>

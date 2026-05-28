@@ -179,7 +179,7 @@
 
 .auth-tab.active {
   background: #fff;
-  color: var(--primary-color);
+  color: var(--dark-pink);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
@@ -272,14 +272,14 @@
 }
 
 .forgot-password {
-  color: var(--primary-color);
+  color: var(--dark-pink);
   text-decoration: none;
   font-weight: 700;
 }
 
-.submit-btn {
+.auth-submit-btn {
   width: 100%;
-  background: var(--primary-color);
+  background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
   color: #fff;
   padding: 18px;
   border: none;
@@ -291,8 +291,8 @@
   letter-spacing: 0.02em;
 }
 
-.submit-btn:hover {
-  background: #222;
+.auth-submit-btn:hover {
+  background: linear-gradient(135deg, var(--accent-color), var(--dark-pink));
   transform: translateY(-3px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }

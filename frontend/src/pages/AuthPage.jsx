@@ -6,7 +6,7 @@ import './AuthPage.css';
 
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
-import logo from "../assets/logo.png";
+import logo from "../assets/eve's era.jpeg";
 
 const AuthPage = () => {
     const [name, setName] = useState("");
@@ -153,9 +153,8 @@ const AuthPage = () => {
                     animate="visible"
                     variants={brandingVariants}
                 >
-                    <motion.div variants={itemVariants} className="branding-group">
-                        <span className="branding-logo-icon" style={{ fontSize: '1.8rem' }}>🎀</span>
-                        <h1 className="branding-name-main">Eve's Era</h1>
+                    <motion.div variants={itemVariants} className="branding-group" style={{ display: 'flex', justifyContent: 'center' }}>
+                        <img src={logo} alt="Eve's Era Logo" style={{ height: '120px', width: 'auto', objectFit: 'contain' }} />
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="brand-badge" style={{
@@ -288,7 +287,7 @@ const AuthPage = () => {
                                             whileHover={{ scale: 1.01 }}
                                             whileTap={{ scale: 0.99 }}
                                             type="submit"
-                                            className="submit-btn"
+                                            className="auth-submit-btn"
                                         >
                                             Sign In
                                         </motion.button>
@@ -373,7 +372,7 @@ const AuthPage = () => {
                                             whileHover={{ scale: 1.01 }}
                                             whileTap={{ scale: 0.99 }}
                                             type="submit"
-                                            className="submit-btn"
+                                            className="auth-submit-btn"
                                         >
                                             Create Account
                                         </motion.button>

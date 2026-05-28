@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaShoppingBag, FaStar, FaShieldAlt, FaGem, FaLeaf, FaArrowRight } from 'react-icons/fa';
 import './LandingPage.css';
+import logo from "../assets/eve's era.jpeg";
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -45,9 +46,11 @@ const LandingPage = () => {
                     className="landing-logo"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
+                    style={{ marginLeft: '-15px' }}
                 >
-                    <span className="logo-emoji">🎀</span>
-                    <span>Eves Era</span>
+                  <div style={{ height: '120px', width: '120px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                    <img src={logo} alt="Eve's Era Logo" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
+                  </div>
                 </motion.div>
                 <div className="nav-actions">
                     <button className="nav-btn login-btn" onClick={() => navigate('/auth', { state: { isLogin: true } })}>Login</button>
@@ -139,8 +142,9 @@ const LandingPage = () => {
                         </div>
                     </div>
                     <div className="hero-main-visual">
-                        <div className="visual-circle-pink"></div>
-                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500&q=80" alt="Eves Era Fashion Model" className="hero-image-large" />
+                        <div className="hero-image-wrapper animate-fade-in-up delay-2">
+                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500&q=80" alt="Eve's Era Fashion Model" className="hero-image-large" />
+                        </div>
                     </div>
                 </motion.div>
             </main>

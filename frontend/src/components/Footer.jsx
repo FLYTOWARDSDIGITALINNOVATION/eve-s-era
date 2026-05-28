@@ -8,7 +8,7 @@ import {
     FaCcVisa, FaCcMastercard, FaCcApplePay, FaPaypal
 } from 'react-icons/fa';
 import { SiGooglepay } from 'react-icons/si';
-import logo from '../assets/logo.png';
+import logo from "../assets/eve's era.jpeg";
 import './Footer.css';
 
 const Footer = () => {
@@ -42,8 +42,9 @@ const Footer = () => {
                     {/* Brand Section */}
                     <div className="footer-section brand-column">
                         <div className="footer-logo-group">
-                            <span className="footer-logo-icon">🎀</span>
-                            <span className="footer-brand-title">Eve's Era</span>
+                          <div style={{ height: '120px', width: '120px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                            <img src={logo} alt="Eve's Era Logo" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
+                          </div>
                         </div>
                         <p className="brand-mission">
                             Crafting timeless luxury and sustainable couture. Discover our custom-manufactured originals and curated resell collections designed for the modern woman.

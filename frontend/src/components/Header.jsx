@@ -17,6 +17,7 @@ import {
 import "./Header.css";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
+import logo from "../assets/eve's era.jpeg";
 
 const Header = ({ onSearch, onModelFilter }) => {
   const [showCategories, setShowCategories] = useState(false);
@@ -63,7 +64,7 @@ const Header = ({ onSearch, onModelFilter }) => {
       <div className="top-banner">
         <div className="container banner-flex">
           <div className="delivery-loc">
-            <span>✨ Welcome to Eves Era | Soft Feminine Luxury Boutique</span>
+            <span>✨ Welcome to Eve's Era | Soft Feminine Luxury Boutique</span>
           </div>
           <div className="top-links">
             <Link to="/customer-service"><FaPhoneAlt size={10} /> Contact Support</Link>
@@ -73,9 +74,10 @@ const Header = ({ onSearch, onModelFilter }) => {
 
       {/* Main Luxury Nav */}
       <div className="main-nav container">
-        <Link to="/home" className="logo-brand">
-          <span className="logo-icon-pink">🎀</span>
-          <span className="brand-name">Eves Era</span>
+        <Link to="/home" className="logo-brand" style={{ marginLeft: '-15px' }}>
+          <div style={{ height: '100px', width: '100px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+            <img src={logo} alt="Eve's Era Logo" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
+          </div>
         </Link>
 
         {/* Search Bar with Pink Theme */}
@@ -162,7 +164,7 @@ const Header = ({ onSearch, onModelFilter }) => {
               onClick={() => handleModelSelect("manufactured")} 
               className={`segment-item original-seg ${location.search.includes('model=manufactured') ? 'active' : ''}`}
             >
-              ✨ Eves Era Originals
+              ✨ Eve's Era Originals
             </button>
           </div>
 

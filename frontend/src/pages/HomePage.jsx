@@ -8,6 +8,7 @@ import { FaStar, FaGem, FaLeaf, FaFilter, FaSlidersH, FaBoxOpen } from "react-ic
 import "./HomePage.css";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import logo from "../assets/eve's era.jpeg";
 
 const HomePage = () => {
   const location = useLocation();
@@ -195,8 +196,10 @@ const HomePage = () => {
             </button>
           </div>
 
-          <div className="sidebar-banner">
-            <span className="logo-sparkle">✨</span>
+          <div className="sidebar-banner" style={{ marginLeft: '-15px' }}>
+            <div style={{ height: '100px', width: '100px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+              <img src={logo} alt="Eve's Era Logo" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
+            </div>
             <h3>Eve's Premium Care</h3>
             <p>Our self-manufactured garments use organic linens and pure Mulberry silks. Vetted resell luxury items are thoroughly authenticated by our boutique team.</p>
           </div>
