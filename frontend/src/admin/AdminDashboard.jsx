@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   FaCoins, FaBoxOpen, FaInbox, FaUsers, FaArrowLeft, FaSignOutAlt, 
-  FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift
+  FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift, FaLayerGroup
 } from "react-icons/fa";
 import "./AdminDashboard.css";
 import logo from "../assets/eve's era.jpeg";
@@ -123,6 +123,9 @@ const AdminDashboard = () => {
           </button>
           <button className={`tab-menu-btn ${activeTab === "support" ? "active" : ""}`} onClick={() => navigate("/admin/support")}>
             <FaInbox /> <span>Customer Support</span>
+          </button>
+          <button className={`tab-menu-btn`} onClick={() => navigate("/admin/add-category")}>
+            <FaLayerGroup /> <span>Manage Categories</span>
           </button>
         </aside>
 

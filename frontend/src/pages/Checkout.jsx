@@ -314,6 +314,10 @@ const Checkout = () => {
                         ? `${API_BASE_URL}${item.image || item.img}`
                         : (item.image || item.img || "https://via.placeholder.com/80")}
                       alt={item.name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=200&q=80";
+                      }}
                     />
                     <div className="sp-details">
                       <p className="sp-name">{item.name}</p>

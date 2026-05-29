@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { FaStar, FaShoppingCart, FaArrowLeft, FaGem, FaLeaf, FaTruck, FaShieldAlt, FaUndo } from "react-icons/fa";
+import { FaStar, FaShoppingCart, FaArrowLeft, FaGem, FaLeaf } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import "./ProductDetailPage.css";
 
@@ -285,21 +285,6 @@ const ProductDetailPage = () => {
               </button>
             </div>
 
-            {/* Premium Delivery Trust widgets */}
-            <div className="trust-ribbon">
-              <div className="trust-item">
-                <FaTruck />
-                <span>Express Delivery</span>
-              </div>
-              <div className="trust-item">
-                <FaShieldAlt />
-                <span>100% Vetted Quality</span>
-              </div>
-              <div className="trust-item">
-                <FaUndo />
-                <span>15-Day Free Returns</span>
-              </div>
-            </div>
           </div>
         </div>
 

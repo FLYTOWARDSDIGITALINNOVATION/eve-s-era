@@ -325,3 +325,17 @@
     grid-column: span 1;
   }
 }
+
+/* Card Icons Fix */
+.card-icons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.card-icons img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+}

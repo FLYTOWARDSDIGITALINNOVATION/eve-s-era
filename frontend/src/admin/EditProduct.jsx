@@ -1,5 +1,5 @@
 import API_BASE_URL from '../api';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft, FaPlus, FaCloudUploadAlt } from "react-icons/fa";
 import "./AddProduct.css"; // Reuse styling
@@ -24,6 +24,11 @@ const EditProduct = () => {
   const [preview, setPreview] = useState(null);
   const [currentImage, setCurrentImage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
+
+  const nameRef = useRef(null);
+  const categoryRef = useRef(null);
+  const priceRef = useRef(null);
 
   const adminEmail = "admin@gmail.com";
 
@@ -70,11 +75,41 @@ const EditProduct = () => {
     }
   };
 
+  const handleInputChange = (field, value) => {
+    setForm({ ...form, [field]: value });
+    if (errors[field]) {
+      setErrors({ ...errors, [field]: null });
+    }
+  };
+
   const handleSubmit = async () => {
-    if (!form.name || !form.price || !form.category) {
-      alert("Name, Price, and Category are required!");
+    const newErrors = {};
+    if (!form.name || !form.name.trim()) {
+      newErrors.name = "Product title name is required.";
+    }
+    if (!form.category) {
+      newErrors.category = "Boutique category is required.";
+    }
+    if (!form.price) {
+      newErrors.price = "Listing price is required.";
+    } else if (Number(form.price) <= 0) {
+      newErrors.price = "Listing price must be greater than zero.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      // Focus the first invalid input field
+      if (newErrors.name && nameRef.current) {
+        nameRef.current.focus();
+      } else if (newErrors.category && categoryRef.current) {
+        categoryRef.current.focus();
+      } else if (newErrors.price && priceRef.current) {
+        priceRef.current.focus();
+      }
       return;
     }
+
+    setErrors({});
 
     const token = localStorage.getItem("token");
     const formData = new FormData();
@@ -153,39 +188,45 @@ const EditProduct = () => {
             </div>
 
             <div className="input-group-field">
-              <label>Product Title Name</label>
+              <label>Product Title Name <span className="required-asterisk">*</span></label>
               <input
+                ref={nameRef}
                 placeholder="e.g. Silk Wrap Maxi Dress"
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="pink-admin-input"
+                onChange={(e) => handleInputChange("name", e.target.value)}
+                className={`pink-admin-input ${errors.name ? "input-error" : ""}`}
               />
+              {errors.name && <span className="field-error-msg">{errors.name}</span>}
             </div>
 
             <div className="form-row-double">
               <div className="input-group-field">
-                <label>Category</label>
+                <label>Category <span className="required-asterisk">*</span></label>
                 <select
+                  ref={categoryRef}
                   value={form.category}
-                  onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  className="pink-admin-select"
+                  onChange={(e) => handleInputChange("category", e.target.value)}
+                  className={`pink-admin-select ${errors.category ? "input-error" : ""}`}
                 >
                   <option value="">Select Boutique Category</option>
                   {categories.map((c) => (
                     <option key={c._id} value={c.name}>{c.name}</option>
                   ))}
                 </select>
+                {errors.category && <span className="field-error-msg">{errors.category}</span>}
               </div>
 
               <div className="input-group-field">
-                <label>Listing Price (₹)</label>
+                <label>Listing Price (₹) <span className="required-asterisk">*</span></label>
                 <input
+                  ref={priceRef}
                   type="number"
                   placeholder="e.g. 1850"
                   value={form.price}
-                  onChange={(e) => setForm({ ...form, price: e.target.value })}
-                  className="pink-admin-input"
+                  onChange={(e) => handleInputChange("price", e.target.value)}
+                  className={`pink-admin-input ${errors.price ? "input-error" : ""}`}
                 />
+                {errors.price && <span className="field-error-msg">{errors.price}</span>}
               </div>
             </div>
 

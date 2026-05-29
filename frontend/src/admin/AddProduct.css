@@ -196,3 +196,32 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Required Field Indicators & Inline Validation Errors */
+.required-asterisk {
+  color: #ff5252;
+  margin-left: 3px;
+  font-weight: bold;
+}
+
+.pink-admin-input.input-error,
+.pink-admin-select.input-error,
+.pink-admin-textarea.input-error {
+  border-color: #ff5252 !important;
+  background-color: #fff5f5;
+}
+
+.pink-admin-input.input-error:focus,
+.pink-admin-select.input-error:focus,
+.pink-admin-textarea.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.15) !important;
+}
+
+.field-error-msg {
+  color: #ff5252;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 4px;
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
