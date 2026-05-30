@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaShoppingBag, FaStar, FaShieldAlt, FaGem, FaLeaf, FaArrowRight } from 'react-icons/fa';
 import './LandingPage.css';
 import logo from "../assets/eve's era.jpeg";
+import hero1 from "../assets/hero1.jpg";
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -143,7 +144,7 @@ const LandingPage = () => {
                     </div>
                     <div className="hero-main-visual">
                         <div className="hero-image-wrapper animate-fade-in-up delay-2">
-                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500&q=80" alt="Eve's Era Fashion Model" className="hero-image-large" />
+                            <img src={hero1} alt="Eve's Era Fashion Model" className="hero-image-large" />
                         </div>
                     </div>
                 </motion.div>

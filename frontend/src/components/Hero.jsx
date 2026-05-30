@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { FaArrowRight, FaGem, FaLeaf } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import fashionHero from "../assets/fashion_hero.png";
-import tshirt2 from "../assets/tshirt2.png";
+import hero1 from "../assets/hero1.jpg";
+import hero2 from "../assets/hero2.jpg";
+import hero3 from "../assets/hero3.jpg";
+import hero4 from "../assets/hero4.jpg";
+import hero5 from "../assets/hero5.jpg";
+import hero6 from "../assets/hero6.jpg";
 import "./hero.css";
 
 const slides = [
   {
     id: 1,
-    img: fashionHero,
+    img: hero1,
     tagline: "Eve's Era Originals",
     title: "Manufactured for Elegance",
     desc: "Experience high-end couture handcrafted with love and sustainable processes in our own workshops.",
@@ -18,10 +22,50 @@ const slides = [
   },
   {
     id: 2,
-    img: tshirt2,
+    img: hero2,
     tagline: "Curated Resell Collection",
     title: "Sustainable Fashion Loop",
     desc: "Give premium, high-quality garments a new story. Hand-inspected, branded items at incredible values.",
+    btnText: "Shop Resell",
+    model: "resell",
+    icon: <FaLeaf />
+  },
+  {
+    id: 3,
+    img: hero3,
+    tagline: "Eve's Era Originals",
+    title: "Timeless Classics",
+    desc: "Discover styles that never fade. Expertly tailored pieces for your everyday luxury.",
+    btnText: "Shop Originals",
+    model: "manufactured",
+    icon: <FaGem />
+  },
+  {
+    id: 4,
+    img: hero4,
+    tagline: "Curated Resell Collection",
+    title: "Eco-Friendly Choices",
+    desc: "Join the movement towards a greener future with our pre-loved authentic collections.",
+    btnText: "Shop Resell",
+    model: "resell",
+    icon: <FaLeaf />
+  },
+  {
+    id: 5,
+    img: hero5,
+    tagline: "Eve's Era Originals",
+    title: "Modern Sophistication",
+    desc: "Elevate your wardrobe with contemporary designs meant to make a statement.",
+    btnText: "Shop Originals",
+    model: "manufactured",
+    icon: <FaGem />
+  },
+  {
+    id: 6,
+    img: hero6,
+    tagline: "Curated Resell Collection",
+    title: "Vintage Treasures",
+    desc: "Unearth rare finds and iconic silhouettes that define authentic fashion history.",
     btnText: "Shop Resell",
     model: "resell",
     icon: <FaLeaf />
@@ -35,7 +79,7 @@ function Hero() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 3000);
     return () => clearInterval(timer);
   }, []);
 
