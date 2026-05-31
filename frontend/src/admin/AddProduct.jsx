@@ -1,7 +1,7 @@
 import API_BASE_URL from '../api';
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaPlus, FaCloudUploadAlt } from "react-icons/fa";
+import { FaArrowLeft, FaPlus, FaCloudUploadAlt, FaTimes } from "react-icons/fa";
 import "./AddProduct.css";
 
 const AddProduct = () => {
@@ -11,15 +11,14 @@ const AddProduct = () => {
     category: "",
     price: "",
     description: "",
-    businessModel: "resell", // default model
+    businessModel: "resell",
     materials: "",
-    sizes: "S, M, L, XL",
-    colors: "Pink, Rose, Dusty Mauve",
-    stock: "15",
-    supplierName: ""
+    sizes: "",        // optional — empty by default
+    colors: "",
   });
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
+
+  // Multi-image state: array of { file, preview }
+  const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
 
   const nameRef = useRef(null);
@@ -33,51 +32,46 @@ const AddProduct = () => {
     fetch(`${API_BASE_URL}/categories`)
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          setCategories(data);
-        }
+        if (Array.isArray(data)) setCategories(data);
       });
   }, []);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-    }
+  // Add multiple images, avoid duplicates by name+size
+  const handleImagesChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    const existing = new Set(images.map((i) => i.file.name + i.file.size));
+    const toAdd = newFiles
+      .filter((f) => !existing.has(f.name + f.size))
+      .map((file) => ({ file, preview: URL.createObjectURL(file) }));
+    setImages((prev) => [...prev, ...toAdd]);
+    // reset input so the same file can be re-added after removal
+    e.target.value = "";
+  };
+
+  const removeImage = (index) => {
+    setImages((prev) => {
+      URL.revokeObjectURL(prev[index].preview);
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
-    if (errors[field]) {
-      setErrors({ ...errors, [field]: null });
-    }
+    if (errors[field]) setErrors({ ...errors, [field]: null });
   };
 
   const handleSubmit = async () => {
     const newErrors = {};
-    if (!form.name || !form.name.trim()) {
-      newErrors.name = "Product title name is required.";
-    }
-    if (!form.category) {
-      newErrors.category = "Boutique category is required.";
-    }
-    if (!form.price) {
-      newErrors.price = "Listing price is required.";
-    } else if (Number(form.price) <= 0) {
-      newErrors.price = "Listing price must be greater than zero.";
-    }
+    if (!form.name || !form.name.trim()) newErrors.name = "Product title name is required.";
+    if (!form.category) newErrors.category = "Boutique category is required.";
+    if (!form.price) newErrors.price = "Listing price is required.";
+    else if (Number(form.price) <= 0) newErrors.price = "Listing price must be greater than zero.";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      // Focus the first invalid input field
-      if (newErrors.name && nameRef.current) {
-        nameRef.current.focus();
-      } else if (newErrors.category && categoryRef.current) {
-        categoryRef.current.focus();
-      } else if (newErrors.price && priceRef.current) {
-        priceRef.current.focus();
-      }
+      if (newErrors.name && nameRef.current) nameRef.current.focus();
+      else if (newErrors.category && categoryRef.current) categoryRef.current.focus();
+      else if (newErrors.price && priceRef.current) priceRef.current.focus();
       return;
     }
 
@@ -91,30 +85,29 @@ const AddProduct = () => {
     formData.append("description", form.description);
     formData.append("businessModel", form.businessModel);
     formData.append("materials", form.materials);
-    formData.append("sizes", form.sizes);
+    formData.append("sizes", form.sizes);     // may be empty string — that's fine
     formData.append("colors", form.colors);
-    formData.append("stock", form.stock);
-    formData.append("supplierName", form.supplierName);
     formData.append("email", adminEmail);
-    
-    if (image) {
-      formData.append("image", image);
+
+    // Append all selected images
+    images.forEach(({ file }) => {
+      formData.append("images", file);
+    });
+    // Keep backward-compat: also send first image as "image"
+    if (images.length > 0) {
+      formData.append("image", images[0].file);
     }
 
     try {
       const res = await fetch(`${API_BASE_URL}/admin/product`, {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
+        headers: { "Authorization": `Bearer ${token}` },
         body: formData,
       });
 
       const data = await res.json();
       alert(data.message || "Product listed in Eve's Era catalogue successfully!");
-      if (res.ok) {
-        navigate("/admin");
-      }
+      if (res.ok) navigate("/admin");
     } catch (err) {
       console.error("Add Product Error:", err);
       alert("Failed to save product.");
@@ -191,9 +184,11 @@ const AddProduct = () => {
 
             <div className="form-row-double">
               <div className="input-group-field">
-                <label>Sizes (Comma-separated)</label>
+                <label>
+                  Sizes <span className="optional-label">(optional)</span>
+                </label>
                 <input
-                  placeholder="S, M, L, XL"
+                  placeholder="e.g. S, M, L, XL or leave blank"
                   value={form.sizes}
                   onChange={(e) => setForm({ ...form, sizes: e.target.value })}
                   className="pink-admin-input"
@@ -211,40 +206,18 @@ const AddProduct = () => {
               </div>
             </div>
 
-            <div className="form-row-double">
+            {/* Material composition — only for manufactured */}
+            {form.businessModel === "manufactured" && (
               <div className="input-group-field">
-                <label>Inventory Stock count</label>
+                <label>Material Composition</label>
                 <input
-                  type="number"
-                  placeholder="10"
-                  value={form.stock}
-                  onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                  placeholder="e.g. 80% Mulberry Silk, 20% Cotton"
+                  value={form.materials}
+                  onChange={(e) => setForm({ ...form, materials: e.target.value })}
                   className="pink-admin-input"
                 />
               </div>
-
-              {form.businessModel === "resell" ? (
-                <div className="input-group-field">
-                  <label>Supplier Vendor Name</label>
-                  <input
-                    placeholder="e.g. Bombay Curations"
-                    value={form.supplierName}
-                    onChange={(e) => setForm({ ...form, supplierName: e.target.value })}
-                    className="pink-admin-input"
-                  />
-                </div>
-              ) : (
-                <div className="input-group-field">
-                  <label>Material Composition</label>
-                  <input
-                    placeholder="e.g. 80% Mulberry Silk, 20% Cotton"
-                    value={form.materials}
-                    onChange={(e) => setForm({ ...form, materials: e.target.value })}
-                    className="pink-admin-input"
-                  />
-                </div>
-              )}
-            </div>
+            )}
 
             <div className="input-group-field">
               <label>Description Details</label>
@@ -258,30 +231,62 @@ const AddProduct = () => {
             </div>
           </div>
 
-          {/* RIGHT: Image Upload */}
+          {/* RIGHT: Multi-Image Upload */}
           <div className="form-upload-column">
-            <label className="upload-header-lbl">Showcase Image</label>
-            <div 
-              className="dropzone-box"
-              onClick={() => document.getElementById("productImageFile").click()}
+            <label className="upload-header-lbl">
+              Showcase Images <span className="optional-label">(up to 5)</span>
+            </label>
+
+            {/* Dropzone */}
+            <div
+              className="dropzone-box multi-dropzone"
+              onClick={() => document.getElementById("productImagesInput").click()}
             >
-              {preview ? (
-                <img src={preview} alt="Product showcase preview" className="dropzone-preview-img" />
-              ) : (
-                <div className="dropzone-msg">
-                  <FaCloudUploadAlt className="upload-icon-form" />
-                  <span>Click or drag image file here</span>
-                  <span className="file-desc-lbl">PNG, JPG up to 5MB</span>
-                </div>
-              )}
+              <div className="dropzone-msg">
+                <FaCloudUploadAlt className="upload-icon-form" />
+                <span>Click to add images</span>
+                <span className="file-desc-lbl">PNG, JPG — select multiple at once</span>
+              </div>
             </div>
+
             <input
               type="file"
-              id="productImageFile"
+              id="productImagesInput"
               hidden
               accept="image/*"
-              onChange={handleImageChange}
+              multiple
+              onChange={handleImagesChange}
             />
+
+            {/* Thumbnails Grid */}
+            {images.length > 0 && (
+              <div className="multi-img-preview-grid">
+                {images.map((img, idx) => (
+                  <div key={idx} className="thumb-wrapper">
+                    <img src={img.preview} alt={`preview-${idx}`} className="thumb-img" />
+                    {idx === 0 && <span className="thumb-primary-badge">Main</span>}
+                    <button
+                      className="thumb-remove-btn"
+                      onClick={() => removeImage(idx)}
+                      title="Remove image"
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+                ))}
+                {/* Add more tile if under 5 */}
+                {images.length < 5 && (
+                  <div
+                    className="thumb-add-more"
+                    onClick={() => document.getElementById("productImagesInput").click()}
+                    title="Add more images"
+                  >
+                    <FaPlus />
+                    <span>Add more</span>
+                  </div>
+                )}
+              </div>
+            )}
 
             <button className="submit-form-btn" onClick={handleSubmit}>
               <FaPlus /> List Fashion Piece

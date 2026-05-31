@@ -4,6 +4,7 @@ import FlashSaleBar from "../components/FlashSaleBar";
 import Hero from "../components/Hero";
 import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
+import BoutiqueCarousel from "../components/BoutiqueCarousel";
 import { FaStar, FaGem, FaLeaf, FaFilter, FaSlidersH, FaBoxOpen } from "react-icons/fa";
 import "./HomePage.css";
 import React, { useState, useEffect } from "react";
@@ -259,6 +260,7 @@ const HomePage = () => {
           )}
         </main>
       </div>
+      <BoutiqueCarousel />
       <Footer />
     </div>
   );

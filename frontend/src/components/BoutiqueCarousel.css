@@ -1,0 +1,441 @@
+/* Boutique Carousel Section styles */
+.boutique-carousel-section {
+  padding: 80px 0;
+  background: linear-gradient(180deg, var(--background-color) 0%, rgba(253, 241, 243, 0.4) 100%);
+  border-top: 1px solid rgba(244, 182, 194, 0.2);
+}
+
+.boutique-section-header {
+  text-align: center;
+  margin-bottom: 48px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.boutique-section-header .header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--light-pink);
+  color: var(--accent-color);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(196, 139, 159, 0.15);
+}
+
+.boutique-section-header .badge-icon {
+  font-size: 14px;
+}
+
+.boutique-section-title {
+  font-family: var(--font-title);
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--text-color);
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+
+.highlight-text-boutique {
+  background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  position: relative;
+}
+
+.highlight-text-boutique::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
+  border-radius: 2px;
+  opacity: 0.3;
+}
+
+.boutique-section-subtitle {
+  font-size: 15px;
+  color: #666666;
+  line-height: 1.6;
+}
+
+/* Two-column layout */
+.boutique-carousel-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  align-items: stretch;
+}
+
+/* Slider Area */
+.boutique-carousel-slider {
+  position: relative;
+  height: 480px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(196, 139, 159, 0.15);
+  border: 1px solid rgba(244, 182, 194, 0.2);
+}
+
+/* Individual Slides */
+.boutique-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+  z-index: 1;
+}
+
+.boutique-slide.active-slide {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+.slide-image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slide-image-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 6s ease-out;
+}
+
+.boutique-slide.active-slide .slide-image-element {
+  transform: scale(1.08);
+}
+
+.slide-overlay-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0) 100%);
+  z-index: 1;
+}
+
+/* Left Glassmorphic Overlaid Content Card */
+.slide-content-overlay {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  z-index: 3;
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.boutique-slide.active-slide .slide-content-overlay {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@keyframes slideInUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1));
+  color: var(--accent-color);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(219, 39, 119, 0.15);
+}
+
+.slide-title-text {
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.slide-description-text {
+  font-size: 13.5px;
+  color: #555555;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.slide-usp-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+
+.slide-usp-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.usp-dot {
+  font-size: 10px;
+}
+
+/* Nav Controls */
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(244, 182, 194, 0.2);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.carousel-nav-btn:hover {
+  background: var(--accent-color);
+  color: var(--white);
+  box-shadow: 0 6px 15px rgba(196, 139, 159, 0.4);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.prev-btn {
+  left: 20px;
+}
+
+.next-btn {
+  right: 20px;
+}
+
+/* Dots Indicators */
+.carousel-indicators {
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator-dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.2);
+}
+
+.indicator-dot.active {
+  background: var(--accent-color);
+  width: 24px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(196, 139, 159, 0.4);
+}
+
+/* Right Information Card styling */
+.boutique-info-card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  border: 1px dashed var(--secondary-pink);
+  padding: 30px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.boutique-info-card .info-header {
+  border-bottom: 1px solid rgba(244, 182, 194, 0.25);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.boutique-info-card .info-header h4 {
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.boutique-info-card .info-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-grow: 1;
+}
+
+.boutique-info-card .info-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.boutique-info-card .info-icon {
+  font-size: 18px;
+  color: var(--accent-color);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.boutique-info-card .info-item h5 {
+  font-family: var(--font-accent);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #777777;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.boutique-info-card .info-item p {
+  font-size: 13.5px;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.boutique-info-card .info-tag-promo {
+  margin-top: auto;
+  background: linear-gradient(135deg, var(--light-pink), rgba(248, 215, 218, 0.25));
+  padding: 16px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(244, 182, 194, 0.3);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.promo-sparkle {
+  font-size: 16px;
+  animation: pulse-sparkle 2s infinite;
+}
+
+@keyframes pulse-sparkle {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.boutique-info-card .info-tag-promo p {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-color);
+  line-height: 1.5;
+}
+
+/* Responsiveness */
+@media (max-width: 1200px) {
+  .boutique-carousel-container {
+    gap: 20px;
+  }
+  .boutique-carousel-slider {
+    height: 440px;
+  }
+}
+
+@media (max-width: 992px) {
+  .boutique-carousel-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .boutique-carousel-slider {
+    height: 400px;
+  }
+  .boutique-info-card {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .boutique-carousel-section {
+    padding: 50px 0;
+  }
+  .boutique-section-title {
+    font-size: 28px;
+  }
+  .boutique-carousel-slider {
+    height: 340px;
+  }
+  .slide-content-overlay {
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: none;
+    padding: 18px;
+  }
+  .slide-title-text {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .slide-description-text {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .slide-usp-list {
+    gap: 8px 12px;
+  }
+  .slide-usp-item {
+    font-size: 11px;
+  }
+  .carousel-nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .prev-btn {
+    left: 10px;
+  }
+  .next-btn {
+    right: 10px;
+  }
+  .carousel-indicators {
+    right: 20px;
+  }
+}
