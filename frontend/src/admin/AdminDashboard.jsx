@@ -15,13 +15,8 @@ const AdminDashboard = () => {
   // Statistical states
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Supplier registry mock data
-  const suppliers = [
-    { id: 1, name: "Bombay Couture Importers", contact: "+91 98765 43210", category: "Silks & Sarees", status: "Active" },
-    { id: 2, name: "Atelier Cotton Mills", contact: "+91 99887 76655", category: "Organic Cottons", status: "Active" }
-  ];
 
   // Materials & production mock data
   const materials = [
@@ -44,11 +39,15 @@ const AdminDashboard = () => {
       fetch(`${API_BASE_URL}/admin/orders`, {
         headers: { "Authorization": `Bearer ${token}` }
       }).then(res => res.json()).catch(() => ({ orders: [] })),
-      fetch(`${API_BASE_URL}/products`).then(res => res.json()).catch(() => [])
+      fetch(`${API_BASE_URL}/products`).then(res => res.json()).catch(() => []),
+      fetch(`${API_BASE_URL}/admin/users`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      }).then(res => res.json()).catch(() => [])
     ])
-      .then(([ordersData, productsData]) => {
+      .then(([ordersData, productsData, usersData]) => {
         setOrders(ordersData.orders || []);
         setProducts(productsData || []);
+        setCustomers(Array.isArray(usersData) ? usersData : []);
         setLoading(false);
       })
       .catch((err) => {
@@ -306,28 +305,28 @@ const AdminDashboard = () => {
               {/* TAB 3: SUPPLIERS */}
               {activeTab === "suppliers" && (
                 <div className="overview-tab-view animate-fade-in">
-                  <h2>Bombay Supplier registry</h2>
-                  <p className="admin-subtitle">Approved vendor entities supplying authenticated pre-loved luxury segments.</p>
+                  <h2>Registered Customers</h2>
+                  <p className="admin-subtitle">View all registered customers and their accounts.</p>
 
                   <div className="admin-products-table-box">
                     <table className="admin-custom-table">
                       <thead>
                         <tr>
-                          <th>Supplier ID</th>
-                          <th>Supplier Entity</th>
-                          <th>Contact Details</th>
-                          <th>Materials Supplied</th>
-                          <th>Registry Status</th>
+                          <th>User ID</th>
+                          <th>Name</th>
+                          <th>Email Address</th>
+                          <th>Account Type</th>
+                          <th>Status</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {suppliers.map(s => (
-                          <tr key={s.id}>
-                            <td><strong>#VND-00{s.id}</strong></td>
-                            <td><strong>{s.name}</strong></td>
-                            <td>{s.contact}</td>
-                            <td>{s.category}</td>
-                            <td><span className="status-badge delivered">{s.status}</span></td>
+                        {customers.map(c => (
+                          <tr key={c._id}>
+                            <td><strong>#{c._id.substring(c._id.length - 6)}</strong></td>
+                            <td><strong>{c.name}</strong></td>
+                            <td>{c.email}</td>
+                            <td>{c.isAdmin ? "Admin" : "Customer"}</td>
+                            <td><span className="status-badge delivered">Active</span></td>
                           </tr>
                         ))}
                       </tbody>
