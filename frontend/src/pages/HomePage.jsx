@@ -107,7 +107,6 @@ const HomePage = () => {
     <div className="homepage animate-fade-in">
       <Header onSearch={setSearchTerm} onModelFilter={handleModelSelect} />
       <Hero />
-      <FlashSaleBar />
 
       <div className="home-container container">
         {/* Sidebar Filters with Feminine Style */}
