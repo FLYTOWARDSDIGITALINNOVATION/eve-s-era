@@ -68,7 +68,7 @@ function BoutiqueCarousel() {
   const currentSlide = slides[currentIndex];
 
   return (
-    <section 
+    <section
       className="boutique-carousel-section"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -100,9 +100,9 @@ function BoutiqueCarousel() {
               <div key={slide.id} className={`boutique-slide ${position}`}>
                 {/* Background Image with Zoom */}
                 <div className="slide-image-wrapper">
-                  <img 
-                    src={slide.img} 
-                    alt={slide.title} 
+                  <img
+                    src={slide.img}
+                    alt={slide.title}
                     className="slide-image-element"
                   />
                   <div className="slide-overlay-gradient"></div>
@@ -113,7 +113,7 @@ function BoutiqueCarousel() {
                   <span className="slide-badge">{slide.badge}</span>
                   <h3 className="slide-title-text">{slide.title}</h3>
                   <p className="slide-description-text">{slide.desc}</p>
-                  
+
                   <div className="slide-usp-list">
                     {slide.usp.map((item, idx) => (
                       <span key={idx} className="slide-usp-item">
@@ -127,15 +127,15 @@ function BoutiqueCarousel() {
           })}
 
           {/* Navigation Arrows */}
-          <button 
-            className="carousel-nav-btn prev-btn" 
+          <button
+            className="carousel-nav-btn prev-btn"
             onClick={handlePrev}
             aria-label="Previous image"
           >
             <FaArrowLeft />
           </button>
-          <button 
-            className="carousel-nav-btn next-btn" 
+          <button
+            className="carousel-nav-btn next-btn"
             onClick={handleNext}
             aria-label="Next image"
           >
@@ -172,7 +172,7 @@ function BoutiqueCarousel() {
               <FaClock className="info-icon" />
               <div>
                 <h5>Opening Hours</h5>
-                <p>Monday - Sunday: 10:00am to 8:45pm</p>
+                <p>Monday - Sunday: 10:00 am to 8:45 pm</p>
               </div>
             </div>
             <div className="info-tag-promo">
