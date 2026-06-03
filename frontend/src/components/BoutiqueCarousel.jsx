@@ -172,7 +172,7 @@ function BoutiqueCarousel() {
               <FaClock className="info-icon" />
               <div>
                 <h5>Opening Hours</h5>
-                <p>Monday - Sunday: 10:00 AM - 9:00 PM</p>
+                <p>Monday - Sunday: 10:00am to 8:45pm</p>
               </div>
             </div>
             <div className="info-tag-promo">
