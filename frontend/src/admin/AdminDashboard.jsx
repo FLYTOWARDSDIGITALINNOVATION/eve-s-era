@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   FaCoins, FaBoxOpen, FaInbox, FaUsers, FaArrowLeft, FaSignOutAlt, 
-  FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift, FaLayerGroup
+  FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift, FaLayerGroup, FaBars, FaTimes
 } from "react-icons/fa";
 import "./AdminDashboard.css";
 import logo from "../assets/eve's era.jpeg";
@@ -11,6 +11,7 @@ import logo from "../assets/eve's era.jpeg";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Statistical states
   const [orders, setOrders] = useState([]);
@@ -90,40 +91,46 @@ const AdminDashboard = () => {
     <div className="admin-page animate-fade-in">
       {/* Top Ribbon Header */}
       <div className="admin-navbar">
-        <div className="admin-nav-logo" onClick={() => navigate("/home")} style={{ marginLeft: '-15px' }}>
-          <div style={{ height: '80px', width: '80px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-            <img src={logo} alt="Eve's Era Admin" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
+        <div className="admin-navbar-left">
+          <button className="admin-sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            {sidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+          <div className="admin-nav-logo" onClick={() => navigate("/home")} style={{ marginLeft: '4px' }}>
+            <div style={{ height: '60px', width: '60px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+              <img src={logo} alt="Eve's Era Admin" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
+            </div>
           </div>
         </div>
         <div className="admin-nav-links">
           <button className="back-store-btn" onClick={() => navigate("/home")}>
-            <FaArrowLeft /> View Storefront
+            <FaArrowLeft /> <span className="nav-btn-text">View Storefront</span>
           </button>
           <button className="logout-admin-btn" onClick={handleLogout}>
-            <FaSignOutAlt /> Log Out
+            <FaSignOutAlt /> <span className="nav-btn-text">Log Out</span>
           </button>
         </div>
       </div>
 
       <div className="admin-main-layout">
         {/* SIDEBAR TABS */}
-        <aside className="admin-sidebar-menu">
-          <button className={`tab-menu-btn ${activeTab === "overview" ? "active" : ""}`} onClick={() => setActiveTab("overview")}>
+        {sidebarOpen && <div className="admin-sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+        <aside className={`admin-sidebar-menu ${sidebarOpen ? "sidebar-open" : ""}`}>
+          <button className={`tab-menu-btn ${activeTab === "overview" ? "active" : ""}`} onClick={() => { setActiveTab("overview"); setSidebarOpen(false); }}>
             <FaChartBar /> <span>Performance Overview</span>
           </button>
-          <button className={`tab-menu-btn ${activeTab === "products" ? "active" : ""}`} onClick={() => setActiveTab("products")}>
+          <button className={`tab-menu-btn ${activeTab === "products" ? "active" : ""}`} onClick={() => { setActiveTab("products"); setSidebarOpen(false); }}>
             <FaTags /> <span>Product Listings</span>
           </button>
-          <button className={`tab-menu-btn ${activeTab === "orders" ? "active" : ""}`} onClick={() => navigate("/admin/orders")}>
+          <button className={`tab-menu-btn ${activeTab === "orders" ? "active" : ""}`} onClick={() => { navigate("/admin/orders"); setSidebarOpen(false); }}>
             <FaBoxOpen /> <span>Placed Orders</span>
           </button>
-          <button className={`tab-menu-btn ${activeTab === "suppliers" ? "active" : ""}`} onClick={() => setActiveTab("suppliers")}>
+          <button className={`tab-menu-btn ${activeTab === "suppliers" ? "active" : ""}`} onClick={() => { setActiveTab("suppliers"); setSidebarOpen(false); }}>
             <FaUsers /> <span>Suppliers Registry</span>
           </button>
-          <button className={`tab-menu-btn ${activeTab === "support" ? "active" : ""}`} onClick={() => navigate("/admin/support")}>
+          <button className={`tab-menu-btn ${activeTab === "support" ? "active" : ""}`} onClick={() => { navigate("/admin/support"); setSidebarOpen(false); }}>
             <FaInbox /> <span>Customer Support</span>
           </button>
-          <button className={`tab-menu-btn`} onClick={() => navigate("/admin/add-category")}>
+          <button className={`tab-menu-btn`} onClick={() => { navigate("/admin/add-category"); setSidebarOpen(false); }}>
             <FaLayerGroup /> <span>Manage Categories</span>
           </button>
         </aside>
