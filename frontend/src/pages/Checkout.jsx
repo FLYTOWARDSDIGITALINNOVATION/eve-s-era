@@ -46,32 +46,107 @@ const Checkout = () => {
       return;
     }
 
-    try {
-      const orderPromises = cart.map(item =>
-        fetch(`${API_BASE_URL}/orders`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            productName: item.name,
-            productId: item._id || item.id,
-            quantity: item.qty,
-            price: item.price * item.qty,
-            userEmail: user.email,
-            userName: user.name,
-            shippingAddress: shippingInfo,
-            shippingMethod: selectedShipping,
-            paymentMethod: selectedPayment,
-            shippingCost: shippingCost
+    const placeOrdersInDB = async () => {
+      try {
+        const orderPromises = cart.map(item =>
+          fetch(`${API_BASE_URL}/orders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productName: item.name,
+              productId: item._id || item.id,
+              quantity: item.qty,
+              price: item.price * item.qty,
+              userEmail: user.email,
+              userName: user.name,
+              shippingAddress: shippingInfo,
+              shippingMethod: selectedShipping,
+              paymentMethod: selectedPayment,
+              shippingCost: shippingCost
+            })
           })
-        })
-      );
+        );
 
-      await Promise.all(orderPromises);
-      if (clearCart) clearCart();
-      navigate('/order-success', { state: { purchasedItems: cart } });
+        await Promise.all(orderPromises);
+        if (clearCart) clearCart();
+        navigate('/order-success', { state: { purchasedItems: cart } });
+      } catch (error) {
+        console.error("Order failed:", error);
+        alert("Failed to place order. Please try again.");
+      }
+    };
+
+    if (selectedPayment === 'cod') {
+      await placeOrdersInDB();
+      return;
+    }
+
+    // Razorpay Integration
+    try {
+      // 1. Create Order on the Backend
+      const response = await fetch(`${API_BASE_URL}/create-razorpay-order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: Math.round(total * 100) }),
+      });
+      
+      const data = await response.json();
+      
+      if (!data || !data.order) {
+        alert("Server error. Please try again.");
+        return;
+      }
+
+      // 2. Open Razorpay Checkout Modal
+      const options = {
+        key: data.key_id,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: "Eve's Era",
+        description: "Test Transaction",
+        order_id: data.order.id,
+        handler: async function (response) {
+          try {
+            // 3. Verify Payment
+            const verifyRes = await fetch(`${API_BASE_URL}/verify-razorpay-payment`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+            const verifyData = await verifyRes.json();
+            
+            if (verifyRes.ok) {
+              await placeOrdersInDB();
+            } else {
+              alert(verifyData.message || "Payment verification failed.");
+            }
+          } catch (error) {
+            console.error(error);
+            alert("Payment verification failed.");
+          }
+        },
+        prefill: {
+          name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
+          email: shippingInfo.email,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert("Payment Failed. Reason: " + response.error.description);
+      });
+      rzp1.open();
+
     } catch (error) {
-      console.error("Order failed:", error);
-      alert("Failed to place order. Please try again.");
+      console.error(error);
+      alert("Something went wrong!");
     }
   };
 
