@@ -1,7 +1,7 @@
 import API_BASE_URL from '../api';
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaArrowLeft, FaPlus, FaCloudUploadAlt } from "react-icons/fa";
+import { FaArrowLeft, FaPlus, FaCloudUploadAlt, FaTimes } from "react-icons/fa";
 import "./AddProduct.css"; // Reuse styling
 
 const EditProduct = () => {
@@ -20,9 +20,8 @@ const EditProduct = () => {
     stock: "",
     supplierName: ""
   });
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [currentImage, setCurrentImage] = useState("");
+  const [images, setImages] = useState([]);
+  const [currentImages, setCurrentImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
 
@@ -58,7 +57,7 @@ const EditProduct = () => {
           stock: data.stock !== undefined ? String(data.stock) : "15",
           supplierName: data.supplierName || ""
         });
-        setCurrentImage(data.image);
+        setCurrentImages(data.images || (data.image ? [data.image] : []));
         setLoading(false);
       })
       .catch((err) => {
@@ -67,12 +66,29 @@ const EditProduct = () => {
       });
   }, [id]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-    }
+  // Add multiple images, avoid duplicates by name+size
+  const handleImagesChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    const existing = new Set(images.map((i) => i.file.name + i.file.size));
+    const slotsLeft = Math.max(0, 5 - images.length);
+    const toAdd = newFiles
+      .filter((f) => !existing.has(f.name + f.size))
+      .slice(0, slotsLeft)
+      .map((file) => ({ file, preview: URL.createObjectURL(file) }));
+    setImages((prev) => [...prev, ...toAdd]);
+    // reset input so the same file can be re-added after removal
+    e.target.value = "";
+  };
+
+  const removeImage = (index) => {
+    setImages((prev) => {
+      URL.revokeObjectURL(prev[index].preview);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const removeCurrentImage = (imagePath) => {
+    setCurrentImages((prev) => prev.filter((img) => img !== imagePath));
   };
 
   const handleInputChange = (field, value) => {
@@ -125,8 +141,17 @@ const EditProduct = () => {
     formData.append("supplierName", form.supplierName);
     formData.append("email", adminEmail);
     
-    if (image) {
-      formData.append("image", image);
+    // Append all newly selected images with "images" field name
+    images.forEach(({ file }) => {
+      formData.append("images", file);
+    });
+
+    // If there are new images, also include the first one as "image" for the cover
+    // Otherwise, keep the existing images
+    if (images.length > 0) {
+      formData.append("image", images[0].file);
+    } else if (currentImages.length > 0) {
+      formData.append("images", currentImages[0]);
     }
 
     try {
@@ -301,29 +326,77 @@ const EditProduct = () => {
 
           {/* RIGHT: Image Upload */}
           <div className="form-upload-column">
-            <label className="upload-header-lbl">Showcase Image</label>
-            <div 
-              className="dropzone-box"
-              onClick={() => document.getElementById("productImageFile").click()}
-            >
-              {preview ? (
-                <img src={preview} alt="Product showcase preview" className="dropzone-preview-img" />
-              ) : currentImage ? (
-                <img src={`${API_BASE_URL}${currentImage}`} alt="Current product" className="dropzone-preview-img" />
-              ) : (
+            <label className="upload-header-lbl">Showcase Images (Up to 5)</label>
+            
+            {/* Current Images */}
+            {currentImages.length > 0 && (
+              <div className="images-grid">
+                <p className="gallery-label">Current Images</p>
+                {currentImages.map((imgPath, idx) => (
+                  <div key={idx} className="image-thumbnail">
+                    <img
+                      src={`${API_BASE_URL}${imgPath}`}
+                      alt={`Current product ${idx + 1}`}
+                      className="thumbnail-img"
+                    />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => removeCurrentImage(imgPath)}
+                      title="Remove image"
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* New Images to Upload */}
+            {images.length > 0 && (
+              <div className="images-grid">
+                <p className="gallery-label">New Images to Upload</p>
+                {images.map(({ preview }, idx) => (
+                  <div key={idx} className="image-thumbnail">
+                    <img
+                      src={preview}
+                      alt={`New product ${idx + 1}`}
+                      className="thumbnail-img"
+                    />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => removeImage(idx)}
+                      title="Remove image"
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Upload Area */}
+            {currentImages.length + images.length < 5 && (
+              <div
+                className="dropzone-box"
+                onClick={() => document.getElementById("productImageFile").click()}
+              >
                 <div className="dropzone-msg">
                   <FaCloudUploadAlt className="upload-icon-form" />
-                  <span>Click or drag image file here</span>
-                  <span className="file-desc-lbl">PNG, JPG up to 5MB</span>
+                  <span>Click or drag image files here</span>
+                  <span className="file-desc-lbl">PNG, JPG up to 5MB • Max 5 images total</span>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+            
             <input
               type="file"
               id="productImageFile"
               hidden
               accept="image/*"
-              onChange={handleImageChange}
+              multiple
+              onChange={handleImagesChange}
             />
 
             <button className="submit-form-btn" onClick={handleSubmit}>

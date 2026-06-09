@@ -476,11 +476,17 @@ app.delete("/admin/product/:id", verifyAdmin, async (req, res) => {
   }
 });
 
-app.put("/admin/product/:id", verifyAdmin, upload.single("image"), async (req, res) => {
+app.put("/admin/product/:id", verifyAdmin, productImageUpload, async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) {
-      data.image = `/uploads/${req.file.filename}`;
+    const imageFiles = [
+      ...(req.files?.images || []),
+      ...(req.files?.image || []),
+    ];
+    if (imageFiles.length > 0) {
+      const imagePaths = imageFiles.map((file) => `/uploads/${file.filename}`);
+      data.images = [...new Set(imagePaths)];
+      data.image = data.images[0];
     }
     if (data.sizes && typeof data.sizes === "string") {
       data.sizes = data.sizes.split(",").map(s => s.trim()).filter(Boolean);

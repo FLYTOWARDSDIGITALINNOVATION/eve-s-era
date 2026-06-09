@@ -17,6 +17,7 @@ const ProductDetailPage = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Review State
   const [reviews, setReviews] = useState([]);
@@ -37,6 +38,7 @@ const ProductDetailPage = () => {
       })
       .then((data) => {
         setProduct(data);
+        setSelectedImageIndex(0);
         if (data.sizes && data.sizes.length > 0) {
           setSelectedSize(data.sizes[0]);
         } else {
@@ -167,6 +169,8 @@ const ProductDetailPage = () => {
   const isManufactured = product.businessModel === "manufactured";
   const sizes = product.sizes && product.sizes.length > 0 ? product.sizes : ["S", "M", "L", "XL"];
   const colors = product.colors && product.colors.length > 0 ? product.colors : ["Pink", "Rose", "Dusty Mauve"];
+  const productImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
+  const displayImage = productImages[selectedImageIndex] || product.image;
 
   return (
     <div className="product-detail-page animate-fade-in">
@@ -179,20 +183,43 @@ const ProductDetailPage = () => {
         </button>
 
         <div className="detail-grid">
-          {/* Main Showcase Image */}
+          {/* Main Showcase Image with Gallery */}
           <div className="product-image-section">
             <div className={`detail-model-tag ${isManufactured ? "manufactured" : "resell"}`}>
               {isManufactured ? <FaGem /> : <FaLeaf />}
               <span>Eves Era</span>
             </div>
             <img
-              src={`${API_BASE_URL}${product.image}`}
+              src={`${API_BASE_URL}${displayImage}`}
               alt={product.name}
               className="main-detail-img"
               onError={(e) => {
                 e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80";
               }}
             />
+            
+            {/* Image Gallery Thumbnails */}
+            {productImages.length > 1 && (
+              <div className="image-gallery-thumbs">
+                {productImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    className={`thumb-btn ${selectedImageIndex === idx ? "active" : ""}`}
+                    onClick={() => setSelectedImageIndex(idx)}
+                    title={`View image ${idx + 1}`}
+                  >
+                    <img
+                      src={`${API_BASE_URL}${img}`}
+                      alt={`Product ${idx + 1}`}
+                      className="thumb-img"
+                      onError={(e) => {
+                        e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80";
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Luxury Specifications Area */}
