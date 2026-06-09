@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaShoppingBag, FaStar, FaShieldAlt, FaGem, FaLeaf, FaArrowRight } from 'react-icons/fa';
+import { FaShoppingBag, FaStar, FaShieldAlt, FaGem, FaArrowRight } from 'react-icons/fa';
 import './LandingPage.css';
 import logo from "../assets/eve's era.jpeg";
 import hero1 from "../assets/hero1.jpg";
@@ -76,8 +76,8 @@ const LandingPage = () => {
                     </motion.h1>
 
                     <motion.p variants={itemVariants} className="hero-description">
-                        Step into curated elegance. Eve's Era brings you premium manufactured original silhouettes 
-                        alongside hand-selected high-end resell pieces. Seamlessly crafted, sustainably minded.
+                        Step into curated elegance. Eve's Era brings you premium silhouettes, refined detailing,
+                        and boutique styling made for the modern woman.
                     </motion.p>
 
                     <motion.div variants={itemVariants} className="hero-cta-splits">
@@ -87,20 +87,8 @@ const LandingPage = () => {
                         >
                             <span className="cta-icon"><FaGem /></span>
                             <div className="cta-label-group">
-                                <strong>Eve's Era Originals</strong>
-                                <span>Premium Self-Manufactured</span>
-                            </div>
-                            <FaArrowRight className="arrow-right-icon" />
-                        </button>
-
-                        <button 
-                            className="cta-split resell-cta" 
-                            onClick={() => handleSelectModel('resell')}
-                        >
-                            <span className="cta-icon"><FaLeaf /></span>
-                            <div className="cta-label-group">
-                                <strong>Resell Collection</strong>
-                                <span>Sustainably Curated</span>
+                                <strong>Eve's Era</strong>
+                                <span>Premium Boutique Collection</span>
                             </div>
                             <FaArrowRight className="arrow-right-icon" />
                         </button>
@@ -117,7 +105,7 @@ const LandingPage = () => {
                         </div>
                         <div className="feature-item">
                             <FaShoppingBag className="feature-icon" />
-                            <span>Circular Fashion</span>
+                            <span>Boutique Fashion</span>
                         </div>
                     </motion.div>
                 </motion.div>
@@ -129,17 +117,17 @@ const LandingPage = () => {
                     transition={{ duration: 1.2, ease: "easeOut" }}
                 >
                     <div className="floating-card card-1">
-                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=150&q=80" alt="Resell curation" className="card-img" />
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=150&q=80" alt="Eves Era curation" className="card-img" />
                         <div className="card-info-floating">
                             <div className="card-dot-pink"></div>
-                            <p>Pre-loved luxury: 100% vetted</p>
+                            <p>Premium pieces: quality checked</p>
                         </div>
                     </div>
                     <div className="floating-card card-2">
                         <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=150&q=80" alt="Manufacturing process" className="card-img" />
                         <div className="card-info-floating">
                             <div className="card-dot-pink dark"></div>
-                            <p>In-House Originals: Silk & Linen</p>
+                            <p>Eve's Era: Silk & Linen</p>
                         </div>
                     </div>
                     <div className="hero-main-visual">

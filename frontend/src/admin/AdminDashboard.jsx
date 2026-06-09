@@ -84,8 +84,7 @@ const AdminDashboard = () => {
   const revenue = orders.reduce((sum, o) => sum + (o.price * o.quantity || 0), 0);
   const pendingOrders = orders.filter(o => o.status === "Ordered").length;
   
-  const resellCount = products.filter(p => p.businessModel === "resell" || !p.businessModel).length;
-  const mfgCount = products.filter(p => p.businessModel === "manufactured").length;
+  const eveEraCount = products.length;
 
   return (
     <div className="admin-page animate-fade-in">
@@ -148,7 +147,7 @@ const AdminDashboard = () => {
               {activeTab === "overview" && (
                 <div className="overview-tab-view animate-fade-in">
                   <h2>Company Metrics Dashboard</h2>
-                  <p className="admin-subtitle">Live corporate insights across self-manufacturing and reseller networks.</p>
+                  <p className="admin-subtitle">Live corporate insights across self-manufacturing and boutique operations.</p>
 
                   {/* 4 Cards Grid */}
                   <div className="metrics-cards-grid">
@@ -176,7 +175,7 @@ const AdminDashboard = () => {
                         <span className="m-title">Catalog Items</span>
                       </div>
                       <h3>{products.length}</h3>
-                      <p className="m-growth">{mfgCount} Originals | {resellCount} Resell</p>
+                      <p className="m-growth">{eveEraCount} Eves Era items</p>
                     </div>
 
                     <div className="metric-card shadow-sm">
@@ -192,7 +191,7 @@ const AdminDashboard = () => {
                   {/* Interactive SVG Profit & Sales Graph */}
                   <div className="graph-section-card shadow-sm">
                     <h3>Revenue Breakdown & Sales Analysis</h3>
-                    <p className="graph-sub-desc">Atelier Manufactured vs. Pre-loved Resell sales metrics.</p>
+                    <p className="graph-sub-desc">Eves Era sales metrics and atelier performance.</p>
                     
                     <div className="graph-visual-wrapper">
                       <svg viewBox="0 0 800 240" className="dashboard-svg-chart">
@@ -213,7 +212,7 @@ const AdminDashboard = () => {
                         <circle cx="350" cy="70" r="6" fill="#C48B9F" />
                         <circle cx="650" cy="40" r="6" fill="#C48B9F" />
 
-                        {/* Resell Line Graph */}
+                        {/* Eves Era Line Graph */}
                         <path 
                           d="M 50 200 Q 200 180 350 140 T 650 100 T 750 90" 
                           fill="none" 
@@ -237,11 +236,11 @@ const AdminDashboard = () => {
                     <div className="graph-legends">
                       <div className="legend-item">
                         <span className="leg-color leg-mfg"></span>
-                        <span>Eve's Era Originals (Manufactured)</span>
+                        <span>Eve's Era (Manufactured)</span>
                       </div>
                       <div className="legend-item">
-                        <span className="leg-color leg-resell"></span>
-                        <span>Resell Curation (Bombay / Mumbai Suppliers)</span>
+                        <span className="leg-color leg-boutique"></span>
+                        <span>Eves Era Boutique Collection</span>
                       </div>
                     </div>
                   </div>
@@ -285,7 +284,7 @@ const AdminDashboard = () => {
                             <td><strong>{p.name}</strong></td>
                             <td>
                               <span className={`table-badge ${p.businessModel === "manufactured" ? "mfg" : "resell"}`}>
-                                {p.businessModel === "manufactured" ? "Original" : "Resell"}
+                                {"Eves Era"}
                               </span>
                             </td>
                             <td>{p.category}</td>

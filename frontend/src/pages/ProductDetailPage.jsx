@@ -183,7 +183,7 @@ const ProductDetailPage = () => {
           <div className="product-image-section">
             <div className={`detail-model-tag ${isManufactured ? "manufactured" : "resell"}`}>
               {isManufactured ? <FaGem /> : <FaLeaf />}
-              <span>{isManufactured ? "Eves Era Original" : "Certified Resell"}</span>
+              <span>Eves Era</span>
             </div>
             <img
               src={`${API_BASE_URL}${product.image}`}

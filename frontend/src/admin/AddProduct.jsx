@@ -11,7 +11,7 @@ const AddProduct = () => {
     category: "",
     price: "",
     description: "",
-    businessModel: "resell",
+    businessModel: "manufactured",
     materials: "",
     sizes: "",        // optional — empty by default
     colors: "",
@@ -40,8 +40,10 @@ const AddProduct = () => {
   const handleImagesChange = (e) => {
     const newFiles = Array.from(e.target.files);
     const existing = new Set(images.map((i) => i.file.name + i.file.size));
+    const slotsLeft = Math.max(0, 5 - images.length);
     const toAdd = newFiles
       .filter((f) => !existing.has(f.name + f.size))
+      .slice(0, slotsLeft)
       .map((file) => ({ file, preview: URL.createObjectURL(file) }));
     setImages((prev) => [...prev, ...toAdd]);
     // reset input so the same file can be re-added after removal
@@ -105,12 +107,18 @@ const AddProduct = () => {
         body: formData,
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get("content-type") || "";
+      const data = contentType.includes("application/json")
+        ? await res.json()
+        : { message: await res.text() };
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to save product.");
+      }
       alert(data.message || "Product listed in Eve's Era catalogue successfully!");
       if (res.ok) navigate("/admin");
     } catch (err) {
       console.error("Add Product Error:", err);
-      alert("Failed to save product.");
+      alert(err.message || "Failed to save product.");
     }
   };
 
@@ -122,7 +130,7 @@ const AddProduct = () => {
 
       <div className="form-card-container">
         <h2>List New Fashion Piece</h2>
-        <p className="form-sub-header">Add self-manufactured originals or verified pre-loved resell items to Eves Era.</p>
+        <p className="form-sub-header">Add premium boutique fashion pieces to Eves Era.</p>
 
         <div className="product-form-grid">
           {/* LEFT: Details */}
@@ -134,8 +142,7 @@ const AddProduct = () => {
                 onChange={(e) => setForm({ ...form, businessModel: e.target.value })}
                 className="pink-admin-select"
               >
-                <option value="resell">🌸 Resell / Pre-loved Item</option>
-                <option value="manufactured">✨ Eves Era Original (Manufactured)</option>
+                <option value="manufactured">Eves Era</option>
               </select>
             </div>
 
@@ -299,3 +306,5 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+
+

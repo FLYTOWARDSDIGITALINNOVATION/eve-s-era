@@ -47,7 +47,7 @@ const Footer = () => {
                           </div>
                         </div>
                         <p className="brand-mission">
-                            Crafting timeless luxury and sustainable couture. Discover our custom-manufactured originals and curated resell collections designed for the modern woman.
+                            Crafting timeless luxury and sustainable couture. Discover Eve's Era collections designed for the modern woman.
                         </p>
                         <div className="social-links-grid">
                             <a href="#" className="social-icon instagram">
@@ -63,8 +63,7 @@ const Footer = () => {
                     <div className="footer-section links-column">
                         <h4 className="footer-heading">Collections</h4>
                         <ul className="footer-list">
-                            <li><Link to="/home?model=manufactured">Eves Era Originals</Link></li>
-                            <li><Link to="/home?model=resell">Resell Collection</Link></li>
+                            <li><Link to="/home?model=manufactured">Eves Era</Link></li>
                             <li><Link to="/category/Women">Women's Wear</Link></li>
                             <li><Link to="/category/Accessories">Accessories</Link></li>
                             <li><Link to="/home">All New Arrivals</Link></li>

@@ -5,7 +5,7 @@ import Hero from "../components/Hero";
 import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
 import BoutiqueCarousel from "../components/BoutiqueCarousel";
-import { FaStar, FaGem, FaLeaf, FaFilter, FaSlidersH, FaBoxOpen } from "react-icons/fa";
+import { FaStar, FaGem, FaFilter, FaSlidersH, FaBoxOpen } from "react-icons/fa";
 import "./HomePage.css";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -131,13 +131,7 @@ const HomePage = () => {
                   className={`pill-btn original-pill ${modelFilter === "manufactured" ? "active" : ""}`}
                   onClick={() => handleModelSelect("manufactured")}
                 >
-                  <FaGem /> Originals
-                </button>
-                <button 
-                  className={`pill-btn resell-pill ${modelFilter === "resell" ? "active" : ""}`}
-                  onClick={() => handleModelSelect("resell")}
-                >
-                  <FaLeaf /> Resell
+                  <FaGem /> Eves Era
                 </button>
               </div>
             </div>
@@ -201,7 +195,7 @@ const HomePage = () => {
               <img src={logo} alt="Eve's Era Logo" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
             </div>
             <h3>Eve's Premium Care</h3>
-            <p>Our self-manufactured garments use organic linens and pure Mulberry silks. Vetted resell luxury items are thoroughly authenticated by our boutique team.</p>
+            <p>Our boutique garments use organic linens, pure Mulberry silks, and carefully checked finishing for a polished Eve's Era feel.</p>
           </div>
         </aside>
 
@@ -210,7 +204,7 @@ const HomePage = () => {
           <div className="content-header">
             <div>
               <h2 className="section-title-label">
-                {modelFilter === "manufactured" ? "🌸 Eve's Era Originals" : modelFilter === "resell" ? "♻️ Resell Collection" : "🛍️ Discover All Collections"}
+                {modelFilter === "manufactured" ? "🌸 Eve's Era" : "🛍️ Discover All Collections"}
               </h2>
               <p className="result-count">{sortedProducts.length} items found</p>
             </div>

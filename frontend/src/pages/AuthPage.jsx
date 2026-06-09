@@ -178,17 +178,17 @@ const AuthPage = () => {
                     </motion.h2>
 
                     <motion.p variants={itemVariants} className="brand-subtext">
-                        Discover our custom-manufactured originals and curated resell collections designed for the modern woman.
+                        Discover Eve's Era collections designed for the modern woman.
                     </motion.p>
 
                     <motion.div variants={itemVariants} className="brand-stats">
                         <div className="stat-item">
                             <h3>BOUTIQUE</h3>
-                            <p>Originals</p>
+                            <p>Eves Era</p>
                         </div>
                         <div className="stat-item">
-                            <h3>CURATED</h3>
-                            <p>Resell</p>
+                            <h3>STYLE</h3>
+                            <p>Eves Era</p>
                         </div>
                         <div className="stat-item">
                             <h3>ATELIER</h3>

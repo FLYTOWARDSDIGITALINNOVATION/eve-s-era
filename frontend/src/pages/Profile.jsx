@@ -41,11 +41,11 @@ const Profile = () => {
   // Mock Wallet and Notification Data
   const walletPoints = 650; 
   const notifications = [
-    { id: 1, title: "Order Shipped! 📦", body: "Your Eves Era Originals Silk Blouse is on its way.", date: "Today" },
+    { id: 1, title: "Order Shipped! 📦", body: "Your Eves Era Silk Blouse is on its way.", date: "Today" },
     { id: 2, title: "Earned Reward Points! 🌸", body: "You earned 150 points from your last checkout.", date: "Yesterday" }
   ];
   const returns = [
-    { id: "RET-9081", product: "Pre-loved Cashmere Sweater", status: "Refund Processed", amount: "₹1,450" }
+    { id: "RET-9081", product: "Cashmere Sweater", status: "Refund Processed", amount: "₹1,450" }
   ];
 
   useEffect(() => {
@@ -218,7 +218,7 @@ const Profile = () => {
               </div>
               <div className="rewards-msg">
                 <p><strong>1 Point = ₹1.00</strong> toward checkout discounts.</p>
-                <p>Earn reward points with each manufactured original or pre-loved resell purchase!</p>
+                <p>Earn reward points with each Eve's Era purchase!</p>
               </div>
             </div>
           </section>

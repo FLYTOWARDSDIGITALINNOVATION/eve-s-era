@@ -155,16 +155,10 @@ const Header = ({ onSearch, onModelFilter }) => {
               All Collection
             </Link>
             <button 
-              onClick={() => handleModelSelect("resell")} 
-              className={`segment-item resell-seg ${location.search.includes('model=resell') ? 'active' : ''}`}
-            >
-              🌸 Resell Collection
-            </button>
-            <button 
               onClick={() => handleModelSelect("manufactured")} 
               className={`segment-item original-seg ${location.search.includes('model=manufactured') ? 'active' : ''}`}
             >
-              ✨ Eve's Era Originals
+              ✨ Eve's Era
             </button>
           </div>
 

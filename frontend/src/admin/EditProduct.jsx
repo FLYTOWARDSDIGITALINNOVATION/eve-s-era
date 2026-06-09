@@ -13,7 +13,7 @@ const EditProduct = () => {
     category: "",
     price: "",
     description: "",
-    businessModel: "resell",
+    businessModel: "manufactured",
     materials: "",
     sizes: "",
     colors: "",
@@ -51,7 +51,7 @@ const EditProduct = () => {
           category: data.category || "",
           price: data.price || "",
           description: data.description || "",
-          businessModel: data.businessModel || "resell",
+          businessModel: data.businessModel || "manufactured",
           materials: data.materials || "",
           sizes: Array.isArray(data.sizes) ? data.sizes.join(", ") : (data.sizes || "S, M, L, XL"),
           colors: Array.isArray(data.colors) ? data.colors.join(", ") : (data.colors || "Pink, Rose, Dusty Mauve"),
@@ -182,8 +182,8 @@ const EditProduct = () => {
                 onChange={(e) => setForm({ ...form, businessModel: e.target.value })}
                 className="pink-admin-select"
               >
-                <option value="resell">🌸 Resell / Pre-loved Item</option>
-                <option value="manufactured">✨ Eves Era Original (Manufactured)</option>
+                <option value="resell">Eves Era</option>
+                <option value="manufactured">Eves Era</option>
               </select>
             </div>
 
@@ -337,3 +337,4 @@ const EditProduct = () => {
 };
 
 export default EditProduct;
+

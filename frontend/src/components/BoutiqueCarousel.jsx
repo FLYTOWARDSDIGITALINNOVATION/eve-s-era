@@ -18,8 +18,8 @@ const slides = [
     img: boutiqueInside,
     badge: "🛍️ Exclusive In-Store Curation",
     title: "Elegant Interior & Collections",
-    desc: "Browse our handpicked range of self-manufactured organic silks, linens, and meticulously authenticated premium resell garments.",
-    usp: ["Mulberry Silk & Linens", "Carefully Vetted Resell", "Premium Trial Experience"]
+    desc: "Browse our handpicked range of organic silks, linens, and meticulously authenticated premium boutique garments.",
+    usp: ["Mulberry Silk & Linens", "Carefully Checked Finish", "Premium Trial Experience"]
   }
 ];
 

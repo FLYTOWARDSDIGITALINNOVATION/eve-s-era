@@ -53,7 +53,7 @@ const ProductCard = ({ product }) => {
           ) : (
             <>
               <FaLeaf size={10} />
-              <span>Resell</span>
+              <span>Eves Era</span>
             </>
           )}
         </div>

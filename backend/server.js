@@ -61,6 +61,7 @@ const productSchema = new mongoose.Schema({
   price: Number,
   description: String,
   image: String,
+  images: [String],
   businessModel: { type: String, enum: ["resell", "manufactured"], default: "resell" },
   materials: { type: String, default: "" },
   sizes: { type: [String], default: ["S", "M", "L", "XL"] },
@@ -389,12 +390,23 @@ app.get("/categories", async (req, res) => {
   }
 });
 
+const productImageUpload = upload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "images", maxCount: 5 },
+]);
+
 // PRODUCT
-app.post("/admin/product", verifyAdmin, upload.single("image"), async (req, res) => {
+app.post("/admin/product", verifyAdmin, productImageUpload, async (req, res) => {
   try {
     let data = { ...req.body };
-    if (req.file) {
-      data.image = `/uploads/${req.file.filename}`;
+    const imageFiles = [
+      ...(req.files?.images || []),
+      ...(req.files?.image || []),
+    ];
+    const imagePaths = imageFiles.map((file) => `/uploads/${file.filename}`);
+    if (imagePaths.length > 0) {
+      data.images = [...new Set(imagePaths)];
+      data.image = data.images[0];
     }
     if (data.sizes && typeof data.sizes === "string") {
       data.sizes = data.sizes.split(",").map(s => s.trim()).filter(Boolean);
