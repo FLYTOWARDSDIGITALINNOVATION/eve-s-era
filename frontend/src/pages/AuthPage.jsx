@@ -1,6 +1,7 @@
 import API_BASE_URL from '../api';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GoogleLogin } from '@react-oauth/google';
 import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
 import './AuthPage.css';
 
@@ -84,6 +85,34 @@ const AuthPage = () => {
             }
         } catch (err) {
             setError("Server not reachable");
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/google-login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: credentialResponse.credential })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                setError(data.message);
+                return;
+            }
+
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            if (data.user.isAdmin) {
+                navigate("/admin");
+            } else {
+                navigate("/home");
+            }
+        } catch (err) {
+            setError("Google login failed. Please try again.");
         }
     };
 
@@ -291,6 +320,19 @@ const AuthPage = () => {
                                         >
                                             Sign In
                                         </motion.button>
+                                        
+                                        <div className="divider">
+                                            <span>OR</span>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <GoogleLogin
+                                                onSuccess={handleGoogleSuccess}
+                                                onError={() => {
+                                                    setError('Google login failed.');
+                                                }}
+                                                useOneTap
+                                            />
+                                        </div>
                                     </form>
                                 </motion.div>
                             ) : (
@@ -376,6 +418,19 @@ const AuthPage = () => {
                                         >
                                             Create Account
                                         </motion.button>
+
+                                        <div className="divider">
+                                            <span>OR</span>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <GoogleLogin
+                                                onSuccess={handleGoogleSuccess}
+                                                onError={() => {
+                                                    setError('Google login failed.');
+                                                }}
+                                                useOneTap
+                                            />
+                                        </div>
                                     </form>
                                 </motion.div>
                             )}

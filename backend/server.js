@@ -12,7 +12,10 @@ const path = require("path");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
+const { OAuth2Client } = require('google-auth-library');
 require("dotenv").config();
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com");
 
 const app = express();
 const fs = require("fs");
@@ -257,6 +260,45 @@ app.post("/signup", async (req, res) => {
     }
     console.error("Signup Error:", err);
     res.status(500).json({ message: "Signup failed" });
+  }
+});
+
+// GOOGLE LOGIN
+app.post("/google-login", async (req, res) => {
+  try {
+    const { token } = req.body;
+    const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+    });
+    const payload = ticket.getPayload();
+    const { email, name, sub: googleId } = payload;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+        // Create user with googleId as dummy password
+        const hashed = await bcrypt.hash(googleId, 10);
+        user = await User.create({ name, email, password: hashed, isAdmin: false });
+    }
+
+    const jwtToken = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      "SECRET_KEY",
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      token: jwtToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
+    });
+  } catch (err) {
+    console.error("Google Login Error:", err);
+    res.status(500).json({ message: "Google login failed" });
   }
 });
 
