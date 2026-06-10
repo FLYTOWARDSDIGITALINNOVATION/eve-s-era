@@ -105,7 +105,7 @@ const CustomerService = () => {
 
             <div className="chat-container">
                 {/* SIDEBAR: CHAT LIST */}
-                <div className={`chat-sidebar ${activeChat ? 'mobile-hidden' : ''}`}>
+                <div className={`chat-sidebar ${activeChat || showNewChatForm ? 'mobile-hidden' : ''}`}>
                     <div className="sidebar-header">
                         <h2>Support Chats</h2>
                         <button className="new-chat-btn" onClick={() => setShowNewChatForm(true)}>
@@ -131,7 +131,7 @@ const CustomerService = () => {
                 </div>
 
                 {/* MAIN AREA */}
-                <div className={`chat-window ${!activeChat && !showNewChatForm ? 'mobile-hidden empty' : ''} ${!activeChat && showNewChatForm ? '' : ''} ${activeChat ? 'active' : ''}`}>
+                <div className={`chat-window ${!activeChat && !showNewChatForm ? 'mobile-hidden empty' : 'active'}`}>
 
                     {/* 1. EMPTY STATE */}
                     {!activeChat && !showNewChatForm && (
@@ -143,7 +143,12 @@ const CustomerService = () => {
                     {/* 2. NEW CHAT FORM */}
                     {showNewChatForm && (
                         <div className="new-chat-form-container">
-                            <h3>Start a New Support Chat</h3>
+                            <div className="form-top-header">
+                                <button className="mobile-back" onClick={() => setShowNewChatForm(false)}>
+                                    <FaArrowLeft />
+                                </button>
+                                <h3>Start a New Support Chat</h3>
+                            </div>
                             <form onSubmit={handleStartChat}>
                                 <textarea
                                     placeholder="How can we help you?"
@@ -163,6 +168,7 @@ const CustomerService = () => {
                             <button className="cancel-btn" onClick={() => setShowNewChatForm(false)}>Cancel</button>
                         </div>
                     )}
+
 
                     {/* 3. ACTIVE CHAT */}
                     {activeChat && (
