@@ -9,9 +9,11 @@ import {
 import { SiGooglepay } from 'react-icons/si';
 import logo from "../assets/eve's era.jpeg";
 import './Footer.css';
+import API_BASE_URL from '../api';
 
 const Footer = () => {
     const [showBackToTop, setShowBackToTop] = useState(false);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -24,6 +26,17 @@ const Footer = () => {
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        fetch(`${API_BASE_URL}/categories`)
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setCategories(data);
+                }
+            })
+            .catch(err => console.error("Footer: Failed to fetch categories:", err));
     }, []);
 
     const scrollToTop = () => {
@@ -65,10 +78,12 @@ const Footer = () => {
                     <div className="footer-section links-column">
                         <h4 className="footer-heading">Collections</h4>
                         <ul className="footer-list">
-                            <li><Link to="/home?model=manufactured">Eves Era</Link></li>
-                            <li><Link to="/category/Women">Women's Wear</Link></li>
-                            <li><Link to="/category/Accessories">Accessories</Link></li>
-                            <li><Link to="/home">All New Arrivals</Link></li>
+                            {categories.map(cat => (
+                                <li key={cat._id}>
+                                    <Link to={`/category/${cat.name}`}>{cat.name}</Link>
+                                </li>
+                            ))}
+                            <li><Link to="/home">All Collection</Link></li>
                         </ul>
                     </div>
 
@@ -78,9 +93,7 @@ const Footer = () => {
                         <ul className="footer-list">
                             <li><Link to="/orders">My Orders</Link></li>
                             <li><Link to="/wishlist">Wishlist</Link></li>
-                            <li><Link to="/profile">Account Settings</Link></li>
                             <li><Link to="/customer-service">Contact Us</Link></li>
-                            <li><Link to="/customer-service">Returns & Privacy</Link></li>
                         </ul>
                     </div>
 

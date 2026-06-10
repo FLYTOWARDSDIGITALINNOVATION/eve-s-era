@@ -189,14 +189,6 @@ const HomePage = () => {
               Reset All Filters
             </button>
           </div>
-
-          <div className="sidebar-banner" style={{ marginLeft: '-15px' }}>
-            <div style={{ height: '100px', width: '100px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-              <img src={logo} alt="Eve's Era Logo" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
-            </div>
-            <h3>Eve's Premium Care</h3>
-            <p>Our boutique garments use organic linens, pure Mulberry silks, and carefully checked finishing for a polished Eve's Era feel.</p>
-          </div>
         </aside>
 
         {/* Main Products Grid */}

@@ -37,6 +37,7 @@ const Header = ({ onSearch, onModelFilter }) => {
   const [categories, setCategories] = useState([]);
   const { wishlist } = useWishlist();
   const { cart } = useCart();
+  const [unreadSupportCount, setUnreadSupportCount] = useState(0);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/categories`)
@@ -48,6 +49,29 @@ const Header = ({ onSearch, onModelFilter }) => {
       })
       .catch((err) => console.error("Error fetching categories:", err));
   }, []);
+
+  useEffect(() => {
+    if (!user?.email) {
+      setUnreadSupportCount(0);
+      return;
+    }
+
+    const fetchUnreadCount = () => {
+      fetch(`${API_BASE_URL}/support/user/${user.email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) {
+            const count = data.filter((chat) => chat.unreadByUser).length;
+            setUnreadSupportCount(count);
+          }
+        })
+        .catch((err) => console.error("Error fetching support unread count:", err));
+    };
+
+    fetchUnreadCount();
+    const interval = setInterval(fetchUnreadCount, 10000);
+    return () => clearInterval(interval);
+  }, [user?.email]);
 
   const handleModelSelect = (model) => {
     if (onModelFilter) {
@@ -67,7 +91,12 @@ const Header = ({ onSearch, onModelFilter }) => {
             <span>✨ Welcome to Eve's Era | Soft Feminine Luxury Boutique</span>
           </div>
           <div className="top-links">
-            <Link to="/customer-service"><FaPhoneAlt size={10} /> Contact Support</Link>
+            <Link to="/customer-service" style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <FaPhoneAlt size={10} /> Contact Support
+              {unreadSupportCount > 0 && (
+                <span className="support-badge-header">{unreadSupportCount}</span>
+              )}
+            </Link>
             {!user ? (
               <>
                 <span className="banner-divider">|</span>
@@ -153,6 +182,9 @@ const Header = ({ onSearch, onModelFilter }) => {
             {/* Support — mobile only */}
             <Link to="/customer-service" className="icon-link mobile-only-link" onClick={() => setIsMobileMenuOpen(false)}>
               <FaPhoneAlt />
+              {unreadSupportCount > 0 && (
+                <span className="cart-badge">{unreadSupportCount}</span>
+              )}
               <span className="mobile-label">Support</span>
               <span className="icon-subtext">Contact Us</span>
             </Link>
