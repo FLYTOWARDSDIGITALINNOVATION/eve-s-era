@@ -131,7 +131,7 @@ const CustomerService = () => {
                 </div>
 
                 {/* MAIN AREA */}
-                <div className={`chat-window ${!activeChat && !showNewChatForm ? 'empty' : ''} ${!activeChat && showNewChatForm ? 'mobile-hidden' : ''}`}>
+                <div className={`chat-window ${!activeChat && !showNewChatForm ? 'mobile-hidden empty' : ''} ${!activeChat && showNewChatForm ? '' : ''} ${activeChat ? 'active' : ''}`}>
 
                     {/* 1. EMPTY STATE */}
                     {!activeChat && !showNewChatForm && (

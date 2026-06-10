@@ -132,6 +132,12 @@ const Header = ({ onSearch, onModelFilter }) => {
                   <span className="icon-subtext">Bag</span>
                 </Link>
 
+                <Link to="/customer-service" className="icon-link mobile-only-link" onClick={() => setIsMobileMenuOpen(false)}>
+                  <FaPhoneAlt />
+                  <span className="mobile-label">Support</span>
+                  <span className="icon-subtext">Contact Us</span>
+                </Link>
+
                 <button onClick={handleLogout} className="icon-link logout-btn-header">
                   <FaSignOutAlt />
                   <span className="mobile-label">Logout</span>
@@ -139,9 +145,16 @@ const Header = ({ onSearch, onModelFilter }) => {
                 </button>
               </>
             ) : (
-              <Link to="/auth" className="login-nav-btn" onClick={() => setIsMobileMenuOpen(false)}>
-                Sign In
-              </Link>
+              <>
+                <Link to="/customer-service" className="icon-link mobile-only-link" onClick={() => setIsMobileMenuOpen(false)}>
+                  <FaPhoneAlt />
+                  <span className="mobile-label">Support</span>
+                  <span className="icon-subtext">Contact Us</span>
+                </Link>
+                <Link to="/auth" className="login-nav-btn" onClick={() => setIsMobileMenuOpen(false)}>
+                  Sign In
+                </Link>
+              </>
             )}
           </div>
         </div>

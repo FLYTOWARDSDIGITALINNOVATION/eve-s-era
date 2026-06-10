@@ -211,6 +211,15 @@
   cursor: pointer;
 }
 
+/* Hide support link & mobile labels on desktop */
+.mobile-only-link {
+  display: none;
+}
+
+.mobile-label {
+  display: none;
+}
+
 .login-nav-btn {
   background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
   color: var(--white);
@@ -395,6 +404,11 @@
     display: block;
     margin-left: 12px;
     font-weight: 500;
+  }
+
+  /* Show customer support link on mobile */
+  .mobile-only-link {
+    display: flex;
   }
 
   /* Categories bar: stack rows, never overflow horizontally */

@@ -9,7 +9,8 @@ import {
   FaUserCircle, FaBoxOpen, FaMapMarkerAlt,
   FaSignOutAlt, FaEdit, FaPlus,
   FaShoppingBag, FaShieldAlt, FaChevronRight,
-  FaArrowLeft, FaCoins, FaBell, FaUndoAlt
+  FaArrowLeft, FaCoins, FaBell, FaUndoAlt,
+  FaPhoneAlt
 } from "react-icons/fa";
 import "./Profile.css";
 
@@ -196,6 +197,9 @@ const Profile = () => {
           <nav className="profile-side-nav">
             <button className="nav-btn" onClick={() => navigate("/orders")}>
               <FaBoxOpen /> <span>My Placed Orders</span> <FaChevronRight />
+            </button>
+            <button className="nav-btn" onClick={() => navigate("/customer-service")}>
+              <FaPhoneAlt /> <span>Customer Support</span> <FaChevronRight />
             </button>
             <button className="nav-btn logout-btn" onClick={logout}>
               <FaSignOutAlt /> <span>Log Out</span>

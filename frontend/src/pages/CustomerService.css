@@ -307,19 +307,42 @@
         border-radius: 0;
     }
 
+    /* On mobile: sidebar takes full width */
     .chat-sidebar {
         width: 100%;
     }
 
+    /* Hide sidebar when a chat is active */
     .chat-sidebar.mobile-hidden {
         display: none;
     }
 
+    /* Hide the right panel when no chat selected (empty state) */
     .chat-window.mobile-hidden {
         display: none;
     }
 
+    /* When a chat IS selected, right panel takes full width */
+    .chat-window.active {
+        width: 100%;
+    }
+
     .mobile-back {
         display: block;
+    }
+
+    /* Back button on top of page */
+    .back-btn {
+        position: static;
+        margin: 10px 14px;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        color: var(--accent-color);
+        font-weight: 500;
     }
 }
