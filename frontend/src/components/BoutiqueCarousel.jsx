@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaArrowLeft, FaArrowRight, FaMapMarkerAlt, FaStore, FaClock } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaMapMarkerAlt, FaStore, FaClock, FaPhoneAlt } from "react-icons/fa";
 import boutiqueFront from "../assets/boutique_front.jpg";
 import boutiqueInside from "../assets/boutique_inside.jpg";
 import "./BoutiqueCarousel.css";
@@ -165,7 +165,14 @@ function BoutiqueCarousel() {
               <FaMapMarkerAlt className="info-icon" />
               <div>
                 <h5>Boutique Address</h5>
-                <p>Eves Era Boutique, Women's Clothing Boutique,<br />Near main bazaar road, Tamil Nadu</p>
+                <p>205 c Gnanagiri road,<br />Near Anso Sports Academy,<br />Sivakasi - 626123</p>
+              </div>
+            </div>
+            <div className="info-item">
+              <FaPhoneAlt className="info-icon" />
+              <div>
+                <h5>Phone Number</h5>
+                <p>+91 63742 26455</p>
               </div>
             </div>
             <div className="info-item">

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-    FaInstagram, FaEnvelope, FaPhoneAlt, 
+    FaInstagram, FaPhoneAlt, 
     FaMapMarkerAlt, FaPaperPlane, FaFacebookF, 
-    FaTwitter, FaYoutube, FaChevronUp,
-    FaTruck, FaShieldAlt, FaSyncAlt, FaAward,
+    FaYoutube, FaChevronUp,
     FaCcVisa, FaCcMastercard, FaCcApplePay, FaPaypal
 } from 'react-icons/fa';
 import { SiGooglepay } from 'react-icons/si';
@@ -50,12 +49,15 @@ const Footer = () => {
                             Crafting timeless luxury and sustainable couture. Discover Eve's Era collections designed for the modern woman.
                         </p>
                         <div className="social-links-grid">
-                            <a href="#" className="social-icon instagram">
+                            <a href="https://www.instagram.com/eves__era?igsh=MWY4OXg4a291aGJkcA==" target="_blank" rel="noopener noreferrer" className="social-icon instagram">
                                 <FaInstagram />
                             </a>
-                            <a href="#" className="social-icon facebook"><FaFacebookF /></a>
-                            <a href="#" className="social-icon twitter"><FaTwitter /></a>
-                            <a href="#" className="social-icon youtube"><FaYoutube /></a>
+                            <a href="https://www.facebook.com/share/18ywmRi34w/" target="_blank" rel="noopener noreferrer" className="social-icon facebook">
+                                <FaFacebookF />
+                            </a>
+                            <a href="https://youtube.com/@evesera1?si=DAcrbaTrIzCTWcPq" target="_blank" rel="noopener noreferrer" className="social-icon youtube">
+                                <FaYoutube />
+                            </a>
                         </div>
                     </div>
 
@@ -95,13 +97,9 @@ const Footer = () => {
                             </div>
                         </form>
                         <div className="footer-contact-info">
-                            <a href="tel:+918248518238" className="contact-tile">
+                            <a href="tel:+916374226455" className="contact-tile">
                                 <FaPhoneAlt />
-                                <span>+91 82485 18238</span>
-                            </a>
-                            <a href="mailto:support@evesera.com" className="contact-tile">
-                                <FaEnvelope />
-                                <span>support@evesera.com</span>
+                                <span>+91 63742 26455</span>
                             </a>
                         </div>
                     </div>
@@ -130,7 +128,7 @@ const Footer = () => {
 
                 <div className="footer-address">
                     <FaMapMarkerAlt />
-                    <span>Eve's Era Atelier, Premium Fashion Block, Tirupur 641 603</span>
+                    <span>205 c Gnanagiri road, Near Anso Sports Academy, Sivakasi - 626123</span>
                 </div>
             </div>
 
@@ -147,4 +145,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

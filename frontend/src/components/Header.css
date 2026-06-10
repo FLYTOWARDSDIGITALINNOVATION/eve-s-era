@@ -55,6 +55,35 @@
   text-decoration: underline;
 }
 
+.banner-divider {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+}
+
+.welcome-msg {
+  color: var(--white);
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.banner-logout-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.95;
+  display: flex;
+  align-items: center;
+}
+
+.banner-logout-btn:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
 .admin-ribbon-btn {
   background: rgba(255, 255, 255, 0.2);
   padding: 3px 10px;

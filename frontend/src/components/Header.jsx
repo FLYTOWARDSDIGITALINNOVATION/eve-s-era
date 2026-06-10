@@ -68,6 +68,21 @@ const Header = ({ onSearch, onModelFilter }) => {
           </div>
           <div className="top-links">
             <Link to="/customer-service"><FaPhoneAlt size={10} /> Contact Support</Link>
+            {!user ? (
+              <>
+                <span className="banner-divider">|</span>
+                <Link to="/auth" state={{ isLogin: true }}>Login</Link>
+                <span className="banner-divider">|</span>
+                <Link to="/auth" state={{ isLogin: false }}>Sign Up</Link>
+              </>
+            ) : (
+              <>
+                <span className="banner-divider">|</span>
+                <span className="welcome-msg">Hello, {user.name ? user.name.split(' ')[0] : 'User'}</span>
+                <span className="banner-divider">|</span>
+                <button onClick={handleLogout} className="banner-logout-btn">Logout</button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -98,66 +113,69 @@ const Header = ({ onSearch, onModelFilter }) => {
 
         <div className={`nav-content ${isMobileMenuOpen ? "open" : ""}`}>
           <div className="nav-icons">
-            {user ? (
-              <>
-                <Link to="/profile" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
-                  <FaUser />
-                  <span className="mobile-label">Profile</span>
-                  <span className="icon-subtext">Account</span>
-                </Link>
 
-                <Link to="/orders" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
-                  <FaBoxOpen />
-                  <span className="mobile-label">Orders</span>
-                  <span className="icon-subtext">My Orders</span>
-                </Link>
+            {/* Profile — always visible */}
+            <Link to={user ? "/profile" : "/auth"} state={!user ? { from: "/profile" } : undefined} className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <FaUser />
+              <span className="mobile-label">Profile</span>
+              <span className="icon-subtext">Account</span>
+            </Link>
 
-                <Link to="/wishlist" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
-                  <FaHeart />
-                  {wishlist.length > 0 && (
-                    <span className="cart-badge">{wishlist.length}</span>
-                  )}
-                  <span className="mobile-label">Wishlist</span>
-                  <span className="icon-subtext">Wishlist</span>
-                </Link>
+            {/* Orders — always visible */}
+            <Link to={user ? "/orders" : "/auth"} state={!user ? { from: "/orders" } : undefined} className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <FaBoxOpen />
+              <span className="mobile-label">Orders</span>
+              <span className="icon-subtext">My Orders</span>
+            </Link>
 
-                <Link to="/cart" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
-                  <FaShoppingCart />
-                  {cart.length > 0 && (
-                    <span className="cart-badge">
-                      {cart.reduce((sum, i) => sum + i.qty, 0)}
-                    </span>
-                  )}
-                  <span className="mobile-label">Cart</span>
-                  <span className="icon-subtext">Bag</span>
-                </Link>
+            {/* Wishlist — always visible */}
+            <Link to="/wishlist" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <FaHeart />
+              {wishlist.length > 0 && (
+                <span className="cart-badge">{wishlist.length}</span>
+              )}
+              <span className="mobile-label">Wishlist</span>
+              <span className="icon-subtext">Wishlist</span>
+            </Link>
 
-                <Link to="/customer-service" className="icon-link mobile-only-link" onClick={() => setIsMobileMenuOpen(false)}>
-                  <FaPhoneAlt />
-                  <span className="mobile-label">Support</span>
-                  <span className="icon-subtext">Contact Us</span>
-                </Link>
+            {/* Cart — always visible */}
+            <Link to="/cart" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <FaShoppingCart />
+              {cart.length > 0 && (
+                <span className="cart-badge">
+                  {cart.reduce((sum, i) => sum + i.qty, 0)}
+                </span>
+              )}
+              <span className="mobile-label">Cart</span>
+              <span className="icon-subtext">Bag</span>
+            </Link>
 
-                <button onClick={handleLogout} className="icon-link logout-btn-header">
-                  <FaSignOutAlt />
-                  <span className="mobile-label">Logout</span>
-                  <span className="icon-subtext">Log out</span>
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/customer-service" className="icon-link mobile-only-link" onClick={() => setIsMobileMenuOpen(false)}>
-                  <FaPhoneAlt />
-                  <span className="mobile-label">Support</span>
-                  <span className="icon-subtext">Contact Us</span>
-                </Link>
-                <Link to="/auth" className="login-nav-btn" onClick={() => setIsMobileMenuOpen(false)}>
-                  Sign In
-                </Link>
-              </>
+            {/* Support — mobile only */}
+            <Link to="/customer-service" className="icon-link mobile-only-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <FaPhoneAlt />
+              <span className="mobile-label">Support</span>
+              <span className="icon-subtext">Contact Us</span>
+            </Link>
+
+            {/* Logout — only when logged in */}
+            {user && (
+              <button onClick={handleLogout} className="icon-link logout-btn-header">
+                <FaSignOutAlt />
+                <span className="mobile-label">Logout</span>
+                <span className="icon-subtext">Log out</span>
+              </button>
             )}
+
+            {/* Sign In button — only when NOT logged in */}
+            {!user && (
+              <Link to="/auth" className="login-nav-btn" onClick={() => setIsMobileMenuOpen(false)}>
+                Sign In
+              </Link>
+            )}
+
           </div>
         </div>
+
       </div>
 
       {/* Categories & Luxury Segment Bar */}

@@ -1,5 +1,5 @@
 import API_BASE_URL from '../api';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GoogleLogin } from '@react-oauth/google';
 import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
@@ -21,6 +21,12 @@ const AuthPage = () => {
     const location = useLocation();
     const [isLogin, setIsLogin] = useState(location.state?.isLogin !== undefined ? location.state.isLogin : true);
     const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        if (location.state?.isLogin !== undefined) {
+            setIsLogin(location.state.isLogin);
+        }
+    }, [location.state?.isLogin]);
 
     // Animation Variants
     const containerVariants = {
@@ -80,8 +86,16 @@ const AuthPage = () => {
             if (!res.ok) {
                 setError(data.message);
             } else {
-                setSuccess(data.message);
-                setTimeout(() => setIsLogin(true), 2000);
+                setSuccess("Signup successful! Logging you in...");
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
+                setTimeout(() => {
+                    if (data.user.isAdmin) {
+                        navigate("/admin");
+                    } else {
+                        navigate(location.state?.from || "/home");
+                    }
+                }, 1500);
             }
         } catch (err) {
             setError("Server not reachable");
@@ -109,7 +123,7 @@ const AuthPage = () => {
             if (data.user.isAdmin) {
                 navigate("/admin");
             } else {
-                navigate("/home");
+                navigate(location.state?.from || "/home");
             }
         } catch (err) {
             setError("Google login failed. Please try again.");
@@ -139,7 +153,7 @@ const AuthPage = () => {
             if (data.user.isAdmin) {
                 navigate("/admin");
             } else {
-                navigate("/home");
+                navigate(location.state?.from || "/home");
             }
         } catch (err) {
             setError("Something went wrong. Please try again.");

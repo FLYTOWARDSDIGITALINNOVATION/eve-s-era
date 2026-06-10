@@ -19,8 +19,42 @@ const CustomerService = () => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
     useEffect(() => {
-        if (user.email) fetchChats();
-    }, []);
+        if (!user.email) return;
+        
+        fetchChats();
+        const interval = setInterval(() => {
+            fetch(`${API_BASE_URL}/support/user/${user.email}`)
+                .then(res => res.json())
+                .then(data => {
+                    setChats(data);
+                })
+                .catch(err => console.error("Failed to fetch chats", err));
+        }, 4000);
+        
+        return () => clearInterval(interval);
+    }, [user.email]);
+
+    useEffect(() => {
+        if (activeChat && chats.length > 0) {
+            const updated = chats.find(c => c._id === activeChat._id);
+            if (updated) {
+                if (JSON.stringify(updated.messages) !== JSON.stringify(activeChat.messages)) {
+                    setActiveChat(updated);
+                }
+                if (updated.unreadByUser) {
+                    fetch(`${API_BASE_URL}/support/${activeChat._id}/read`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ role: "user" })
+                    })
+                    .then(() => {
+                        setChats(prev => prev.map(c => c._id === activeChat._id ? { ...c, unreadByUser: false } : c));
+                    })
+                    .catch(err => console.error("Failed to mark chat as read", err));
+                }
+            }
+        }
+    }, [chats, activeChat]);
 
     const fetchChats = async () => {
         try {
@@ -97,6 +131,22 @@ const CustomerService = () => {
         }
     };
 
+    const handleSelectChat = async (chat) => {
+        setActiveChat(chat);
+        if (chat.unreadByUser) {
+            try {
+                await fetch(`${API_BASE_URL}/support/${chat._id}/read`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ role: "user" })
+                });
+                setChats(prev => prev.map(c => c._id === chat._id ? { ...c, unreadByUser: false } : c));
+            } catch (err) {
+                console.error("Failed to mark chat as read", err);
+            }
+        }
+    };
+
     return (
         <div className="customer-service-page chat-mode">
             <button className="back-btn" onClick={() => navigate("/home")}>
@@ -118,13 +168,25 @@ const CustomerService = () => {
                             <div
                                 key={chat._id}
                                 className={`chat-item ${activeChat?._id === chat._id ? 'active' : ''}`}
-                                onClick={() => setActiveChat(chat)}
+                                onClick={() => handleSelectChat(chat)}
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: '16px' }}
                             >
-                                <div className="chat-avatar">🎧</div>
-                                <div className="chat-info">
-                                    <h4>{chat.subject}</h4>
-                                    <p>{new Date(chat.lastUpdated).toLocaleDateString()}</p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div className="chat-avatar">🎧</div>
+                                    <div className="chat-info">
+                                        <h4 style={{ fontWeight: chat.unreadByUser ? '700' : 'normal' }}>{chat.subject}</h4>
+                                        <p>{new Date(chat.lastUpdated).toLocaleDateString()}</p>
+                                    </div>
                                 </div>
+                                {chat.unreadByUser && (
+                                    <span className="unread-dot-badge" style={{
+                                        width: '10px',
+                                        height: '10px',
+                                        borderRadius: '50%',
+                                        backgroundColor: '#e91e63',
+                                        flexShrink: 0
+                                    }}></span>
+                                )}
                             </div>
                         ))}
                     </div>

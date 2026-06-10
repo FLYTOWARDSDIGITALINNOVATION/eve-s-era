@@ -17,7 +17,11 @@ const OrdersPage = () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
-        if (user?.email) {
+        if (!user) {
+            navigate("/auth", { state: { from: "/orders" } });
+            return;
+        }
+        if (user.email) {
             fetch(`${API_BASE_URL}/orders/${user.email}`)
                 .then((res) => res.json())
                 .then((data) => {
@@ -28,8 +32,10 @@ const OrdersPage = () => {
                     console.error("Error fetching orders:", err);
                     setLoading(false);
                 });
+        } else {
+            setLoading(false);
         }
-    }, [user]);
+    }, [user, navigate]);
 
     const handleOpenModal = (order) => {
         setSelectedOrder(order);

@@ -9,7 +9,6 @@ import {
   FaUserCircle, FaBoxOpen, FaMapMarkerAlt,
   FaSignOutAlt, FaEdit, FaPlus,
   FaShoppingBag, FaShieldAlt, FaChevronRight,
-  FaArrowLeft, FaCoins, FaBell, FaUndoAlt,
   FaPhoneAlt
 } from "react-icons/fa";
 import "./Profile.css";
@@ -39,15 +38,6 @@ const Profile = () => {
 
   const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic"));
 
-  // Mock Wallet and Notification Data
-  const walletPoints = 650; 
-  const notifications = [
-    { id: 1, title: "Order Shipped! 📦", body: "Your Eves Era Silk Blouse is on its way.", date: "Today" },
-    { id: 2, title: "Earned Reward Points! 🌸", body: "You earned 150 points from your last checkout.", date: "Yesterday" }
-  ];
-  const returns = [
-    { id: "RET-9081", product: "Cashmere Sweater", status: "Refund Processed", amount: "₹1,450" }
-  ];
 
   useEffect(() => {
     if (!userEmail) return;
@@ -128,7 +118,7 @@ const Profile = () => {
           <div className="empty-icon">🔒</div>
           <h3>Authentication Required</h3>
           <p>Please log in or register to inspect your customer profile details.</p>
-          <button className="reset-empty-btn" onClick={() => navigate("/auth")}>Login Now</button>
+          <button className="reset-empty-btn" onClick={() => navigate("/auth", { state: { from: "/profile" } })}>Login Now</button>
         </div>
         <Footer />
       </div>
@@ -210,83 +200,6 @@ const Profile = () => {
         {/* MAIN DASHBOARD */}
         <main className="profile-content-area">
           
-          {/* LOYALTY & REWARD POINTS */}
-          <section className="profile-content-section reward-section-box">
-            <div className="header-title">
-              <FaCoins /> <h3>Eve's Reward Points</h3>
-            </div>
-            <div className="rewards-card-details">
-              <div className="points-showcase">
-                <span className="points-num">{walletPoints}</span>
-                <span className="points-lbl">Available Points</span>
-              </div>
-              <div className="rewards-msg">
-                <p><strong>1 Point = ₹1.00</strong> toward checkout discounts.</p>
-                <p>Earn reward points with each Eve's Era purchase!</p>
-              </div>
-            </div>
-          </section>
-
-          {/* ORDERS */}
-          <section className="profile-content-section">
-            <div className="header-title">
-              <FaShoppingBag /> <h3>Recent Orders</h3>
-            </div>
-
-            {orders.length === 0 ? (
-              <div className="empty-section-placeholder">No orders registered yet</div>
-            ) : (
-              orders.slice(0, 3).map(order => (
-                <div key={order._id} className="order-row-card">
-                  <div>
-                    <strong>{order.productName}</strong>
-                    <p>{new Date(order.createdAt).toLocaleDateString()}</p>
-                  </div>
-                  <span className={`status-badge ${order.status?.toLowerCase() || 'ordered'}`}>
-                    {order.status}
-                  </span>
-                </div>
-              ))
-            )}
-          </section>
-
-          {/* RETURNS & REFUNDS */}
-          <section className="profile-content-section">
-            <div className="header-title">
-              <FaUndoAlt /> <h3>Returns & Refunds</h3>
-            </div>
-            {returns.map(ret => (
-              <div key={ret.id} className="order-row-card">
-                <div>
-                  <strong>{ret.product}</strong>
-                  <p>Ticket ID: {ret.id}</p>
-                </div>
-                <div style={{ textAlignment: 'right' }}>
-                  <span className="refund-amount">{ret.amount}</span>
-                  <span className="status-badge refund-badge">{ret.status}</span>
-                </div>
-              </div>
-            ))}
-          </section>
-
-          {/* NOTIFICATION FEED */}
-          <section className="profile-content-section">
-            <div className="header-title">
-              <FaBell /> <h3>Inbox Alerts</h3>
-            </div>
-            <div className="notifications-list-box">
-              {notifications.map(notif => (
-                <div key={notif.id} className="notification-row">
-                  <div className="notif-dot"></div>
-                  <div className="notif-info">
-                    <h4>{notif.title}</h4>
-                    <p>{notif.body}</p>
-                    <span className="notif-time">{notif.date}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
 
           {/* SAVED ADDRESSES */}
           <section className="profile-content-section">

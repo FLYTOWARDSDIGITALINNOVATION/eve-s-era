@@ -14,7 +14,46 @@ const AdminSupportPage = () => {
 
     useEffect(() => {
         fetchChats();
+        const interval = setInterval(() => {
+            const token = localStorage.getItem("token");
+            fetch(`${API_BASE_URL}/support/admin`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setChats(data);
+                })
+                .catch(err => console.error("Failed to fetch chats", err));
+        }, 4000);
+        
+        return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        if (activeChat && chats.length > 0) {
+            const updated = chats.find(c => c._id === activeChat._id);
+            if (updated) {
+                if (JSON.stringify(updated.messages) !== JSON.stringify(activeChat.messages)) {
+                    setActiveChat(updated);
+                }
+                if (updated.unreadByAdmin) {
+                    const token = localStorage.getItem("token");
+                    fetch(`${API_BASE_URL}/support/${activeChat._id}/read`, {
+                        method: "PUT",
+                        headers: { 
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}` 
+                        },
+                        body: JSON.stringify({ role: "admin" })
+                    })
+                    .then(() => {
+                        setChats(prev => prev.map(c => c._id === activeChat._id ? { ...c, unreadByAdmin: false } : c));
+                    })
+                    .catch(err => console.error("Failed to mark chat as read", err));
+                }
+            }
+        }
+    }, [chats, activeChat]);
 
     const fetchChats = async () => {
         try {
@@ -72,6 +111,26 @@ const AdminSupportPage = () => {
         }
     };
 
+    const handleSelectChat = async (chat) => {
+        setActiveChat(chat);
+        if (chat.unreadByAdmin) {
+            try {
+                const token = localStorage.getItem("token");
+                await fetch(`${API_BASE_URL}/support/${chat._id}/read`, {
+                    method: "PUT",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ role: "admin" })
+                });
+                setChats(prev => prev.map(c => c._id === chat._id ? { ...c, unreadByAdmin: false } : c));
+            } catch (err) {
+                console.error("Failed to mark chat as read", err);
+            }
+        }
+    };
+
     return (
         <div className="admin-support-page chat-mode">
             <button className="back-btn" onClick={() => navigate("/admin")}>
@@ -89,18 +148,32 @@ const AdminSupportPage = () => {
                             <div
                                 key={chat._id}
                                 className={`chat-item ${activeChat?._id === chat._id ? 'active' : ''}`}
-                                onClick={() => setActiveChat(chat)}
+                                onClick={() => handleSelectChat(chat)}
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: '16px' }}
                             >
-                                <div className="chat-avatar user-avatar">
-                                    {chat.userName?.charAt(0).toUpperCase()}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div className="chat-avatar user-avatar">
+                                        {chat.userName?.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div className="chat-info">
+                                        <h4 style={{ fontWeight: chat.unreadByAdmin ? '700' : 'normal' }}>{chat.userName || "Anonymous"}</h4>
+                                        <p>{chat.subject}</p>
+                                    </div>
                                 </div>
-                                <div className="chat-info">
-                                    <h4>{chat.userName || "Anonymous"}</h4>
-                                    <p>{chat.subject}</p>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                                    <span className="time-ago">
+                                        {new Date(chat.lastUpdated).toLocaleDateString()}
+                                    </span>
+                                    {chat.unreadByAdmin && (
+                                        <span className="unread-dot-badge" style={{
+                                            width: '10px',
+                                            height: '10px',
+                                            borderRadius: '50%',
+                                            backgroundColor: '#e91e63',
+                                            flexShrink: 0
+                                        }}></span>
+                                    )}
                                 </div>
-                                <span className="time-ago">
-                                    {new Date(chat.lastUpdated).toLocaleDateString()}
-                                </span>
                             </div>
                         ))}
                     </div>

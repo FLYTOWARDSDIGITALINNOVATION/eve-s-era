@@ -9,41 +9,42 @@ import WishlistPage from "./pages/WishlistPage";
 import CartPage from "./pages/CartPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import Checkout from "./pages/Checkout";
-import OrderSuccess from "./pages/OrderSuccess"; // ✅ Import Success Page
-import AuthPage from "./pages/AuthPage";         // ✅ Import Login/Signup Page
-import LandingPage from "./pages/LandingPage";   // ✅ Import Landing Page
-import AdminDashboard from "./admin/AdminDashboard"; // ✅ Import Admin Dashboard
+import OrderSuccess from "./pages/OrderSuccess";
+import AuthPage from "./pages/AuthPage";
+import AdminDashboard from "./admin/AdminDashboard";
 import AddCategory from "./admin/AddCategory";
 import AddProduct from "./admin/AddProduct";
 import RemoveProductPage from "./admin/RemoveProductPage";
 import AdminOrdersPage from "./admin/AdminOrdersPage";
-import AdminSupportPage from "./admin/AdminSupportPage"; // ✅ Import Admin Support
-import EditProduct from "./admin/EditProduct"; // ✅ Import Edit Product
-import OrdersPage from "./pages/OrdersPage"; // ✅ Import Orders Page
-import CustomerService from "./pages/CustomerService"; // ✅ Import Customer Service Page
+import AdminSupportPage from "./admin/AdminSupportPage";
+import EditProduct from "./admin/EditProduct";
+import OrdersPage from "./pages/OrdersPage";
+import CustomerService from "./pages/CustomerService";
 import Profile from "./pages/Profile";
+
 function App() {
   return (
     <WishlistProvider>
       <CartProvider>
         <Router>
           <Routes>
-            {/* Landing & Auth Routes */}
-            <Route path="/" element={<LandingPage />} />
+            {/* Home / Product Dashboard - shown first, no login required to browse */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/home" element={<HomePage />} />
+
+            {/* Auth */}
             <Route path="/auth" element={<AuthPage />} />
 
             {/* Shop Routes */}
-            <Route path="/home" element={<HomePage />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/orders" element={<OrdersPage />} /> {/* ✅ Orders Route */}
-            <Route path="/order-success" element={<OrderSuccess />} /> {/* ✅ Success Page */}
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
             <Route path="/customer-service" element={<CustomerService />} />
 
-            {/* Admin Route (Optional if you have it) */}
-            {/* Admin Route */}
+            {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/add-category" element={<AddCategory />} />
             <Route path="/admin/add-product" element={<AddProduct />} />

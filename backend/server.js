@@ -141,6 +141,8 @@ const supportSchema = new mongoose.Schema({
   subject: String, // First message snippet
   messages: [messageSchema],
   lastUpdated: { type: Date, default: Date.now },
+  unreadByUser: { type: Boolean, default: false },
+  unreadByAdmin: { type: Boolean, default: false },
 });
 const Support = mongoose.model("Support", supportSchema);
 
@@ -185,6 +187,8 @@ app.post("/support/start", upload.single("image"), async (req, res) => {
       userName,
       subject: message.substring(0, 50) + (message.length > 50 ? "..." : ""),
       messages: [initialMessage],
+      unreadByUser: false,
+      unreadByAdmin: true,
     });
     res.json(support);
   } catch (err) {
@@ -222,14 +226,40 @@ app.put("/support/:id/message", upload.single("image"), async (req, res) => {
       image: req.file ? `/uploads/${req.file.filename}` : "",
     };
 
-    await Support.findByIdAndUpdate(req.params.id, {
+    const update = {
       $push: { messages: newMessage },
       lastUpdated: new Date(),
-    });
+    };
+    if (sender === "user") {
+      update.unreadByUser = false;
+      update.unreadByAdmin = true;
+    } else if (sender === "admin") {
+      update.unreadByUser = true;
+      update.unreadByAdmin = false;
+    }
+
+    await Support.findByIdAndUpdate(req.params.id, update);
 
     res.json(newMessage);
   } catch (err) {
     res.status(500).json({ message: "Failed to send message" });
+  }
+});
+
+// MARK SUPPORT CHAT AS READ
+app.put("/support/:id/read", async (req, res) => {
+  try {
+    const { role } = req.body; // 'user' or 'admin'
+    const update = {};
+    if (role === "user") {
+      update.unreadByUser = false;
+    } else if (role === "admin") {
+      update.unreadByAdmin = false;
+    }
+    await Support.findByIdAndUpdate(req.params.id, update);
+    res.json({ message: "Chat marked as read" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to mark as read" });
   }
 });
 
@@ -252,8 +282,24 @@ app.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const hashed = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hashed });
-    res.json({ message: "Signup successful" });
+    const user = await User.create({ name, email, password: hashed });
+
+    const jwtToken = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      "SECRET_KEY",
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      message: "Signup successful",
+      token: jwtToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
+    });
   } catch (err) {
     if (err.code === 11000) {
       return res.status(400).json({ message: "Email already exists" });

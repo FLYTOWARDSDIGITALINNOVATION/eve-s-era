@@ -1,5 +1,5 @@
 import API_BASE_URL from '../api';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from "../context/CartContext";
 import { ChevronLeft, Lock } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,13 @@ const Checkout = () => {
   const { cart, clearCart } = useCart();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+
+  // 🔒 Guard: redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth", { state: { from: "/checkout", isLogin: false } });
+    }
+  }, []);
 
   // State for selection logic
   const [selectedShipping, setSelectedShipping] = useState('standard');
@@ -36,8 +43,7 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     if (!user) {
-      alert("Please login to place an order");
-      navigate("/login");
+      navigate("/auth", { state: { from: "/checkout", isLogin: false } });
       return;
     }
 

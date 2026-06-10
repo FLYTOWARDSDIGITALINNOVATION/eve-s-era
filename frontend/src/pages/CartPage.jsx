@@ -10,6 +10,7 @@ import "./CartPage.css";
 const CartPage = () => {
   const { cart, removeFromCart, updateQty } = useCart();
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const subtotal = cart.reduce(
     (acc, item) => acc + (Number(item.unitPrice || item.price) * Number(item.qty)),
@@ -132,7 +133,13 @@ const CartPage = () => {
 
                 <button
                   className="checkout-full-btn"
-                  onClick={() => navigate("/checkout")}
+                  onClick={() => {
+                    if (!user) {
+                      navigate("/auth", { state: { from: "/checkout", isLogin: false } });
+                    } else {
+                      navigate("/checkout");
+                    }
+                  }}
                 >
                   Proceed to Checkout
                 </button>
