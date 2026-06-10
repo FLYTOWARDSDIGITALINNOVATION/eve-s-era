@@ -438,6 +438,9 @@
 }
 
 @media (max-width: 600px) {
+    .footer-container {
+        padding: 45px 15px 30px;
+    }
     .footer-trust-bar {
         grid-template-columns: 1fr;
     }
@@ -450,6 +453,7 @@
     }
     .brand-mission {
         max-width: 100%;
+        padding: 0 15px;
     }
     .footer-watermark {
         font-size: 30vw;

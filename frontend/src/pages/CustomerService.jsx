@@ -243,17 +243,43 @@ const CustomerService = () => {
                             </div>
 
                             <div className="messages-area">
-                                {activeChat.messages.map((msg, idx) => (
-                                    <div key={idx} className={`message-bubble ${msg.sender}`}>
-                                        <div className="message-content">
-                                            {msg.text}
-                                            {msg.image && <img src={`${API_BASE_URL}${msg.image}`} alt="attachment" />}
+                                {activeChat.messages.map((msg, idx) => {
+                                    const isOwn = msg.sender === "user";
+                                    return (
+                                        <div 
+                                            key={idx} 
+                                            className={`message-bubble ${msg.sender}`}
+                                            style={{
+                                                alignSelf: isOwn ? 'flex-end' : 'flex-start',
+                                                background: isOwn ? 'var(--accent-color)' : 'white',
+                                                color: isOwn ? 'white' : '#1e293b',
+                                                border: isOwn ? 'none' : '1px solid #e2e8f0',
+                                                borderBottomRightRadius: isOwn ? '2px' : '12px',
+                                                borderBottomLeftRadius: isOwn ? '12px' : '2px',
+                                                maxWidth: '70%',
+                                                padding: '12px 16px',
+                                                borderRadius: '12px',
+                                                position: 'relative',
+                                                fontSize: '0.95rem',
+                                                lineHeight: '1.5'
+                                            }}
+                                        >
+                                            <div className="message-content">
+                                                {msg.text}
+                                                {msg.image && <img src={`${API_BASE_URL}${msg.image}`} alt="attachment" style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '5px' }} />}
+                                            </div>
+                                            <span className="message-time" style={{
+                                                display: 'block',
+                                                fontSize: '0.7rem',
+                                                marginTop: '5px',
+                                                opacity: 0.8,
+                                                textAlign: 'right'
+                                            }}>
+                                                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </span>
                                         </div>
-                                        <span className="message-time">
-                                            {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </span>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
 
                             <form className="chat-input-area" onSubmit={handleSendMessage}>
