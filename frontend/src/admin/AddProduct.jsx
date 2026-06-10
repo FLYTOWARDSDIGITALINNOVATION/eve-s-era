@@ -14,7 +14,6 @@ const AddProduct = () => {
     businessModel: "manufactured",
     materials: "",
     sizes: "",        // optional — empty by default
-    colors: "",
   });
 
   // Multi-image state: array of { file, preview }
@@ -88,7 +87,6 @@ const AddProduct = () => {
     formData.append("businessModel", form.businessModel);
     formData.append("materials", form.materials);
     formData.append("sizes", form.sizes);     // may be empty string — that's fine
-    formData.append("colors", form.colors);
     formData.append("email", adminEmail);
 
     // Append all selected images
@@ -202,15 +200,7 @@ const AddProduct = () => {
                 />
               </div>
 
-              <div className="input-group-field">
-                <label>Colors (Comma-separated)</label>
-                <input
-                  placeholder="Blush Pink, Soft Rose"
-                  value={form.colors}
-                  onChange={(e) => setForm({ ...form, colors: e.target.value })}
-                  className="pink-admin-input"
-                />
-              </div>
+              
             </div>
 
             {/* Material composition — only for manufactured */}

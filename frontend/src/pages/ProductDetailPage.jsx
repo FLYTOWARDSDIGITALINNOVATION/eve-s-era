@@ -15,7 +15,7 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
+
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -44,11 +44,9 @@ const ProductDetailPage = () => {
         } else {
           setSelectedSize("M");
         }
-        if (data.colors && data.colors.length > 0) {
-          setSelectedColor(data.colors[0]);
-        } else {
-          setSelectedColor("Pink");
-        }
+        // Color selection removed
+        // No default color set
+
         setLoading(false);
       })
       .catch((err) => {
@@ -121,7 +119,7 @@ const ProductDetailPage = () => {
         ...product,
         qty: quantity,
         size: selectedSize,
-        color: selectedColor,
+
       });
     }
   };
@@ -132,7 +130,7 @@ const ProductDetailPage = () => {
         ...product,
         qty: quantity,
         size: selectedSize,
-        color: selectedColor,
+
       });
       navigate("/checkout");
     }
@@ -168,7 +166,6 @@ const ProductDetailPage = () => {
 
   const isManufactured = product.businessModel === "manufactured";
   const sizes = product.sizes && product.sizes.length > 0 ? product.sizes : ["S", "M", "L", "XL"];
-  const colors = product.colors && product.colors.length > 0 ? product.colors : ["Pink", "Rose", "Dusty Mauve"];
   const productImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
   const displayImage = productImages[selectedImageIndex] || product.image;
 
@@ -252,29 +249,6 @@ const ProductDetailPage = () => {
             <p className="detail-description">
               {product.description || `Indulge in the pristine details of our luxury ${product.name.toLowerCase()}. Expertly selected to bring you the premium boutique feel that characterizes Eve's Era.`}
             </p>
-
-            {/* Colors picker */}
-            <div className="selection-group">
-              <span className="sel-title">Select Color variant:</span>
-              <div className="color-dots-list">
-                {colors.map((c) => (
-                  <button
-                    key={c}
-                    className={`color-dot-btn ${selectedColor === c ? "active" : ""}`}
-                    onClick={() => setSelectedColor(c)}
-                    style={{
-                      background: c.toLowerCase().includes("pink") ? "#F8D7DA" : 
-                                  c.toLowerCase().includes("rose") ? "#F4B6C2" : 
-                                  c.toLowerCase().includes("mauve") ? "#C48B9F" : 
-                                  c.toLowerCase().includes("charcoal") || c.toLowerCase().includes("gray") ? "#333333" : 
-                                  c.toLowerCase().includes("white") ? "#FFFFFF" : "#E2E8F0"
-                    }}
-                    title={c}
-                  />
-                ))}
-                <span className="selected-color-lbl">{selectedColor}</span>
-              </div>
-            </div>
 
             {/* Sizes picker */}
             <div className="selection-group">
