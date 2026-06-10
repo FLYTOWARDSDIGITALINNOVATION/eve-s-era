@@ -12,6 +12,7 @@ const ProductCard = ({ product }) => {
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
   const [showAdded, setShowAdded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const pid = product._id || product.id;
   const isWishlisted = wishlist.some(p => (p._id || p.id) === pid);
@@ -62,9 +63,21 @@ const ProductCard = ({ product }) => {
           <FaHeart />
         </button>
 
-        <img src={`${API_BASE_URL}${product.image}`} alt={product.name} onError={(e) => {
-          e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=300&q=80";
-        }} />
+        {!imageLoaded && <div className="shimmer-placeholder" />}
+        <img
+          src={`${API_BASE_URL}${product.image}`}
+          alt={product.name}
+          onLoad={() => setImageLoaded(true)}
+          style={{
+            opacity: imageLoaded ? 1 : 0,
+            transition: "opacity 0.35s ease-in-out",
+          }}
+          loading="lazy"
+          onError={(e) => {
+            setImageLoaded(true);
+            e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=300&q=80";
+          }}
+        />
 
         {showAdded && <div className="added-toast">Added to bag 🛍️</div>}
 

@@ -18,6 +18,7 @@ const ProductDetailPage = () => {
 
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // Review State
   const [reviews, setReviews] = useState([]);
@@ -31,6 +32,7 @@ const ProductDetailPage = () => {
 
   // Fetch product from API
   useEffect(() => {
+    setImageLoaded(false);
     fetch(`${API_BASE_URL}/products/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Product not found");
@@ -186,11 +188,20 @@ const ProductDetailPage = () => {
               {isManufactured ? <FaGem /> : <FaLeaf />}
               <span>Eves Era</span>
             </div>
+            {!imageLoaded && <div className="shimmer-placeholder" />}
             <img
               src={`${API_BASE_URL}${displayImage}`}
               alt={product.name}
               className="main-detail-img"
+              onLoad={() => setImageLoaded(true)}
+              style={{
+                opacity: imageLoaded ? 1 : 0,
+                transition: "opacity 0.35s ease-in-out",
+              }}
+              loading="eager"
+              fetchpriority="high"
               onError={(e) => {
+                setImageLoaded(true);
                 e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80";
               }}
             />
@@ -202,7 +213,10 @@ const ProductDetailPage = () => {
                   <button
                     key={idx}
                     className={`thumb-btn ${selectedImageIndex === idx ? "active" : ""}`}
-                    onClick={() => setSelectedImageIndex(idx)}
+                    onClick={() => {
+                      setImageLoaded(false);
+                      setSelectedImageIndex(idx);
+                    }}
                     title={`View image ${idx + 1}`}
                   >
                     <img

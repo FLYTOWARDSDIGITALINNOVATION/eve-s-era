@@ -1,7 +1,7 @@
 .sh-header {
   background: var(--white);
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
   overflow-x: hidden;
   box-shadow: var(--shadow-sm);
   position: sticky;
@@ -285,7 +285,7 @@
   border-top: 1px solid rgba(244, 182, 194, 0.15);
   background: var(--white);
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
   overflow: hidden;
 }
 
@@ -388,7 +388,7 @@
 
   .sh-header {
     width: 100%;
-    max-width: 100vw;
+    max-width: 100%;
     overflow-x: hidden;
   }
   
@@ -460,7 +460,7 @@
   /* Categories bar: stack rows, never overflow horizontally */
   .categories-bar {
     overflow: hidden;
-    max-width: 100vw;
+    max-width: 100%;
   }
 
   .categories-flex {

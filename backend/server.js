@@ -24,7 +24,11 @@ if (!fs.existsSync("uploads")) {
 }
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static("uploads", {
+  maxAge: '1d', // Cache images for 1 day
+  etag: true,
+  lastModified: true
+}));
 
 /* ================= MONGODB ================= */
 mongoose
