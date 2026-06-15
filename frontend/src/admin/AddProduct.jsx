@@ -113,7 +113,7 @@ const AddProduct = () => {
         throw new Error(data.message || "Failed to save product.");
       }
       alert(data.message || "Product listed in Eve's Era catalogue successfully!");
-      if (res.ok) navigate("/admin");
+      if (res.ok) navigate("/admin?tab=products");
     } catch (err) {
       console.error("Add Product Error:", err);
       alert(err.message || "Failed to save product.");

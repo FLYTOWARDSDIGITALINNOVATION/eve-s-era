@@ -1,6 +1,6 @@
 import API_BASE_URL from '../api';
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { 
   FaCoins, FaBoxOpen, FaInbox, FaUsers, FaArrowLeft, FaSignOutAlt, 
   FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift, FaLayerGroup, FaBars, FaTimes
@@ -10,7 +10,9 @@ import logo from "../assets/eve's era.jpeg";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("overview");
+  const location = useLocation();
+  const urlTab = new URLSearchParams(location.search).get("tab") || "overview";
+  const [activeTab, setActiveTab] = useState(urlTab);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Statistical states

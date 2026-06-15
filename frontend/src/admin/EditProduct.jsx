@@ -166,7 +166,7 @@ const EditProduct = () => {
       const data = await res.json();
       if (res.ok) {
         alert("Product updated in Eves Era boutique!");
-        navigate("/admin");
+        navigate("/admin?tab=products");
       } else {
         alert(data.message || "Failed to update product");
       }
