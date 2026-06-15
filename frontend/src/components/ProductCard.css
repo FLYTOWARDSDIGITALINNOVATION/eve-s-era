@@ -167,23 +167,44 @@
 }
 
 .product-category-lbl {
-  font-size: 11px;
-  color: #888888;
+  font-size: 10.5px;
+  color: var(--accent-color);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   font-family: var(--font-accent);
-  margin-bottom: 4px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.product-category-lbl::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--secondary-pink), var(--accent-color));
+  border-radius: 2px;
+  flex-shrink: 0;
 }
 
 .product-title-lbl {
-  font-family: var(--font-family);
-  font-size: 15px;
-  font-weight: 600;
+  font-family: var(--font-title); /* Playfair Display — elegant serif */
+  font-size: 19px;
+  font-weight: 700;
   color: var(--text-color);
   margin-bottom: 6px;
+  line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+  transition: color 0.25s ease;
+}
+
+.card:hover .product-title-lbl {
+  color: var(--accent-color);
 }
 
 .rating-container {

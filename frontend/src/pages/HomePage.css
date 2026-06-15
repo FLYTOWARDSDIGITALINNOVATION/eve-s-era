@@ -55,15 +55,28 @@
 
 .filter-group h4 {
   font-family: var(--font-accent);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 800;
   text-transform: uppercase;
-  color: #777777;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
+  color: var(--accent-color);
+  margin-bottom: 14px;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* Segment Pill buttons */
+.filter-group h4::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--secondary-pink), var(--accent-color));
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Segment Pill buttons (business model filter) */
 .segment-pills {
   display: flex;
   flex-direction: column;
@@ -72,26 +85,25 @@
 
 .pill-btn {
   background: var(--background-color);
-  border: 1px solid rgba(244, 182, 194, 0.15);
+  border: 1.5px solid rgba(244, 182, 194, 0.2);
   color: var(--text-color);
   padding: 10px 16px;
   border-radius: var(--border-radius-sm);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
+  font-family: var(--font-accent);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: var(--transition);
-}
-
-.pill-btn svg {
-  font-size: 12px;
+  gap: 10px;
+  transition: all 0.25s ease;
 }
 
 .pill-btn:hover {
   background: var(--light-pink);
   border-color: var(--secondary-pink);
+  transform: translateX(3px);
+  color: var(--accent-color);
 }
 
 .pill-btn.active {
@@ -101,25 +113,40 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Checkbox lists */
+/* Category checkbox items — redesigned as attractive pill cards */
 .checkbox-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .checkbox-item {
   display: flex;
   align-items: center;
-  position: relative;
-  padding-left: 28px;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--border-radius-sm);
+  border: 1.5px solid rgba(244, 182, 194, 0.2);
+  background: var(--background-color);
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-accent);
   color: var(--text-color);
   user-select: none;
+  transition: all 0.25s ease;
+  position: relative;
+  padding-left: 14px;
 }
 
+.checkbox-item:hover {
+  background: var(--light-pink);
+  border-color: var(--secondary-pink);
+  transform: translateX(3px);
+  color: var(--accent-color);
+}
+
+/* Hide the real checkbox */
 .checkbox-item input {
   position: absolute;
   opacity: 0;
@@ -128,50 +155,42 @@
   width: 0;
 }
 
+/* Replace checkmark with a dot indicator */
 .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 18px;
-  width: 18px;
-  background-color: var(--background-color);
-  border: 1px solid rgba(244, 182, 194, 0.3);
-  border-radius: 4px;
-  transition: var(--transition);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(196, 139, 159, 0.4);
+  background: transparent;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
 }
 
-.checkbox-item:hover input ~ .checkmark {
+.checkbox-item:hover .checkmark {
   border-color: var(--secondary-pink);
-  background-color: var(--light-pink);
 }
 
 .checkbox-item input:checked ~ .checkmark {
-  background-color: var(--secondary-pink);
+  background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(244, 182, 194, 0.3);
+}
+
+/* Checked state — full pill highlight */
+.checkbox-item:has(input:checked) {
+  background: linear-gradient(135deg, rgba(248, 215, 218, 0.5), rgba(244, 182, 194, 0.2));
   border-color: var(--secondary-pink);
+  color: var(--accent-color);
 }
 
+/* Remove old tick pseudo-element */
 .checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-.checkbox-item input:checked ~ .checkmark:after {
-  display: block;
-}
-
-.checkbox-item .checkmark:after {
-  left: 6px;
-  top: 2px;
-  width: 4px;
-  height: 9px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+  display: none !important;
 }
 
 .cat-name-text {
-  margin-left: 2px;
+  margin-left: 0;
+  letter-spacing: 0.3px;
 }
 
 /* Price Range Slider */
