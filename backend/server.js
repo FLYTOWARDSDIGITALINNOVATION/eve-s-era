@@ -12,6 +12,7 @@ const path = require("path");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
+const sharp = require("sharp");
 const { OAuth2Client } = require('google-auth-library');
 require("dotenv").config();
 
@@ -19,13 +20,18 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLI
 
 const app = express();
 const fs = require("fs");
-if (!fs.existsSync("uploads")) {
-  fs.mkdirSync("uploads");
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use(express.json());
-app.use("/uploads", express.static("uploads", {
-  maxAge: '1d', // Cache images for 1 day
+app.use("/uploads", express.static(uploadsDir, {
+  maxAge: '7d',
   etag: true,
   lastModified: true
 }));
@@ -152,11 +158,51 @@ const Support = mongoose.model("Support", supportSchema);
 
 /* ================= IMAGE UPLOAD ================= */
 const storage = multer.diskStorage({
-  destination: "uploads/",
+  destination: uploadsDir,
   filename: (req, file, cb) =>
     cb(null, Date.now() + path.extname(file.originalname)),
 });
 const upload = multer({ storage });
+
+/* Compress image after upload — resize to 900px wide, ~82% quality */
+const compressImage = async (filePath) => {
+  try {
+    const dir = path.dirname(filePath);
+    const ext = path.extname(filePath);
+    const tempPath = path.join(dir, `_tmp_${Date.now()}${ext}`);
+    await sharp(filePath)
+      .resize({ width: 900, withoutEnlargement: true })
+      .jpeg({ quality: 82, progressive: true })
+      .toFile(tempPath);
+    // Small delay to release file lock on Windows
+    await new Promise(r => setTimeout(r, 80));
+    fs.unlinkSync(filePath);
+    fs.renameSync(tempPath, filePath);
+  } catch (err) {
+    // Non-fatal — image still served, just not compressed
+    console.warn("Image compression skipped:", path.basename(filePath), "-", err.code || err.message);
+  }
+};
+
+/* Compress all existing uploads on startup */
+(async () => {
+  try {
+    const files = require("fs").readdirSync(uploadsDir);
+    for (const file of files) {
+      if (/\.(jpg|jpeg|png|webp)$/i.test(file)) {
+        const fullPath = path.join(uploadsDir, file);
+        const stat = require("fs").statSync(fullPath);
+        if (stat.size > 300 * 1024) { // only compress if > 300KB
+          await compressImage(fullPath);
+          console.log(`Compressed: ${file}`);
+        }
+      }
+    }
+    console.log("Image optimization complete.");
+  } catch (e) {
+    console.error("Startup compression error:", e.message);
+  }
+})();
 
 /* ================= AUTH ================= */
 const verifyAdmin = (req, res, next) => {
@@ -495,6 +541,10 @@ app.post("/admin/product", verifyAdmin, productImageUpload, async (req, res) => 
       ...(req.files?.images || []),
       ...(req.files?.image || []),
     ];
+    // Compress each uploaded image
+    for (const file of imageFiles) {
+      await compressImage(file.path);
+    }
     const imagePaths = imageFiles.map((file) => `/uploads/${file.filename}`);
     if (imagePaths.length > 0) {
       data.images = [...new Set(imagePaths)];
