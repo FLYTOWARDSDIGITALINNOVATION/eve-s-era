@@ -171,6 +171,7 @@ const compressImage = async (filePath) => {
     const ext = path.extname(filePath);
     const tempPath = path.join(dir, `_tmp_${Date.now()}${ext}`);
     await sharp(filePath)
+      .rotate()                                        // auto-fix phone photo rotation (EXIF)
       .resize({ width: 900, withoutEnlargement: true })
       .jpeg({ quality: 82, progressive: true })
       .toFile(tempPath);
