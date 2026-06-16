@@ -130,6 +130,8 @@ const AdminOrdersPage = () => {
                   <tr>
                     <th>ID</th>
                     <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Address</th>
                     <th>Product</th>
                     <th>Qty</th>
                     <th>Price</th>
@@ -145,6 +147,18 @@ const AdminOrdersPage = () => {
                         <b>{o.userName || 'Unknown'}</b>
                         <br />
                         <small>{o.userEmail || 'No Email'}</small>
+                      </td>
+                      <td>
+                        {o.shippingAddress?.phone || o.phone || <span style={{color:'#aaa'}}>—</span>}
+                      </td>
+                      <td style={{ maxWidth: '200px', fontSize: '12px', lineHeight: '1.4' }}>
+                        {o.shippingAddress?.address
+                          ? <>
+                              {o.shippingAddress.firstName} {o.shippingAddress.lastName}<br />
+                              {o.shippingAddress.address}
+                            </>
+                          : <span style={{color:'#aaa'}}>—</span>
+                        }
                       </td>
                       <td>{o.productName || 'Unknown Product'}</td>
                       <td>{o.quantity || 0}</td>

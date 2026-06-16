@@ -95,9 +95,20 @@ const orderSchema = new mongoose.Schema({
   price: Number,
   userEmail: String,
   userName: String,
+  phone: { type: String, default: "" },
+  shippingAddress: {
+    firstName: String,
+    lastName: String,
+    email: String,
+    phone: String,
+    address: String,
+  },
+  shippingMethod: { type: String, default: "standard" },
+  paymentMethod: { type: String, default: "cod" },
   status: { type: String, default: "Ordered" },
   createdAt: { type: Date, default: Date.now },
 });
+
 
 orderSchema.index({ createdAt: -1 });
 const Order = mongoose.model("Order", orderSchema);

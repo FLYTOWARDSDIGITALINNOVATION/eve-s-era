@@ -26,6 +26,7 @@ const Checkout = () => {
     firstName: '',
     lastName: '',
     email: user?.email || '',
+    phone: '',
     address: ''
   });
 
@@ -47,8 +48,8 @@ const Checkout = () => {
       return;
     }
 
-    if (!shippingInfo.firstName || !shippingInfo.address) {
-      alert("Please fill in the required shipping information");
+    if (!shippingInfo.firstName || !shippingInfo.address || !shippingInfo.phone) {
+      alert("Please fill in your name, phone number and address");
       return;
     }
 
@@ -216,8 +217,19 @@ const Checkout = () => {
                   <input
                     type="text"
                     name="address"
-                    placeholder="123 Main Street"
+                    placeholder="123 Main Street, City, State - PIN"
                     value={shippingInfo.address}
+                    onChange={handleShippingChange}
+                    required
+                  />
+                </div>
+                <div className="field full">
+                  <label>Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="+91 98765 43210"
+                    value={shippingInfo.phone}
                     onChange={handleShippingChange}
                     required
                   />
