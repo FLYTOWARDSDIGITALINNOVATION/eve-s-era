@@ -1,1 +1,5 @@
 ﻿node_modules/
+
+backend/uploads/_tmp_*
+backend/uploads/_c_*
+backend/uploads/_r_*
