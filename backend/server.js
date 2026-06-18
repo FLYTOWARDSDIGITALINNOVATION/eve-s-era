@@ -553,10 +553,7 @@ app.post("/admin/product", verifyAdmin, productImageUpload, async (req, res) => 
       ...(req.files?.images || []),
       ...(req.files?.image || []),
     ];
-    // Compress each uploaded image
-    for (const file of imageFiles) {
-      await compressImage(file.path);
-    }
+    // Compression handled safely by background startup script
     const imagePaths = imageFiles.map((file) => `/uploads/${file.filename}`);
     if (imagePaths.length > 0) {
       data.images = [...new Set(imagePaths)];
