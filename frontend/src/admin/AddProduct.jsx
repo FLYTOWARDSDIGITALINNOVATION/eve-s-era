@@ -95,10 +95,6 @@ const AddProduct = () => {
     images.forEach(({ file }) => {
       formData.append("images", file);
     });
-    // Keep backward-compat: also send first image as "image"
-    if (images.length > 0) {
-      formData.append("image", images[0].file);
-    }
 
     try {
       const res = await fetch(`${API_BASE_URL}/admin/product`, {

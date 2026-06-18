@@ -148,11 +148,7 @@ const EditProduct = () => {
       formData.append("images", file);
     });
 
-    // If there are new images, also include the first one as "image" for the cover
-    // Otherwise, keep the existing images
-    if (images.length > 0) {
-      formData.append("image", images[0].file);
-    } else if (currentImages.length > 0) {
+    if (images.length === 0 && currentImages.length > 0) {
       formData.append("images", currentImages[0]);
     }
 
