@@ -202,7 +202,7 @@ const ProductDetailPage = () => {
               fetchpriority="high"
               onError={(e) => {
                 setImageLoaded(true);
-                e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80";
+                e.target.src = "https://placehold.co/600x800/ffe6e6/ff66b2?text=Eve%27s+Era";
               }}
             />
             
@@ -224,7 +224,7 @@ const ProductDetailPage = () => {
                       alt={`Product ${idx + 1}`}
                       className="thumb-img"
                       onError={(e) => {
-                        e.target.src = "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80";
+                        e.target.src = "https://placehold.co/600x800/ffe6e6/ff66b2?text=Eve%27s+Era";
                       }}
                     />
                   </button>

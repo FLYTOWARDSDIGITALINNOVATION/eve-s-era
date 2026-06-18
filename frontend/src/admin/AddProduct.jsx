@@ -19,6 +19,7 @@ const AddProduct = () => {
   // Multi-image state: array of { file, preview }
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const nameRef = useRef(null);
   const categoryRef = useRef(null);
@@ -77,6 +78,7 @@ const AddProduct = () => {
     }
 
     setErrors({});
+    setIsSubmitting(true);
 
     const token = localStorage.getItem("token");
     const formData = new FormData();
@@ -117,6 +119,8 @@ const AddProduct = () => {
     } catch (err) {
       console.error("Add Product Error:", err);
       alert(err.message || "Failed to save product.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -285,8 +289,8 @@ const AddProduct = () => {
               </div>
             )}
 
-            <button className="submit-form-btn" onClick={handleSubmit}>
-              <FaPlus /> List Fashion Piece
+            <button className="submit-form-btn" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? "Listing Fashion Piece..." : <><FaPlus /> List Fashion Piece</>}
             </button>
           </div>
         </div>

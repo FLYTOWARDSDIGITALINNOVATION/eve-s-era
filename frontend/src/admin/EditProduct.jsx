@@ -23,6 +23,7 @@ const EditProduct = () => {
   const [images, setImages] = useState([]);
   const [currentImages, setCurrentImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
   const nameRef = useRef(null);
@@ -126,6 +127,7 @@ const EditProduct = () => {
     }
 
     setErrors({});
+    setIsSubmitting(true);
 
     const token = localStorage.getItem("token");
     const formData = new FormData();
@@ -173,6 +175,8 @@ const EditProduct = () => {
     } catch (err) {
       console.error("Update Product Error:", err);
       alert("Failed to save product changes.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -399,8 +403,8 @@ const EditProduct = () => {
               onChange={handleImagesChange}
             />
 
-            <button className="submit-form-btn" onClick={handleSubmit}>
-              Save Specifications Changes
+            <button className="submit-form-btn" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : "Save Specifications Changes"}
             </button>
           </div>
         </div>
