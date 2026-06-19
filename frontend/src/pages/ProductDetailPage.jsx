@@ -32,6 +32,7 @@ const ProductDetailPage = () => {
 
   // Fetch product from API
   useEffect(() => {
+    window.scrollTo(0, 0);
     setImageLoaded(false);
     fetch(`${API_BASE_URL}/products/${id}`)
       .then((res) => {
@@ -41,10 +42,10 @@ const ProductDetailPage = () => {
       .then((data) => {
         setProduct(data);
         setSelectedImageIndex(0);
-        if (data.sizes && data.sizes.length > 0) {
+        if (data.sizes && data.sizes.length > 0 && data.sizes[0] !== "") {
           setSelectedSize(data.sizes[0]);
         } else {
-          setSelectedSize("M");
+          setSelectedSize("");
         }
         // Color selection removed
         // No default color set
@@ -167,7 +168,7 @@ const ProductDetailPage = () => {
   }
 
   const isManufactured = product.businessModel === "manufactured";
-  const sizes = product.sizes && product.sizes.length > 0 ? product.sizes : ["S", "M", "L", "XL"];
+  const sizes = product.sizes && product.sizes.length > 0 && product.sizes[0] !== "" ? product.sizes : [];
   const productImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
   const displayImage = productImages[selectedImageIndex] || product.image;
 
@@ -265,20 +266,22 @@ const ProductDetailPage = () => {
             </p>
 
             {/* Sizes picker */}
-            <div className="selection-group">
-              <span className="sel-title">Select Size:</span>
-              <div className="size-options">
-                {sizes.map((size) => (
-                  <button
-                    key={size}
-                    className={`size-btn ${selectedSize === size ? "active" : ""}`}
-                    onClick={() => setSelectedSize(size)}
-                  >
-                    {size}
-                  </button>
-                ))}
+            {sizes.length > 0 && (
+              <div className="selection-group">
+                <span className="sel-title">Select Size:</span>
+                <div className="size-options">
+                  {sizes.map((size) => (
+                    <button
+                      key={size}
+                      className={`size-btn ${selectedSize === size ? "active" : ""}`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Quantity */}
             <div className="selection-group">
