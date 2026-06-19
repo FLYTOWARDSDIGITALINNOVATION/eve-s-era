@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaArrowRight, FaGem, FaLeaf } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../api";
 import hero1 from "../assets/hero1.jpg";
 import hero2 from "../assets/hero2.jpg";
 import hero3 from "../assets/hero3.jpg";
@@ -74,16 +75,30 @@ const slides = [
 
 function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [customSlides, setCustomSlides] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetch(`${API_BASE_URL}/hero`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setCustomSlides(data);
+      })
+      .catch(err => console.error("Failed to fetch custom hero slides", err));
+
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 3000);
     return () => clearInterval(timer);
   }, []);
 
-  const slide = slides[currentSlide];
+  const baseSlide = slides[currentSlide];
+  const customSlide = customSlides.find(s => s.slideId === baseSlide.id);
+  
+  const slide = {
+    ...baseSlide,
+    img: customSlide ? `${API_BASE_URL}${customSlide.img}` : baseSlide.img
+  };
 
   return (
     <section className="hero-section-wrapper">

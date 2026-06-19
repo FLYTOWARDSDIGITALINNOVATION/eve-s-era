@@ -147,6 +147,13 @@ const reviewSchema = new mongoose.Schema({
 });
 const Review = mongoose.model("Review", reviewSchema);
 
+// HERO SLIDE
+const heroSlideSchema = new mongoose.Schema({
+  slideId: { type: Number, required: true, unique: true },
+  img: { type: String, required: true },
+});
+const HeroSlide = mongoose.model("HeroSlide", heroSlideSchema);
+
 // CUSTOMER SUPPORT
 // CUSTOMER SUPPORT CHAT
 const messageSchema = new mongoose.Schema({
@@ -519,6 +526,35 @@ app.delete("/cart/:email/:productId", async (req, res) => {
 
 /* ================= ADMIN ================= */
 
+// HERO BANNERS
+app.post("/admin/hero/:slideId", verifyAdmin, upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: "No image provided" });
+    const slideId = Number(req.params.slideId);
+    const imgPath = `/uploads/${req.file.filename}`;
+    
+    const slide = await HeroSlide.findOneAndUpdate(
+      { slideId },
+      { img: imgPath },
+      { new: true, upsert: true }
+    );
+    res.json(slide);
+  } catch (err) {
+    console.error("Hero Update Error:", err);
+    res.status(500).json({ message: "Failed to update hero slide" });
+  }
+});
+
+app.delete("/admin/hero/:slideId", verifyAdmin, async (req, res) => {
+  try {
+    const slideId = Number(req.params.slideId);
+    await HeroSlide.findOneAndDelete({ slideId });
+    res.json({ message: "Slide removed" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to remove hero slide" });
+  }
+});
+
 // CATEGORY
 app.post("/admin/category", verifyAdmin, async (req, res) => {
   try {
@@ -654,6 +690,16 @@ app.get("/admin/users", verifyAdmin, async (req, res) => {
 });
 
 /* ================= USER ================= */
+
+// HERO BANNERS
+app.get("/hero", async (req, res) => {
+  try {
+    const slides = await HeroSlide.find();
+    res.json(slides);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch hero slides" });
+  }
+});
 
 // PRODUCTS
 app.get("/products", async (req, res) => res.json(await Product.find()));

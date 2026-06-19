@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
   FaCoins, FaBoxOpen, FaInbox, FaUsers, FaArrowLeft, FaSignOutAlt, 
-  FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift, FaLayerGroup, FaBars, FaTimes
+  FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift, FaLayerGroup, FaBars, FaTimes, FaImage
 } from "react-icons/fa";
 import "./AdminDashboard.css";
 import logo from "../assets/eve's era.jpeg";
+import AdminHeroBanners from "./AdminHeroBanners";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -133,6 +134,9 @@ const AdminDashboard = () => {
           </button>
           <button className={`tab-menu-btn`} onClick={() => { navigate("/admin/add-category"); setSidebarOpen(false); }}>
             <FaLayerGroup /> <span>Manage Categories</span>
+          </button>
+          <button className={`tab-menu-btn ${activeTab === "hero" ? "active" : ""}`} onClick={() => { setActiveTab("hero"); setSidebarOpen(false); }}>
+            <FaImage /> <span>Hero Banners</span>
           </button>
         </aside>
 
@@ -341,6 +345,11 @@ const AdminDashboard = () => {
                     </table>
                   </div>
                 </div>
+              )}
+
+              {/* TAB 4: HERO BANNERS */}
+              {activeTab === "hero" && (
+                <AdminHeroBanners />
               )}
 
             </>
