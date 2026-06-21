@@ -108,8 +108,6 @@ const Header = ({ onSearch, onModelFilter }) => {
               <>
                 <span className="banner-divider">|</span>
                 <span className="welcome-msg">Hello, {user.name ? user.name.split(' ')[0] : 'User'}</span>
-                <span className="banner-divider">|</span>
-                <button onClick={handleLogout} className="banner-logout-btn">Logout</button>
               </>
             )}
           </div>
