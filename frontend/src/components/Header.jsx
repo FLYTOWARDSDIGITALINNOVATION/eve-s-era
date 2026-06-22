@@ -101,8 +101,6 @@ const Header = ({ onSearch, onModelFilter }) => {
               <>
                 <span className="banner-divider">|</span>
                 <Link to="/auth" state={{ isLogin: true }}>Login</Link>
-                <span className="banner-divider">|</span>
-                <Link to="/auth" state={{ isLogin: false }}>Sign Up</Link>
               </>
             ) : (
               <>
