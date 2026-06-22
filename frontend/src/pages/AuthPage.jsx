@@ -7,7 +7,7 @@ import './AuthPage.css';
 
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
-import logo from "../assets/eve's era.jpeg";
+import logo from "../assets/logo1.png";
 
 const AuthPage = () => {
     const [name, setName] = useState("");

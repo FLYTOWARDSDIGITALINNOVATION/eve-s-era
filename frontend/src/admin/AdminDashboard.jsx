@@ -6,7 +6,7 @@ import {
   FaTags, FaTools, FaChartBar, FaPlus, FaTrashAlt, FaPen, FaFileInvoiceDollar, FaGift, FaLayerGroup, FaBars, FaTimes, FaImage
 } from "react-icons/fa";
 import "./AdminDashboard.css";
-import logo from "../assets/eve's era.jpeg";
+import logo from "../assets/logo1.png";
 import AdminHeroBanners from "./AdminHeroBanners";
 
 const AdminDashboard = () => {

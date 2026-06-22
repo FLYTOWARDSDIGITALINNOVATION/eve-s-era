@@ -9,7 +9,7 @@ import { FaStar, FaGem, FaFilter, FaSlidersH, FaBoxOpen } from "react-icons/fa";
 import "./HomePage.css";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/eve's era.jpeg";
+import logo from "../assets/logo1.png";
 
 const HomePage = () => {
   const location = useLocation();

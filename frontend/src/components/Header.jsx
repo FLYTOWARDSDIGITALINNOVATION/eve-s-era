@@ -17,7 +17,7 @@ import {
 import "./Header.css";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
-import logo from "../assets/eve's era.jpeg";
+import logo from "../assets/logo1.png";
 
 const Header = ({ onSearch, onModelFilter }) => {
   const [showCategories, setShowCategories] = useState(false);

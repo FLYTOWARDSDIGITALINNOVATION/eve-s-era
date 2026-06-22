@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaShoppingBag, FaStar, FaShieldAlt, FaGem, FaArrowRight } from 'react-icons/fa';
 import './LandingPage.css';
-import logo from "../assets/eve's era.jpeg";
+import logo from "../assets/logo1.png";
 import hero1 from "../assets/hero1.jpg";
 
 const LandingPage = () => {

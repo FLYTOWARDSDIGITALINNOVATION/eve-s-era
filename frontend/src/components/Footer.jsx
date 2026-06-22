@@ -7,7 +7,7 @@ import {
     FaCcVisa, FaCcMastercard, FaCcApplePay, FaPaypal
 } from 'react-icons/fa';
 import { SiGooglepay } from 'react-icons/si';
-import logo from "../assets/eve's era.jpeg";
+import logo from "../assets/logo1.png";
 import './Footer.css';
 import API_BASE_URL from '../api';
 
