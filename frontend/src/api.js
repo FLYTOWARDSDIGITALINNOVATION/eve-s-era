@@ -2,6 +2,6 @@ const isLocal = window.location.hostname === "localhost" || window.location.host
 
 const API_BASE_URL = isLocal
   ? "http://localhost:5011"         // dev: direct to backend
-  : "http://31.97.237.122:3011/api"; // live: through nginx proxy → backend
+  : "https://eveseraclothing.com/api"; // live: through nginx proxy → backend
 
 export default API_BASE_URL;
