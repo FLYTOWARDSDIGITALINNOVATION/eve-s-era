@@ -2,7 +2,7 @@
   background: var(--white);
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
@@ -389,7 +389,7 @@
   .sh-header {
     width: 100%;
     max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   
   .main-nav {

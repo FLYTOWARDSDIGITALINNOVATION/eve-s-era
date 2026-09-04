@@ -18,21 +18,54 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  position: sticky;
+  top: 205px;
+  align-self: start;
+  z-index: 100;
 }
 
 .filter-section {
   background: var(--white);
   border-radius: var(--border-radius);
   border: 1px solid rgba(244, 182, 194, 0.15);
-  padding: 24px;
+  padding: 0 24px 24px 24px;
   box-shadow: var(--shadow-sm);
+  max-height: calc(100vh - 225px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary-pink) rgba(248, 215, 218, 0.2);
+}
+
+.filter-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter-section::-webkit-scrollbar-track {
+  background: rgba(248, 215, 218, 0.2);
+  border-radius: 4px;
+}
+
+.filter-section::-webkit-scrollbar-thumb {
+  background: var(--secondary-pink);
+  border-radius: 4px;
+}
+
+.filter-section::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
 }
 
 .filter-header {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  z-index: 5;
   display: flex;
   align-items: center;
   gap: 10px;
   border-bottom: 1px solid rgba(244, 182, 194, 0.15);
+  padding-top: 20px;
   padding-bottom: 16px;
   margin-bottom: 20px;
 }
@@ -436,6 +469,12 @@
   }
   .sidebar {
     width: 100%;
+    position: static;
+    top: auto;
+  }
+  .filter-section {
+    max-height: none;
+    overflow-y: visible;
   }
   .segment-pills {
     flex-direction: row;
