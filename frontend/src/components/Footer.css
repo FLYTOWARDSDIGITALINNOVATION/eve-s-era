@@ -79,10 +79,10 @@
 /* Background Watermark */
 .footer-watermark {
     position: absolute;
-    top: 60%;
+    top: 48%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 20vw;
+    font-size: 15vw;
     font-weight: 700;
     color: rgba(248, 215, 218, 0.015);
     pointer-events: none;
@@ -95,16 +95,16 @@
 .footer-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 80px 60px 40px;
+    padding: 30px 40px 15px;
     position: relative;
     z-index: 1;
 }
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 0.8fr 0.8fr 1.2fr;
-    gap: 60px;
-    margin-bottom: 60px;
+    grid-template-columns: 1.4fr 1fr 1fr 1.1fr;
+    gap: 25px;
+    margin-bottom: 20px;
 }
 
 /* Brand Column */
@@ -112,7 +112,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 25px;
+    margin-bottom: 12px;
 }
 
 .footer-logo-icon {
@@ -137,11 +137,73 @@
 }
 
 .brand-mission {
-    font-size: 0.95rem;
-    line-height: 1.7;
+    font-size: 0.8rem;
+    line-height: 1.5;
     color: #d1b4bb;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     max-width: 320px;
+}
+
+.brand-address {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: #f1e4e6;
+    margin-bottom: 14px;
+    line-height: 1.4;
+}
+
+.brand-address-icon {
+    color: var(--secondary-pink);
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.brand-social-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.instagram-handle-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #f1e4e6;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(244, 182, 194, 0.18);
+    padding: 4px 14px 4px 5px;
+    border-radius: 25px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: fit-content;
+}
+
+.instagram-handle-badge:hover {
+    transform: translateY(-2px);
+    border-color: var(--secondary-pink);
+    background: rgba(244, 182, 194, 0.12);
+    box-shadow: 0 4px 15px rgba(244, 182, 194, 0.15);
+    color: #fff;
+}
+
+.instagram-handle-badge .social-icon.instagram {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    border: none;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+}
+
+.instagram-id-text {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: #f1e4e6;
+}
+
+.instagram-handle-badge:hover .instagram-id-text {
+    color: #fff;
 }
 
 .social-links-grid {
@@ -179,11 +241,11 @@
 /* Links Columns */
 .footer-heading {
     color: #fff;
-    font-size: 0.95rem;
+    font-size: 0.82rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    margin-bottom: 30px;
+    margin-bottom: 14px;
     font-family: var(--font-accent);
 }
 
@@ -194,13 +256,13 @@
 }
 
 .footer-list li {
-    margin-bottom: 15px;
+    margin-bottom: 7px;
 }
 
 .footer-list a {
     color: #bfa5aa;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.78rem;
     transition: all 0.3s ease;
     display: inline-block;
 }
@@ -292,63 +354,89 @@
 }
 
 .footer-contact-info {
-    margin-top: 30px;
+    margin-top: 12px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 6px;
+}
+
+.contact-subtitle {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #c48b9f;
+    font-family: var(--font-accent);
 }
 
 .contact-tile {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 0.85rem;
-    color: #bfa5aa;
+    gap: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #f1e4e6;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    padding: 7px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(244, 182, 194, 0.2);
+    border-radius: 20px;
+    width: fit-content;
 }
 
 .contact-tile:hover {
     color: #fff;
+    border-color: var(--secondary-pink);
+    transform: translateY(-2px);
+    background: rgba(244, 182, 194, 0.12);
+    box-shadow: 0 4px 15px rgba(244, 182, 194, 0.15);
 }
 
 .contact-tile svg {
     color: var(--secondary-pink);
+    font-size: 0.82rem;
 }
 
 /* Bottom Area */
 .footer-divider {
     height: 1px;
     background: rgba(244, 182, 194, 0.1);
-    margin-bottom: 30px;
+    margin-bottom: 12px;
 }
 
 .footer-bottom {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 25px;
+    gap: 30px;
+    margin-bottom: 8px;
+    text-align: center;
+    flex-wrap: wrap;
 }
 
 .footer-legal {
     display: flex;
     align-items: center;
-    gap: 40px;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    text-align: center;
 }
 
 .footer-legal p {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     color: #8c787c;
     margin: 0;
 }
 
 .legal-links {
     display: flex;
-    gap: 20px;
+    gap: 15px;
 }
 
 .legal-links a {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     color: #8c787c;
     text-decoration: none;
     transition: color 0.3s ease;
@@ -360,8 +448,8 @@
 
 .payment-methods {
     display: flex;
-    gap: 15px;
-    font-size: 1.5rem;
+    gap: 12px;
+    font-size: 1rem;
     color: #8c787c;
 }
 
@@ -373,19 +461,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    font-size: 0.8rem;
-    color: #6e5e62;
+    gap: 8px;
+    font-size: 0.7rem;
+    color: #a89498;
     text-align: center;
+    margin-top: 8px;
+}
+
+.footer-address svg {
+    color: var(--secondary-pink);
+    font-size: 0.74rem;
+    flex-shrink: 0;
 }
 
 /* Back to Top */
 .back-to-top {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 45px;
-    height: 45px;
+    bottom: 25px;
+    right: 25px;
+    width: 38px;
+    height: 38px;
+    font-size: 0.85rem;
     background: var(--accent-color);
     color: #fff;
     border: none;
@@ -421,25 +517,25 @@
         grid-template-columns: 1fr 1fr;
     }
     .footer-container {
-        padding: 60px 30px 40px;
+        padding: 30px 25px 20px;
     }
 }
 
 @media (max-width: 768px) {
     .footer-bottom {
         flex-direction: column;
-        gap: 20px;
+        gap: 10px;
         text-align: center;
     }
     .footer-legal {
         flex-direction: column;
-        gap: 15px;
+        gap: 8px;
     }
 }
 
 @media (max-width: 600px) {
     .footer-container {
-        padding: 45px 15px 30px;
+        padding: 25px 15px 15px;
     }
     .footer-trust-bar {
         grid-template-columns: 1fr;
@@ -448,8 +544,12 @@
         grid-template-columns: 1fr;
         text-align: center;
     }
-    .footer-logo-group, .social-links-grid, .footer-address {
+    .footer-logo-group, .social-links-grid, .footer-address, .footer-contact-info, .brand-address, .brand-social-wrapper {
         justify-content: center;
+        align-items: center;
+    }
+    .contact-tile, .instagram-handle-badge {
+        margin: 0 auto;
     }
     .brand-mission {
         max-width: 100%;

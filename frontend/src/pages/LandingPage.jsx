@@ -33,7 +33,7 @@ const LandingPage = () => {
     };
 
     const handleSelectModel = (model) => {
-        navigate(`/home?model=${model}`);
+        navigate(`/category/all?model=${model}`);
     };
 
     return (

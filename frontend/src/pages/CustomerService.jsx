@@ -213,21 +213,51 @@ const CustomerService = () => {
                             </div>
                             <form onSubmit={handleStartChat}>
                                 <textarea
-                                    placeholder="How can we help you?"
+                                    placeholder="How can we help you? Describe your issue, order details, or sizing question..."
                                     value={startMessage}
                                     onChange={e => setStartMessage(e.target.value)}
                                     required
                                 />
+
+                                {/* Uploaded Image Preview */}
+                                {preview && (
+                                    <div className="new-chat-preview-box">
+                                        <img src={preview} className="preview-thumb" alt="upload" />
+                                        <div className="preview-meta">
+                                            <span className="file-name">{image?.name}</span>
+                                            <button 
+                                                type="button" 
+                                                className="remove-img-btn" 
+                                                onClick={() => { setImage(null); setPreview(null); }}
+                                                title="Remove Image"
+                                            >
+                                                <FaTimes /> Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="form-actions">
-                                    <label className="icon-btn">
-                                        <FaCloudUploadAlt />
-                                        <input type="file" hidden onChange={handleImageChange} />
+                                    <label className="upload-image-btn" title="Upload Image / Screenshot">
+                                        <FaCloudUploadAlt size={18} />
+                                        <span>{image ? 'Change Image' : 'Upload Image'}</span>
+                                        <input type="file" accept="image/*" hidden onChange={handleImageChange} />
                                     </label>
-                                    <button type="submit">Start Chat</button>
+
+                                    <div className="form-buttons-group">
+                                        <button 
+                                            type="button" 
+                                            className="cancel-btn-styled" 
+                                            onClick={() => { setShowNewChatForm(false); setImage(null); setPreview(null); }}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button type="submit" className="start-chat-btn">
+                                            Start Chat
+                                        </button>
+                                    </div>
                                 </div>
-                                {preview && <img src={preview} className="preview-thumb" alt="upload" />}
                             </form>
-                            <button className="cancel-btn" onClick={() => setShowNewChatForm(false)}>Cancel</button>
                         </div>
                     )}
 

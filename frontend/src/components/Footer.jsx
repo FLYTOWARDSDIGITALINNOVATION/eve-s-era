@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
     FaInstagram, FaPhoneAlt, 
-    FaMapMarkerAlt, FaPaperPlane, FaFacebookF, 
-    FaYoutube, FaChevronUp,
+    FaMapMarkerAlt, FaChevronUp,
     FaCcVisa, FaCcMastercard, FaCcApplePay, FaPaypal
 } from 'react-icons/fa';
 import { SiGooglepay } from 'react-icons/si';
@@ -54,31 +53,36 @@ const Footer = () => {
                     {/* Brand Section */}
                     <div className="footer-section brand-column">
                         <div className="footer-logo-group">
-                          <div style={{ height: '120px', width: '120px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                          <div style={{ height: '80px', width: '80px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
                             <img src={logo} alt="Eve's Era Logo" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
                           </div>
                         </div>
                         <p className="brand-mission">
                             Crafting timeless luxury and sustainable couture. Discover Eve's Era collections designed for the modern woman.
                         </p>
-                        <div className="social-links-grid">
-                            <a href="https://www.instagram.com/eves__era?igsh=MWY4OXg4a291aGJkcA==" target="_blank" rel="noopener noreferrer" className="social-icon instagram">
-                                <FaInstagram />
-                            </a>
-                            <a href="https://www.facebook.com/share/18ywmRi34w/" target="_blank" rel="noopener noreferrer" className="social-icon facebook">
-                                <FaFacebookF />
-                            </a>
-                            <a href="https://youtube.com/@evesera1?si=DAcrbaTrIzCTWcPq" target="_blank" rel="noopener noreferrer" className="social-icon youtube">
-                                <FaYoutube />
+
+                        {/* Instagram Icon with ID next to it */}
+                        <div className="brand-social-wrapper">
+                            <a 
+                                href="https://www.instagram.com/eves__era?igsh=MWY4OXg4a291aGJkcA==" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="instagram-handle-badge"
+                                title="Instagram: eves__era"
+                            >
+                                <span className="social-icon instagram">
+                                    <FaInstagram />
+                                </span>
+                                <span className="instagram-id-text">eves__era</span>
                             </a>
                         </div>
                     </div>
 
-                    {/* Shop Section */}
+                    {/* Collections Section - Top 5 */}
                     <div className="footer-section links-column">
                         <h4 className="footer-heading">Collections</h4>
                         <ul className="footer-list">
-                            {categories.map(cat => (
+                            {categories.slice(0, 5).map(cat => (
                                 <li key={cat._id}>
                                     <Link to={`/category/${cat.name}`}>{cat.name}</Link>
                                 </li>
@@ -87,29 +91,27 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Support Section */}
+                    {/* Quick Links / Navigation Section */}
                     <div className="footer-section links-column">
-                        <h4 className="footer-heading">Support</h4>
+                        <h4 className="footer-heading">Quick Links</h4>
                         <ul className="footer-list">
+                            <li><Link to="/home">Home</Link></li>
                             <li><Link to="/orders">My Orders</Link></li>
                             <li><Link to="/wishlist">Wishlist</Link></li>
-                            <li><Link to="/customer-service">Contact Us</Link></li>
+                            <li><Link to="/cart">Cart</Link></li>
+                            <li><Link to="/profile">Profile</Link></li>
                         </ul>
                     </div>
 
-                    {/* Newsletter Section */}
-                    <div className="footer-section newsletter-column">
-                        <h4 className="footer-heading">Join the Circle</h4>
-                        <p className="newsletter-text">Subscribe for exclusive drops and early access.</p>
-                        <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-                            <div className="input-field-group">
-                                <input type="email" placeholder="Email Address" required />
-                                <button type="submit" className="subscribe-btn">
-                                    <FaPaperPlane />
-                                </button>
-                            </div>
-                        </form>
+                    {/* Support Section with Mobile Number */}
+                    <div className="footer-section links-column support-column">
+                        <h4 className="footer-heading">Support</h4>
+                        <ul className="footer-list">
+                            <li><Link to="/customer-service">Contact Us</Link></li>
+                            <li><Link to="/customer-service">Help & FAQs</Link></li>
+                        </ul>
                         <div className="footer-contact-info">
+                            <span className="contact-subtitle">Customer Care</span>
                             <a href="tel:+916374226455" className="contact-tile">
                                 <FaPhoneAlt />
                                 <span>+91 63742 26455</span>
@@ -124,9 +126,9 @@ const Footer = () => {
                     <div className="footer-legal">
                         <p>&copy; {new Date().getFullYear()} Eve's Era. All rights reserved.</p>
                         <div className="legal-links">
-                            <Link to="/customer-service">Privacy</Link>
-                            <Link to="/customer-service">Terms</Link>
-                            <Link to="/customer-service">Cookies</Link>
+                            <Link to="/privacy">Privacy</Link>
+                            <Link to="/terms">Terms</Link>
+                            <Link to="/cookies">Cookies</Link>
                         </div>
                     </div>
                     
@@ -139,6 +141,7 @@ const Footer = () => {
                     </div>
                 </div>
 
+                {/* Footer Last - Address */}
                 <div className="footer-address">
                     <FaMapMarkerAlt />
                     <span>205 c Gnanagiri road, Near Anso Sports Academy, Sivakasi - 626123</span>

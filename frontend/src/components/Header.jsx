@@ -76,8 +76,10 @@ const Header = ({ onSearch, onModelFilter }) => {
   const handleModelSelect = (model) => {
     if (onModelFilter) {
       onModelFilter(model);
+    } else if (model === "manufactured") {
+      navigate("/category/all?model=manufactured");
     } else {
-      navigate(`/home?model=${model}`);
+      navigate("/home");
     }
     setIsMobileMenuOpen(false);
   };
@@ -91,23 +93,18 @@ const Header = ({ onSearch, onModelFilter }) => {
             <span>✨ Welcome to Eve's Era | Soft Feminine Luxury Boutique</span>
           </div>
           <div className="top-links">
+            {user && (
+              <>
+                <span className="welcome-msg">Hello, {user.name ? user.name.split(' ')[0] : 'User'}</span>
+                <span className="banner-divider">|</span>
+              </>
+            )}
             <Link to="/customer-service" style={{ display: 'inline-flex', alignItems: 'center' }}>
               <FaPhoneAlt size={10} /> Contact Support
               {unreadSupportCount > 0 && (
                 <span className="support-badge-header">{unreadSupportCount}</span>
               )}
             </Link>
-            {!user ? (
-              <>
-                <span className="banner-divider">|</span>
-                <Link to="/auth" state={{ isLogin: true }}>Login</Link>
-              </>
-            ) : (
-              <>
-                <span className="banner-divider">|</span>
-                <span className="welcome-msg">Hello, {user.name ? user.name.split(' ')[0] : 'User'}</span>
-              </>
-            )}
           </div>
         </div>
       </div>
@@ -194,11 +191,26 @@ const Header = ({ onSearch, onModelFilter }) => {
               </button>
             )}
 
-            {/* Sign In button — only when NOT logged in */}
+            {/* Auth Buttons — Log In & Sign Up for new / existing users */}
             {!user && (
-              <Link to="/auth" className="login-nav-btn" onClick={() => setIsMobileMenuOpen(false)}>
-                Sign In
-              </Link>
+              <div className="header-auth-group">
+                <Link 
+                  to="/auth" 
+                  state={{ isLogin: true }} 
+                  className="auth-header-btn login-btn-subtle" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Log In
+                </Link>
+                <Link 
+                  to="/auth" 
+                  state={{ isLogin: false }} 
+                  className="auth-header-btn signup-btn-primary" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </div>
             )}
 
           </div>
@@ -210,12 +222,12 @@ const Header = ({ onSearch, onModelFilter }) => {
       <nav className="categories-bar">
         <div className="container categories-flex">
           <div className="luxury-segments">
-            <Link to="/home" className={`segment-item ${!location.search ? 'active' : ''}`} onClick={() => handleModelSelect("all")}>
+            <Link to="/home" className={`segment-item ${location.pathname === '/home' || location.pathname === '/' ? 'active' : ''}`} onClick={() => handleModelSelect("all")}>
               All Collection
             </Link>
             <button 
               onClick={() => handleModelSelect("manufactured")} 
-              className={`segment-item original-seg ${location.search.includes('model=manufactured') ? 'active' : ''}`}
+              className={`segment-item original-seg ${location.search.includes('model=manufactured') || decodeURIComponent(location.pathname).toLowerCase().includes("eve's era") ? 'active' : ''}`}
             >
               ✨ Eve's Era
             </button>
@@ -239,11 +251,13 @@ const Header = ({ onSearch, onModelFilter }) => {
                 return "👚";
               };
 
+              const isCatActive = decodeURIComponent(location.pathname).toLowerCase() === `/category/${name}`;
+
               return (
                 <Link
                   key={cat._id}
                   to={`/category/${rawName}`}
-                  className="cat-item"
+                  className={`cat-item ${isCatActive ? 'active' : ''}`}
                 >
                   <span className="cat-emoji">{getIcon(name)}</span>
                   <span>{rawName}</span>

@@ -1,7 +1,6 @@
 import API_BASE_URL from '../api';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GoogleLogin } from '@react-oauth/google';
 import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
 import './AuthPage.css';
 
@@ -16,6 +15,8 @@ const AuthPage = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [acceptedTerms, setAcceptedTerms] = useState(false);
+    const [notRegistered, setNotRegistered] = useState(false);
+    const [alreadyRegistered, setAlreadyRegistered] = useState(false);
     const navigate = useNavigate();
 
     const location = useLocation();
@@ -27,6 +28,14 @@ const AuthPage = () => {
             setIsLogin(location.state.isLogin);
         }
     }, [location.state?.isLogin]);
+
+    const switchTab = (toLogin) => {
+        setIsLogin(toLogin);
+        setError("");
+        setSuccess("");
+        setNotRegistered(false);
+        setAlreadyRegistered(false);
+    };
 
     // Animation Variants
     const containerVariants = {
@@ -70,6 +79,9 @@ const AuthPage = () => {
         e.preventDefault();
         setError("");
         setSuccess("");
+        setNotRegistered(false);
+        setAlreadyRegistered(false);
+
         if (!acceptedTerms) {
             setError("Please accept Terms & Privacy Policy");
             return;
@@ -84,7 +96,10 @@ const AuthPage = () => {
             const data = await res.json();
 
             if (!res.ok) {
-                setError(data.message);
+                setError(data.message || "Signup failed");
+                if (data.alreadyRegistered) {
+                    setAlreadyRegistered(true);
+                }
             } else {
                 setSuccess("Signup successful! Logging you in...");
                 localStorage.setItem("token", data.token);
@@ -102,37 +117,13 @@ const AuthPage = () => {
         }
     };
 
-    const handleGoogleSuccess = async (credentialResponse) => {
-        try {
-            const res = await fetch(`${API_BASE_URL}/google-login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: credentialResponse.credential })
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                setError(data.message);
-                return;
-            }
-
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
-
-            if (data.user.isAdmin) {
-                navigate("/admin");
-            } else {
-                navigate(location.state?.from || "/home");
-            }
-        } catch (err) {
-            setError("Google login failed. Please try again.");
-        }
-    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
+        setNotRegistered(false);
+        setAlreadyRegistered(false);
+
         try {
             const res = await fetch(`${API_BASE_URL}/login`, {
                 method: "POST",
@@ -143,7 +134,10 @@ const AuthPage = () => {
             const data = await res.json();
 
             if (!res.ok) {
-                setError(data.message);
+                setError(data.message || "Invalid credentials");
+                if (data.notRegistered) {
+                    setNotRegistered(true);
+                }
                 return;
             }
 
@@ -251,13 +245,13 @@ const AuthPage = () => {
                         <div className="auth-tabs">
                             <button
                                 className={`auth-tab ${isLogin ? 'active' : ''}`}
-                                onClick={() => setIsLogin(true)}
+                                onClick={() => switchTab(true)}
                             >
                                 Login
                             </button>
                             <button
                                 className={`auth-tab ${!isLogin ? 'active' : ''}`}
-                                onClick={() => setIsLogin(false)}
+                                onClick={() => switchTab(false)}
                             >
                                 Sign Up
                             </button>
@@ -322,7 +316,20 @@ const AuthPage = () => {
                                             <a href="/" className="forgot-password">Forgot password?</a>
                                         </motion.div>
                                         
-                                        {error && <p className="error-text">{error}</p>}
+                                        {notRegistered ? (
+                                            <div className="auth-alert-box warning-alert">
+                                                <p>⚠️ {error}</p>
+                                                <button
+                                                    type="button"
+                                                    className="alert-link-btn"
+                                                    onClick={() => switchTab(false)}
+                                                >
+                                                    Click here to Sign Up Now →
+                                                </button>
+                                            </div>
+                                        ) : error ? (
+                                            <p className="error-text">{error}</p>
+                                        ) : null}
                                         {success && <p className="success-text">{success}</p>}
 
                                         <motion.button
@@ -335,17 +342,16 @@ const AuthPage = () => {
                                             Sign In
                                         </motion.button>
                                         
-                                        <div className="divider">
-                                            <span>OR</span>
-                                        </div>
-                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <GoogleLogin
-                                                onSuccess={handleGoogleSuccess}
-                                                onError={() => {
-                                                    setError('Google login failed.');
-                                                }}
-                                                useOneTap
-                                            />
+
+                                        <div className="auth-switch-prompt">
+                                            <span>New to Eve's Era?</span>{" "}
+                                            <button
+                                                type="button"
+                                                className="auth-switch-link"
+                                                onClick={() => switchTab(false)}
+                                            >
+                                                Create an Account (Sign Up)
+                                            </button>
                                         </div>
                                     </form>
                                 </motion.div>
@@ -420,7 +426,20 @@ const AuthPage = () => {
                                             </label>
                                         </motion.div>
                                         
-                                        {error && <p className="error-text">{error}</p>}
+                                        {alreadyRegistered ? (
+                                            <div className="auth-alert-box info-alert">
+                                                <p>ℹ️ {error}</p>
+                                                <button
+                                                    type="button"
+                                                    className="alert-link-btn"
+                                                    onClick={() => switchTab(true)}
+                                                >
+                                                    Click here to Log In Now →
+                                                </button>
+                                            </div>
+                                        ) : error ? (
+                                            <p className="error-text">{error}</p>
+                                        ) : null}
                                         {success && <p className="success-text">{success}</p>}
 
                                         <motion.button
@@ -433,17 +452,16 @@ const AuthPage = () => {
                                             Create Account
                                         </motion.button>
 
-                                        <div className="divider">
-                                            <span>OR</span>
-                                        </div>
-                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <GoogleLogin
-                                                onSuccess={handleGoogleSuccess}
-                                                onError={() => {
-                                                    setError('Google login failed.');
-                                                }}
-                                                useOneTap
-                                            />
+
+                                        <div className="auth-switch-prompt">
+                                            <span>Already have an account?</span>{" "}
+                                            <button
+                                                type="button"
+                                                className="auth-switch-link"
+                                                onClick={() => switchTab(true)}
+                                            >
+                                                Log In to your Account
+                                            </button>
                                         </div>
                                     </form>
                                 </motion.div>

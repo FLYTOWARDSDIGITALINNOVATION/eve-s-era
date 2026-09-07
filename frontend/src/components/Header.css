@@ -266,6 +266,50 @@
   display: none;
 }
 
+.header-auth-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-header-btn {
+  padding: 8px 18px;
+  border-radius: var(--border-radius);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.login-btn-subtle {
+  background: var(--light-pink);
+  color: var(--accent-color);
+  border: 1.5px solid rgba(196, 139, 159, 0.3);
+}
+
+.login-btn-subtle:hover {
+  background: #fff;
+  border-color: var(--accent-color);
+  color: var(--dark-pink);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(196, 139, 159, 0.15);
+}
+
+.signup-btn-primary {
+  background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
+  color: var(--white);
+  border: 1.5px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.signup-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--accent-color), var(--dark-pink));
+}
+
 .login-nav-btn {
   background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
   color: var(--white);
@@ -286,14 +330,12 @@
   background: var(--white);
   width: 100%;
   max-width: 100%;
-  overflow: hidden;
 }
 
 .categories-flex {
   display: flex;
   align-items: center;
-  height: 52px;
-  overflow: hidden;
+  height: 54px;
   max-width: 100%;
 }
 
@@ -302,12 +344,18 @@
   gap: 12px;
   align-items: center;
   height: 100%;
+  margin-left: 110px;
+  padding: 8px 0;
+  box-sizing: border-box;
 }
 
 .segment-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
-  border: none;
-  padding: 6px 14px;
+  border: 1px solid transparent;
+  padding: 6px 16px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-color);
@@ -316,16 +364,23 @@
   white-space: nowrap;
   font-family: var(--font-accent);
   transition: var(--transition);
+  text-decoration: none;
+  box-sizing: border-box;
+  line-height: 1;
+  height: 32px;
 }
 
 .segment-item:hover {
   background: var(--light-pink);
   color: var(--accent-color);
+  border-color: rgba(244, 182, 194, 0.4);
+  transform: translateY(-1px);
 }
 
 .segment-item.active {
   background: var(--primary-color);
   color: var(--text-color);
+  border-color: transparent;
   box-shadow: 0 2px 8px rgba(248, 215, 218, 0.6);
 }
 
@@ -334,6 +389,7 @@
   height: 24px;
   background: rgba(244, 182, 194, 0.3);
   margin: 0 20px;
+  flex-shrink: 0;
 }
 
 .cat-links {
@@ -342,6 +398,8 @@
   overflow-x: auto;
   scrollbar-width: none;
   align-items: center;
+  padding: 8px 4px;
+  box-sizing: border-box;
 }
 
 .cat-links::-webkit-scrollbar {
@@ -349,7 +407,7 @@
 }
 
 .cat-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
@@ -360,12 +418,24 @@
   font-weight: 500;
   white-space: nowrap;
   transition: var(--transition);
+  text-decoration: none;
+  box-sizing: border-box;
+  height: 32px;
 }
 
 .cat-item:hover {
   background: var(--light-pink);
   border-color: var(--secondary-pink);
   transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(244, 182, 194, 0.25);
+}
+
+.cat-item.active {
+  background: var(--primary-color);
+  border-color: var(--secondary-pink);
+  color: var(--text-color);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(248, 215, 218, 0.6);
 }
 
 .cat-emoji {
@@ -471,6 +541,7 @@
     overflow: hidden;
     max-width: 100%;
     box-sizing: border-box;
+    transform: none;
   }
   
   /* Each row scrolls horizontally internally — page does NOT */
@@ -478,9 +549,10 @@
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 2px;
+    padding: 6px 2px;
     scrollbar-width: none;
+    margin-left: 0;
+    box-sizing: border-box;
   }
 
   .luxury-segments::-webkit-scrollbar {
@@ -495,8 +567,9 @@
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
-    overflow-y: hidden;
+    padding: 6px 2px;
     scrollbar-width: none;
+    box-sizing: border-box;
   }
 
   .cat-links::-webkit-scrollbar {

@@ -21,6 +21,7 @@ import EditProduct from "./admin/EditProduct";
 import OrdersPage from "./pages/OrdersPage";
 import CustomerService from "./pages/CustomerService";
 import Profile from "./pages/Profile";
+import LegalPage from "./pages/LegalPage";
 
 function App() {
   return (
@@ -57,6 +58,12 @@ function App() {
             <Route path="/category/:category" element={<CategoryProducts />} />
 
             <Route path="/profile" element={<Profile />} />
+
+            {/* Legal Policies */}
+            <Route path="/privacy" element={<LegalPage defaultTab="privacy" />} />
+            <Route path="/terms" element={<LegalPage defaultTab="terms" />} />
+            <Route path="/cookies" element={<LegalPage defaultTab="cookies" />} />
+            <Route path="/legal" element={<LegalPage defaultTab="privacy" />} />
 
           </Routes>
         </Router>

@@ -120,13 +120,13 @@ function Hero() {
           <div className="hero-buttons">
             <button 
               className="primary-btn"
-              onClick={() => navigate(`/home?model=${slide.model}`)}
+              onClick={() => navigate(`/category/all?model=${slide.model || "manufactured"}`)}
             >
               {slide.btnText} <FaArrowRight />
             </button>
             <button 
               className="secondary-btn"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/category/all")}
             >
               Explore All
             </button>
