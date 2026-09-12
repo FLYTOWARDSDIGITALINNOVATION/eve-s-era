@@ -30,9 +30,10 @@
   flex-direction: column;
   gap: 20px;
   position: sticky;
-  top: 235px;
+  top: 220px;
   align-self: start;
   z-index: 50;
+  width: 280px;
 }
 
 .category-sidebar .filter-section {
@@ -41,7 +42,7 @@
   border: 1px solid rgba(244, 182, 194, 0.25);
   padding: 0 20px 22px 20px;
   box-shadow: 0 4px 18px rgba(196, 139, 159, 0.08);
-  max-height: calc(100vh - 200px);
+  max-height: calc(100vh - 240px);
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -70,11 +71,23 @@
   z-index: 5;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   border-bottom: 1px solid rgba(244, 182, 194, 0.2);
   padding-top: 18px;
   padding-bottom: 14px;
   margin-bottom: 18px;
+}
+
+.filter-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-filter-toggle-btn,
+.mobile-active-cat-badge {
+  display: none;
 }
 
 .category-sidebar .filter-icon-side {
@@ -461,31 +474,180 @@
 /* =========================================
    RESPONSIVE DESIGN
    ========================================= */
-@media (max-width: 992px) {
+/* =========================================
+   TABLET RESPONSIVE DESIGN (768px - 1024px)
+   Sidebar stays FIXED on the side!
+   ========================================= */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .category-page-wrapper .category-page,
+  .category-page.container {
+    padding-top: 24px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .category-layout {
+    grid-template-columns: 240px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* 🌟 Fixed/Sticky Left Sidebar on Tablet */
+  .category-sidebar {
+    position: sticky;
+    top: 140px;
+    align-self: start;
+    width: 240px;
+    z-index: 50;
+    display: flex !important;
+  }
+
+  .category-sidebar .filter-section {
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding: 0 14px 18px 14px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary-pink, #f4b6c2) rgba(248, 215, 218, 0.2);
+  }
+
+  .category-sidebar .filter-header {
+    position: sticky;
+    top: 0;
+    cursor: default;
+    padding-top: 14px;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+  }
+
+  .mobile-filter-toggle-btn,
+  .mobile-active-cat-badge {
+    display: none !important;
+  }
+
+  .filter-collapsible-body {
+    display: block !important;
+  }
+
+  .cat-nav-item {
+    font-size: 12.5px;
+    padding: 8px 10px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* =========================================
+   MOBILE RESPONSIVE DESIGN (Phones <= 767px)
+   ========================================= */
+@media (max-width: 767px) {
+  .category-page-wrapper .category-page,
+  .category-page.container {
+    padding: 20px 12px 60px !important;
+  }
+
   .category-layout {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 18px;
   }
 
   .category-sidebar {
     position: static;
     top: auto;
     width: 100%;
+    z-index: 1;
   }
 
+  /* Completely remove scroll containment and trap on mobile phones */
   .category-sidebar .filter-section {
     max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
+    touch-action: pan-y;
+  }
+
+  .category-sidebar .filter-header {
+    position: static;
+    top: auto;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    user-select: none;
+  }
+
+  .filter-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .mobile-filter-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--light-pink, #FFF0F2);
+    border: 1.5px solid var(--secondary-pink, #f4b6c2);
+    color: var(--accent-color, #C48B9F);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-filter-toggle-btn:hover {
+    background: var(--primary-color, #F8D7DA);
+    border-color: var(--accent-color, #C48B9F);
+  }
+
+  .mobile-active-cat-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--secondary-pink, #f4b6c2), var(--accent-color, #C48B9F));
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-left: 6px;
+    box-shadow: 0 2px 6px rgba(196, 139, 159, 0.2);
+    text-transform: capitalize;
+  }
+
+  .category-sidebar.mobile-collapsed .filter-collapsible-body {
+    display: none;
+  }
+
+  .category-sidebar.mobile-collapsed .filter-header {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 16px;
+  }
+
+  .category-sidebar.mobile-collapsed .filter-section {
+    padding-bottom: 0;
   }
 
   .cat-nav-list {
     flex-direction: row;
     flex-wrap: wrap;
+    touch-action: pan-y;
   }
 
   .cat-nav-item {
     width: auto;
     flex: 1;
     min-width: 120px;
+    touch-action: manipulation;
   }
 
   .category-sidebar .segment-pills {
@@ -497,13 +659,7 @@
     flex: 1;
     min-width: 110px;
     justify-content: center;
-  }
-}
-
-@media (max-width: 600px) {
-  .category-page-wrapper .category-page,
-  .category-page.container {
-    padding: 24px 14px 60px !important;
+    touch-action: manipulation;
   }
 
   .category-banner-info {
@@ -517,7 +673,7 @@
   }
 
   .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    gap: 12px;
   }
 }

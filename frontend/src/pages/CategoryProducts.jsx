@@ -4,7 +4,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
-import { FaFilter, FaArrowLeft } from "react-icons/fa";
+import { FaFilter, FaArrowLeft, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import "./CategoryProducts.css";
 
 const CategoryProducts = () => {
@@ -30,6 +30,35 @@ const CategoryProducts = () => {
   const [priceRange, setPriceRange] = useState(5000);
   const [maxPrice, setMaxPrice] = useState(5000);
   const [sortBy, setSortBy] = useState("Featured");
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(true);
+
+  // Smooth scroll down to products section on mobile devices
+  const scrollToProducts = () => {
+    const mainEl = document.querySelector('.category-main-content');
+    if (mainEl) {
+      const headerEl = document.querySelector('.sh-header');
+      const headerHeight = headerEl ? headerEl.offsetHeight : 120;
+      const targetY = mainEl.getBoundingClientRect().top + window.pageYOffset - headerHeight - 14;
+      window.scrollTo({
+        top: Math.max(0, targetY),
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleCategorySelect = (catName) => {
+    if (catName === "all") {
+      setModelFilter("all");
+      navigate("/category/all");
+    } else {
+      navigate(`/category/${encodeURIComponent(catName)}`);
+    }
+    if (window.innerWidth < 768) {
+      setTimeout(() => {
+        scrollToProducts();
+      }, 120);
+    }
+  };
 
   // Fetch all categories for sidebar navigation
   useEffect(() => {
@@ -45,7 +74,13 @@ const CategoryProducts = () => {
 
   // Fetch products for the active category
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.innerWidth < 768) {
+      setTimeout(() => {
+        scrollToProducts();
+      }, 150);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     setLoading(true);
     setSearchTerm("");
 
@@ -124,103 +159,135 @@ const CategoryProducts = () => {
         <div className="category-layout">
           
           {/* 🌟 Left Fixed/Sticky Sidebar */}
-          <aside className="category-sidebar">
+          <aside className={`category-sidebar ${isMobileFilterOpen ? "mobile-open" : "mobile-collapsed"}`}>
             <div className="filter-section">
-              <div className="filter-header">
-                <FaFilter className="filter-icon-side" />
-                <h3>Filter & Browse</h3>
-              </div>
-
-              {/* Categories Navigation */}
-              <div className="filter-group">
-                <h4>Categories</h4>
-                <div className="cat-nav-list">
-                  <button
-                    className={`cat-nav-item ${isAllCategory && modelFilter !== "manufactured" ? "active" : ""}`}
-                    onClick={() => {
-                      setModelFilter("all");
-                      navigate("/category/all");
-                    }}
-                  >
-                    <span className="cat-nav-dot"></span>
-                    <span className="cat-nav-name">All Collections</span>
-                  </button>
-                  {categories.map((cat) => {
-                    const isActive =
-                      !isAllCategory &&
-                      (cat.name || "").toLowerCase().trim() ===
-                      (category || "").toLowerCase().trim();
-                    return (
-                      <button
-                        key={cat._id || cat.name}
-                        className={`cat-nav-item ${isActive ? "active" : ""}`}
-                        onClick={() => navigate(`/category/${encodeURIComponent(cat.name)}`)}
-                      >
-                        <span className="cat-nav-dot"></span>
-                        <span className="cat-nav-name">{cat.name}</span>
-                      </button>
-                    );
-                  })}
+              <div 
+                className="filter-header"
+                onClick={() => {
+                  if (window.innerWidth < 768) {
+                    setIsMobileFilterOpen(prev => !prev);
+                  }
+                }}
+              >
+                <div className="filter-header-left">
+                  <FaFilter className="filter-icon-side" />
+                  <h3>Filter & Browse</h3>
+                  {category && !isAllCategory && (
+                    <span className="mobile-active-cat-badge">{category}</span>
+                  )}
                 </div>
+                <button 
+                  type="button" 
+                  className="mobile-filter-toggle-btn"
+                  aria-label="Toggle filter menu"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMobileFilterOpen(prev => !prev);
+                  }}
+                >
+                  <span>{isMobileFilterOpen ? "Hide" : "Filter"}</span>
+                  {isMobileFilterOpen ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
+                </button>
               </div>
 
-              {/* Collection Type (Business Model) */}
-              <div className="filter-group">
-                <h4>Collection Type</h4>
-                <div className="segment-pills">
-                  <button
-                    className={`pill-btn ${modelFilter === "all" ? "active" : ""}`}
-                    onClick={() => setModelFilter("all")}
-                  >
-                    All Collections
-                  </button>
-                  <button
-                    className={`pill-btn ${modelFilter === "manufactured" ? "active" : ""}`}
-                    onClick={() => setModelFilter("manufactured")}
-                  >
-                    ✨ Eve's Era Original
-                  </button>
-                  <button
-                    className={`pill-btn ${modelFilter === "resell" ? "active" : ""}`}
-                    onClick={() => setModelFilter("resell")}
-                  >
-                    Curated Resell
-                  </button>
-                </div>
-              </div>
-
-              {/* Price Range Slider */}
-              <div className="filter-group">
-                <h4>Max Price</h4>
-                <div className="price-slider-container">
-                  <input
-                    type="range"
-                    min="0"
-                    max={maxPrice}
-                    step="50"
-                    value={priceRange}
-                    onChange={(e) => setPriceRange(Number(e.target.value))}
-                    className="price-slider"
-                  />
-                  <div className="price-values">
-                    <span>₹0</span>
-                    <span className="current-price-tag">Up to ₹{priceRange}</span>
+              <div className="filter-collapsible-body">
+                {/* Categories Navigation */}
+                <div className="filter-group">
+                  <h4>Categories</h4>
+                  <div className="cat-nav-list">
+                    <button
+                      className={`cat-nav-item ${isAllCategory && modelFilter !== "manufactured" ? "active" : ""}`}
+                      onClick={() => handleCategorySelect("all")}
+                    >
+                      <span className="cat-nav-dot"></span>
+                      <span className="cat-nav-name">All Collections</span>
+                    </button>
+                    {categories.map((cat) => {
+                      const isActive =
+                        !isAllCategory &&
+                        (cat.name || "").toLowerCase().trim() ===
+                        (category || "").toLowerCase().trim();
+                      return (
+                        <button
+                          key={cat._id || cat.name}
+                          className={`cat-nav-item ${isActive ? "active" : ""}`}
+                          onClick={() => handleCategorySelect(cat.name)}
+                        >
+                          <span className="cat-nav-dot"></span>
+                          <span className="cat-nav-name">{cat.name}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
-              </div>
 
-              {/* Reset Filters */}
-              {hasActiveFilters && (
-                <button className="clear-btn" onClick={handleResetFilters}>
-                  Reset Filters
-                </button>
-              )}
+                {/* Collection Type (Business Model) */}
+                <div className="filter-group">
+                  <h4>Collection Type</h4>
+                  <div className="segment-pills">
+                    <button
+                      className={`pill-btn ${modelFilter === "all" ? "active" : ""}`}
+                      onClick={() => {
+                        setModelFilter("all");
+                        if (window.innerWidth < 768) scrollToProducts();
+                      }}
+                    >
+                      All Collections
+                    </button>
+                    <button
+                      className={`pill-btn ${modelFilter === "manufactured" ? "active" : ""}`}
+                      onClick={() => {
+                        setModelFilter("manufactured");
+                        if (window.innerWidth < 768) scrollToProducts();
+                      }}
+                    >
+                      ✨ Eve's Era Original
+                    </button>
+                    <button
+                      className={`pill-btn ${modelFilter === "resell" ? "active" : ""}`}
+                      onClick={() => {
+                        setModelFilter("resell");
+                        if (window.innerWidth < 768) scrollToProducts();
+                      }}
+                    >
+                      Curated Resell
+                    </button>
+                  </div>
+                </div>
 
-              {/* Boutique Promo Card */}
-              <div className="sidebar-banner">
-                <span className="logo-sparkle">✨</span>
-                <h3>Eve's Era</h3>
-                <p>100% Authentic Handpicked Couture & Boutique Designs</p>
+                {/* Price Range Slider */}
+                <div className="filter-group">
+                  <h4>Max Price</h4>
+                  <div className="price-slider-container">
+                    <input
+                      type="range"
+                      min="0"
+                      max={maxPrice}
+                      step="50"
+                      value={priceRange}
+                      onChange={(e) => setPriceRange(Number(e.target.value))}
+                      className="price-slider"
+                    />
+                    <div className="price-values">
+                      <span>₹0</span>
+                      <span className="current-price-tag">Up to ₹{priceRange}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reset Filters */}
+                {hasActiveFilters && (
+                  <button className="clear-btn" onClick={handleResetFilters}>
+                    Reset Filters
+                  </button>
+                )}
+
+                {/* Boutique Promo Card */}
+                <div className="sidebar-banner">
+                  <span className="logo-sparkle">✨</span>
+                  <h3>Eve's Era</h3>
+                  <p>100% Authentic Handpicked Couture & Boutique Designs</p>
+                </div>
               </div>
             </div>
           </aside>
