@@ -2,6 +2,7 @@ import API_BASE_URL from '../api';
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaPlus, FaCloudUploadAlt, FaTimes } from "react-icons/fa";
+import AdminSizeSelector from "../components/AdminSizeSelector";
 import "./AddProduct.css";
 
 const AddProduct = () => {
@@ -13,7 +14,7 @@ const AddProduct = () => {
     description: "",
     businessModel: "manufactured",
     materials: "",
-    sizes: "",        // optional — empty by default
+    sizes: "S, M, L, XL, XXL", // standard boutique sizes by default
   });
 
   // Multi-image state: array of { file, preview }
@@ -187,20 +188,14 @@ const AddProduct = () => {
               </div>
             </div>
 
-            <div className="form-row-double">
-              <div className="input-group-field">
-                <label>
-                  Sizes <span className="optional-label">(optional)</span>
-                </label>
-                <input
-                  placeholder="e.g. S, M, L, XL or leave blank"
-                  value={form.sizes}
-                  onChange={(e) => setForm({ ...form, sizes: e.target.value })}
-                  className="pink-admin-input"
-                />
-              </div>
-
-              
+            <div className="input-group-field">
+              <label>
+                Available Sizes <span className="optional-label">(Click to toggle or use dropdown)</span>
+              </label>
+              <AdminSizeSelector
+                value={form.sizes}
+                onChange={(val) => setForm({ ...form, sizes: val })}
+              />
             </div>
 
             {/* Material composition — only for manufactured */}

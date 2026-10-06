@@ -77,7 +77,14 @@ const CartPage = () => {
 
                     <div className="product-details">
                       <div className="product-header">
-                        <h3>{item.name}</h3>
+                        <div>
+                          <h3>{item.name}</h3>
+                          {item.size && (
+                            <span style={{ fontSize: '12px', color: '#c48b9f', fontWeight: '600', display: 'inline-block', marginTop: '2px' }}>
+                              Size: {item.size}
+                            </span>
+                          )}
+                        </div>
                         <button
                           className="delete-btn"
                           onClick={() => removeFromCart(item.productId)}

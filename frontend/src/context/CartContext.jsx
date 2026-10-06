@@ -24,18 +24,20 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (product) => {
     const pid = product._id || product.id;
+    const itemSize = product.size || "";
 
     const newCartItem = {
       ...product,
       productId: pid,
-      qty: 1
+      size: itemSize,
+      qty: product.qty || 1
     };
 
     setCart(prev => {
-      const exists = prev.find(p => p.productId === pid);
+      const exists = prev.find(p => p.productId === pid && (p.size || "") === itemSize);
       if (exists) {
         return prev.map(p =>
-          p.productId === pid ? { ...p, qty: p.qty + 1 } : p
+          p.productId === pid && (p.size || "") === itemSize ? { ...p, qty: p.qty + (product.qty || 1) } : p
         );
       }
       return [...prev, newCartItem];
@@ -52,7 +54,8 @@ export const CartProvider = ({ children }) => {
             name: product.name,
             price: product.price,
             img: product.image || product.img,
-            qty: 1
+            size: itemSize,
+            qty: product.qty || 1
           })
         });
       } catch (err) {

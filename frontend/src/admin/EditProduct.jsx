@@ -2,6 +2,7 @@ import API_BASE_URL from '../api';
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft, FaPlus, FaCloudUploadAlt, FaTimes } from "react-icons/fa";
+import AdminSizeSelector from "../components/AdminSizeSelector";
 import "./AddProduct.css"; // Reuse styling
 
 const EditProduct = () => {
@@ -46,6 +47,14 @@ const EditProduct = () => {
     fetch(`${API_BASE_URL}/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
+        let parsedSizes = [];
+        if (Array.isArray(data.sizes)) {
+          parsedSizes = data.sizes.flatMap(s => typeof s === "string" ? s.split(",") : s);
+        } else if (typeof data.sizes === "string") {
+          parsedSizes = data.sizes.split(",");
+        }
+        const cleanSizes = parsedSizes.map(s => String(s).trim()).filter(Boolean);
+
         setForm({
           name: data.name || "",
           category: data.category || "",
@@ -53,7 +62,7 @@ const EditProduct = () => {
           description: data.description || "",
           businessModel: data.businessModel || "manufactured",
           materials: data.materials || "",
-          sizes: Array.isArray(data.sizes) ? data.sizes.join(", ") : (data.sizes || "S, M, L, XL"),
+          sizes: cleanSizes.length > 0 ? cleanSizes.join(", ") : "S, M, L, XL, XXL",
           colors: Array.isArray(data.colors) ? data.colors.join(", ") : (data.colors || "Pink, Rose, Dusty Mauve"),
           stock: data.stock !== undefined ? String(data.stock) : "15",
           supplierName: data.supplierName || ""
@@ -255,16 +264,15 @@ const EditProduct = () => {
               </div>
             </div>
 
+            <div className="input-group-field">
+              <label>Available Sizes</label>
+              <AdminSizeSelector
+                value={form.sizes}
+                onChange={(val) => setForm({ ...form, sizes: val })}
+              />
+            </div>
+
             <div className="form-row-double">
-              <div className="input-group-field">
-                <label>Sizes (Comma-separated)</label>
-                <input
-                  placeholder="S, M, L, XL"
-                  value={form.sizes}
-                  onChange={(e) => setForm({ ...form, sizes: e.target.value })}
-                  className="pink-admin-input"
-                />
-              </div>
 
               <div className="input-group-field">
                 <label>Colors (Comma-separated)</label>

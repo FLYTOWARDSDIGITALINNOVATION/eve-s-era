@@ -78,7 +78,7 @@ const productSchema = new mongoose.Schema({
   images: [String],
   businessModel: { type: String, enum: ["resell", "manufactured"], default: "resell" },
   materials: { type: String, default: "" },
-  sizes: { type: [String], default: ["S", "M", "L", "XL"] },
+  sizes: { type: [String], default: ["S", "M", "L", "XL", "XXL"] },
   colors: { type: [String], default: ["Pink", "Rose", "Dusty Mauve"] },
   stock: { type: Number, default: 10 },
   supplierName: { type: String, default: "" },
@@ -94,6 +94,7 @@ const orderSchema = new mongoose.Schema({
   productId: String,
   quantity: Number,
   price: Number,
+  size: { type: String, default: "" },
   userEmail: String,
   userName: String,
   phone: { type: String, default: "" },
@@ -122,6 +123,7 @@ const cartSchema = new mongoose.Schema({
   unitPrice: Number,
   price: Number,
   img: String,
+  size: { type: String, default: "" },
   qty: { type: Number, default: 1 },
 });
 const Cart = mongoose.model("Cart", cartSchema);
@@ -514,14 +516,15 @@ app.get("/cart/:email", async (req, res) => {
 
 app.post("/cart", async (req, res) => {
   try {
-    const { userEmail, productId, name, price, img, qty } = req.body;
+    const { userEmail, productId, name, price, img, size, qty } = req.body;
+    const itemSize = size || "";
     
-    let item = await Cart.findOne({ userEmail, productId });
+    let item = await Cart.findOne({ userEmail, productId, size: itemSize });
     if (item) {
-      item.qty += qty;
+      item.qty += (qty || 1);
       await item.save();
     } else {
-      item = await Cart.create({ userEmail, productId, name, price, img, qty });
+      item = await Cart.create({ userEmail, productId, name, price, img, size: itemSize, qty: qty || 1 });
     }
     res.json(item);
   } catch (err) {
@@ -679,8 +682,12 @@ app.post("/admin/product", verifyAdmin, productImageUpload, async (req, res) => 
       data.images = [...new Set(imagePaths)];
       data.image = data.images[0];
     }
-    if (data.sizes && typeof data.sizes === "string") {
-      data.sizes = data.sizes.split(",").map(s => s.trim()).filter(Boolean);
+    if (data.sizes) {
+      if (typeof data.sizes === "string") {
+        data.sizes = data.sizes.split(",").map(s => s.trim()).filter(Boolean);
+      } else if (Array.isArray(data.sizes)) {
+        data.sizes = data.sizes.flatMap(s => typeof s === "string" ? s.split(",") : s).map(s => String(s).trim()).filter(Boolean);
+      }
     }
     if (data.colors && typeof data.colors === "string") {
       data.colors = data.colors.split(",").map(c => c.trim()).filter(Boolean);
@@ -717,8 +724,12 @@ app.put("/admin/product/:id", verifyAdmin, productImageUpload, async (req, res) 
       data.images = [...new Set(imagePaths)];
       data.image = data.images[0];
     }
-    if (data.sizes && typeof data.sizes === "string") {
-      data.sizes = data.sizes.split(",").map(s => s.trim()).filter(Boolean);
+    if (data.sizes) {
+      if (typeof data.sizes === "string") {
+        data.sizes = data.sizes.split(",").map(s => s.trim()).filter(Boolean);
+      } else if (Array.isArray(data.sizes)) {
+        data.sizes = data.sizes.flatMap(s => typeof s === "string" ? s.split(",") : s).map(s => String(s).trim()).filter(Boolean);
+      }
     }
     if (data.colors && typeof data.colors === "string") {
       data.colors = data.colors.split(",").map(c => c.trim()).filter(Boolean);

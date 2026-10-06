@@ -143,6 +143,7 @@ const OrdersPage = () => {
                                         <div className="product-info">
                                             <span className="product-name">{order.productName}</span>
                                             <span className="product-qty">Quantity: {order.quantity}</span>
+                                            {order.size && <span className="product-qty" style={{ color: '#c48b9f', fontWeight: '600' }}>Size: {order.size}</span>}
                                             <div className="order-dates">
                                                 {order.shippedAt && (
                                                     <span className="date-info shipped">

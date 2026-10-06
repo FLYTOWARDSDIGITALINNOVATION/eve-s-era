@@ -416,7 +416,10 @@ const AdminOrdersPage = () => {
                           <span>View Details</span>
                         </button>
                       </td>
-                      <td>{o.productName || 'Unknown Product'}</td>
+                      <td>
+                        {o.productName || 'Unknown Product'}
+                        {o.size && <div style={{ fontSize: '11.5px', color: '#c48b9f', fontWeight: '600' }}>Size: {o.size}</div>}
+                      </td>
                       <td>{o.quantity || 0}</td>
                       <td>₹{o.price || 0}</td>
                       <td>{o.createdAt ? new Date(o.createdAt).toLocaleString() : 'N/A'}</td>

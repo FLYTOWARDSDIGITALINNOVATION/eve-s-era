@@ -42,8 +42,19 @@ const ProductDetailPage = () => {
       .then((data) => {
         setProduct(data);
         setSelectedImageIndex(0);
-        if (data.sizes && data.sizes.length > 0 && data.sizes[0] !== "") {
-          setSelectedSize(data.sizes[0]);
+        let parsedSizes = [];
+        if (Array.isArray(data.sizes)) {
+          parsedSizes = data.sizes.flatMap(s => typeof s === "string" ? s.split(",") : s);
+        } else if (typeof data.sizes === "string") {
+          parsedSizes = data.sizes.split(",");
+        }
+        parsedSizes = parsedSizes
+          .map(s => String(s).trim())
+          .filter(Boolean)
+          .filter(s => !["XS", "3XL", "FREE SIZE", "FREESIZE"].includes(s.toUpperCase()));
+
+        if (parsedSizes.length > 0) {
+          setSelectedSize(parsedSizes[0]);
         } else {
           setSelectedSize("");
         }
@@ -168,7 +179,13 @@ const ProductDetailPage = () => {
   }
 
   const isManufactured = product.businessModel === "manufactured";
-  const sizes = product.sizes && product.sizes.length > 0 && product.sizes[0] !== "" ? product.sizes : [];
+  const rawSizes = Array.isArray(product.sizes)
+    ? product.sizes.flatMap(s => typeof s === "string" ? s.split(",") : s)
+    : (typeof product.sizes === "string" ? product.sizes.split(",") : []);
+  const sizes = rawSizes
+    .map(s => String(s).trim())
+    .filter(Boolean)
+    .filter(s => !["XS", "3XL", "FREE SIZE", "FREESIZE"].includes(s.toUpperCase()));
   const productImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
   const displayImage = productImages[selectedImageIndex] || product.image;
 
@@ -268,11 +285,19 @@ const ProductDetailPage = () => {
             {/* Sizes picker */}
             {sizes.length > 0 && (
               <div className="selection-group">
-                <span className="sel-title">Select Size:</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <span className="sel-title" style={{ margin: 0 }}>Select Size:</span>
+                  {selectedSize && (
+                    <span style={{ fontSize: '13px', color: '#c48b9f', fontWeight: '700' }}>
+                      Selected: <strong>{selectedSize}</strong>
+                    </span>
+                  )}
+                </div>
                 <div className="size-options">
                   {sizes.map((size) => (
                     <button
                       key={size}
+                      type="button"
                       className={`size-btn ${selectedSize === size ? "active" : ""}`}
                       onClick={() => setSelectedSize(size)}
                     >

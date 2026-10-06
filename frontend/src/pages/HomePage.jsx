@@ -47,12 +47,23 @@ const HomePage = () => {
       p => p.category && p.category.toLowerCase().trim() === trimmed
     );
 
-    // ONLY use image if explicitly uploaded by Admin
+    // 1. Image explicitly uploaded by Admin for Category
     let imageUrl = "";
     if (cat && typeof cat === "object" && cat.image && cat.image.trim()) {
       imageUrl = cat.image.startsWith("http")
         ? cat.image
         : `${API_BASE_URL}${cat.image}`;
+    }
+
+    // 2. Automatic fallback: Use first product's photo from this category
+    if (!imageUrl && catProducts.length > 0) {
+      const firstProd = catProducts[0];
+      const prodImg = (firstProd.images && firstProd.images.length > 0 && firstProd.images[0]) || firstProd.image;
+      if (prodImg && typeof prodImg === "string" && prodImg.trim()) {
+        imageUrl = prodImg.startsWith("http")
+          ? prodImg
+          : `${API_BASE_URL}${prodImg}`;
+      }
     }
 
     return {

@@ -64,6 +64,7 @@ const Checkout = () => {
               productId: item._id || item.id,
               quantity: item.qty,
               price: item.price * item.qty,
+              size: item.size || "",
               userEmail: user.email,
               userName: user.name,
               shippingAddress: shippingInfo,
@@ -414,6 +415,7 @@ const Checkout = () => {
                     />
                     <div className="sp-details">
                       <p className="sp-name">{item.name}</p>
+                      {item.size && <p className="sp-size" style={{ fontSize: '11px', color: '#c48b9f', fontWeight: '600', margin: '2px 0' }}>Size: {item.size}</p>}
                       <p className="sp-qty">Qty: {item.qty}</p>
                       <p className="sp-price">₹{item.price.toFixed(2)}</p>
                     </div>

@@ -1,0 +1,222 @@
+/* AdminSizeSelector.css */
+.admin-size-selector-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fdf8f9;
+  border: 1px solid rgba(244, 182, 194, 0.35);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 4px;
+}
+
+.admin-size-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-size-lbl {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #555555;
+  letter-spacing: 0.5px;
+}
+
+.admin-size-presets {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.preset-btn {
+  background: #fff;
+  border: 1px solid rgba(196, 139, 159, 0.4);
+  color: #c48b9f;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-btn:hover {
+  background: #fcecef;
+  border-color: #c48b9f;
+  color: #a85875;
+}
+
+.preset-btn.clear {
+  border-color: #e2e8f0;
+  color: #888888;
+}
+
+.preset-btn.clear:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+/* Quick pills */
+.admin-size-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.size-pill-btn {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  color: #4a5568;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+}
+
+.size-pill-btn:hover {
+  border-color: #c48b9f;
+  background: #fff5f7;
+  color: #a85875;
+}
+
+.size-pill-btn.active {
+  background: #c48b9f;
+  color: #ffffff;
+  border-color: #c48b9f;
+  box-shadow: 0 2px 6px rgba(196, 139, 159, 0.35);
+}
+
+.size-pill-btn .check-mark {
+  font-size: 11px;
+}
+
+/* Dropdown & Custom input row */
+.admin-size-inputs-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.admin-size-dropdown {
+  flex: 1;
+  min-width: 170px;
+  background: #ffffff;
+  border: 1px solid rgba(244, 182, 194, 0.35);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: #333333;
+  outline: none;
+  cursor: pointer;
+}
+
+.admin-size-dropdown:focus {
+  border-color: #c48b9f;
+  box-shadow: 0 0 0 2px rgba(196, 139, 159, 0.15);
+}
+
+.admin-custom-size-box {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  min-width: 170px;
+}
+
+.admin-custom-input {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid rgba(244, 182, 194, 0.35);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #333333;
+  outline: none;
+}
+
+.admin-custom-input:focus {
+  border-color: #c48b9f;
+}
+
+.admin-custom-add-btn {
+  background: #ffffff;
+  border: 1px solid #c48b9f;
+  color: #c48b9f;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.admin-custom-add-btn:hover {
+  background: #c48b9f;
+  color: #ffffff;
+}
+
+/* Selected sizes summary badge list */
+.admin-selected-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(244, 182, 194, 0.35);
+}
+
+.summary-tag-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #777777;
+  margin-right: 4px;
+}
+
+.selected-size-chip {
+  background: #ffffff;
+  border: 1px solid #c48b9f;
+  color: #a85875;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chip-remove-btn {
+  background: none;
+  border: none;
+  color: #c48b9f;
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+
+.chip-remove-btn:hover {
+  color: #dc2626;
+}
+
+.no-sizes-hint {
+  font-size: 11.5px;
+  color: #999999;
+  font-style: italic;
+}
