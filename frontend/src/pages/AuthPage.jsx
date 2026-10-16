@@ -194,7 +194,7 @@ const AuthPage = () => {
                 >
                     <div className="auth-branding-text">
                         <motion.div variants={itemVariants} className="branding-group">
-                            <img src={logo} alt="Eve's Era Logo" style={{ height: '140px', width: 'auto', objectFit: 'contain' }} />
+                            <img src={logo} alt="Eve's Era Logo" className="branding-logo-img" />
                         </motion.div>
 
                         <motion.div variants={itemVariants} className="brand-badge">
