@@ -31,10 +31,12 @@
   flex: 1.15;
   position: relative;
   background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 36px;
   overflow: hidden;
   height: 100%;
   padding: 30px 40px;
@@ -178,7 +180,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background: #faf7f8;
+  background: #fbf9fa;
   padding: 24px 30px;
   overflow-y: auto; /* Internal scroll only if content overflows */
   height: 100%;
@@ -494,18 +496,20 @@
   color: var(--dark-pink);
 }
 
-/* Responsive for Laptop Screens (1024px - 1366px) */
-@media (max-width: 1366px) {
+/* Responsive for Standard Laptops (1050px - 1400px) */
+@media (max-width: 1400px) {
   .auth-branding {
-    padding: 25px 25px;
+    padding: 20px 28px;
+    gap: 28px;
+    justify-content: center;
   }
   .auth-branding-text {
-    flex: 0 1 340px;
-    max-width: 360px;
+    flex: 0 1 330px;
+    max-width: 350px;
   }
   .branding-group {
     padding: 12px 20px;
-    margin-bottom: 24px;
+    margin-bottom: 22px;
     border-radius: 20px;
   }
   .branding-logo-img {
@@ -546,8 +550,209 @@
     padding: 20px;
   }
   .auth-form-card {
-    max-width: 375px;
-    padding: 24px 26px;
+    max-width: 380px;
+    padding: 26px 28px;
+  }
+}
+
+/* Responsive for Compact Laptops (1050px - 1200px) */
+@media (max-width: 1200px) {
+  .auth-branding {
+    gap: 20px;
+    padding: 18px 20px;
+  }
+  .auth-branding-text {
+    flex: 0 1 290px;
+    max-width: 300px;
+  }
+  .branding-logo-img {
+    height: 105px;
+  }
+  .branding-group {
+    padding: 10px 16px;
+    margin-bottom: 18px;
+  }
+  .brand-headline {
+    font-size: 1.75rem;
+  }
+  .brand-subtext {
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+  }
+  .brand-stats {
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 12px;
+  }
+  .stat-item h3 {
+    font-size: 1.1rem;
+  }
+  .stat-item p {
+    font-size: 0.72rem;
+  }
+  .auth-hero-full-img {
+    max-height: 70vh;
+  }
+  .auth-form-card {
+    max-width: 360px;
+    padding: 22px 24px;
+  }
+}
+
+/* Vertical Height Optimization for Laptops (Screen Height <= 760px) */
+@media (max-height: 760px) and (min-width: 900px) {
+  .auth-branding {
+    padding: 16px 24px;
+    gap: 24px;
+  }
+  .auth-hero-full-img {
+    max-height: 68vh;
+  }
+  .branding-group {
+    margin-bottom: 16px;
+    padding: 10px 18px;
+  }
+  .branding-logo-img {
+    height: 105px;
+  }
+  .brand-badge {
+    margin-bottom: 8px;
+    padding: 4px 12px;
+    font-size: 0.68rem;
+  }
+  .brand-headline {
+    font-size: 1.75rem;
+    margin-bottom: 6px;
+  }
+  .brand-subtext {
+    margin-bottom: 10px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+  .brand-stats {
+    margin-top: 12px;
+    padding-top: 10px;
+    gap: 16px;
+  }
+  .stat-item h3 {
+    font-size: 1.1rem;
+  }
+  .stat-item p {
+    font-size: 0.72rem;
+    margin-top: 3px;
+  }
+  .auth-form-side {
+    padding: 16px 20px;
+  }
+  .auth-form-card {
+    padding: 20px 26px;
+    border-radius: 20px;
+  }
+  .auth-brand-header {
+    margin-bottom: 10px;
+  }
+  .auth-card-logo {
+    height: 40px;
+  }
+  .auth-tabs {
+    margin-bottom: 14px;
+    padding: 4px;
+  }
+  .auth-tab {
+    padding: 8px 14px;
+    font-size: 0.88rem;
+  }
+  .form-container h2 {
+    font-size: 1.65rem;
+    margin-bottom: 4px;
+  }
+  .form-subtitle {
+    margin-bottom: 14px;
+    font-size: 0.84rem;
+  }
+  .input-group {
+    margin-bottom: 12px;
+  }
+  .input-group label {
+    margin-bottom: 4px;
+    font-size: 0.76rem;
+  }
+  .input-wrapper input {
+    padding: 10px 14px 10px 42px;
+    font-size: 0.9rem;
+    border-radius: 11px;
+  }
+  .form-actions {
+    margin: 6px 0 14px 0;
+    font-size: 0.82rem;
+  }
+  .auth-submit-btn {
+    padding: 11px;
+    font-size: 0.92rem;
+    border-radius: 12px;
+  }
+  .divider {
+    margin: 14px 0;
+  }
+  .social-buttons {
+    gap: 12px;
+  }
+  .social-btn {
+    padding: 9px;
+    font-size: 0.84rem;
+    border-radius: 12px;
+  }
+  .auth-switch-prompt {
+    margin-top: 12px;
+    font-size: 0.82rem;
+  }
+}
+
+/* Extra Compact Height for Short Screens / Scaled Laptops (Screen Height <= 660px) */
+@media (max-height: 660px) and (min-width: 900px) {
+  .auth-hero-full-img {
+    max-height: 62vh;
+  }
+  .branding-logo-img {
+    height: 85px;
+  }
+  .branding-group {
+    margin-bottom: 10px;
+    padding: 8px 14px;
+  }
+  .brand-headline {
+    font-size: 1.55rem;
+  }
+  .brand-subtext {
+    font-size: 0.78rem;
+    margin-bottom: 8px;
+  }
+  .brand-stats {
+    margin-top: 8px;
+    padding-top: 8px;
+    gap: 12px;
+  }
+  .auth-brand-header {
+    display: none;
+  }
+  .auth-form-card {
+    padding: 16px 22px;
+  }
+  .auth-tabs {
+    margin-bottom: 10px;
+  }
+  .form-container h2 {
+    font-size: 1.45rem;
+  }
+  .form-subtitle {
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+  }
+  .input-group {
+    margin-bottom: 10px;
+  }
+  .divider {
+    margin: 10px 0;
   }
 }
 
