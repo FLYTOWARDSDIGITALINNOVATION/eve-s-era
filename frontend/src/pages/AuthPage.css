@@ -28,104 +28,147 @@
 
 /* Branding Section (Left Pane) */
 .auth-branding {
-  flex: 1.1;
+  flex: 1.15;
   position: relative;
-  background: var(--dark-pink);
-  background-image: 
-    linear-gradient(to bottom, rgba(18, 10, 12, 0.3), rgba(18, 10, 12, 0.8)),
-    url('../assets/fashion_hero.png');
-  background-size: cover;
-  background-position: center;
+  background: #ffffff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  overflow: hidden;
+  height: 100%;
+  padding: 40px 30px 40px 45px;
+  box-sizing: border-box;
+}
+
+.auth-branding-text {
+  flex: 0 0 auto;
+  width: 420px;
+  max-width: 440px;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* Push text to bottom for cinematic feel */
-  padding: 60px 50px; /* Reduced padding from 80px 60px */
-  color: #fff;
-  transition: var(--transition-smooth);
+  justify-content: center;
 }
 
 .branding-group {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 20px; /* Reduced from 30px */
-  background: rgba(255, 255, 255, 0.98);
-  padding: 10px 20px; /* Reduced padding */
-  border-radius: 18px;
+  margin-bottom: 18px;
+  background: #ffffff;
+  padding: 12px 22px;
+  border-radius: 22px;
   width: fit-content;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.branding-logo-main {
-  height: 40px; /* Reduced from 48px */
-  width: auto;
-  mix-blend-mode: multiply;
-}
-
-.branding-name-main {
-  font-size: 1.6rem; /* Reduced from 1.8rem */
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  margin: 0;
-  text-transform: uppercase;
-  color: #000000;
+.brand-badge {
+  background: rgba(199, 133, 147, 0.12);
+  color: #934255;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  margin-bottom: 14px;
+  width: fit-content;
+  border: 1px solid rgba(199, 133, 147, 0.25);
 }
 
 .brand-headline {
-  font-size: 2.5rem; /* Reduced from 3rem */
-  font-weight: 700;
+  font-size: 2.85rem;
+  font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 15px; /* Reduced from 20px */
-  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+  letter-spacing: -0.03em;
+  color: #111111;
 }
 
 .highlight-text {
-  background: linear-gradient(120deg, var(--accent-color) 0%, var(--secondary-pink) 100%);
+  background: linear-gradient(120deg, #c78593 0%, #a25867 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
 
 .brand-subtext {
-  font-size: 1rem; /* Reduced from 1.1rem */
-  font-weight: 300;
-  opacity: 0.9;
-  max-width: 450px;
-  line-height: 1.5;
-  margin-bottom: 30px; /* Reduced from 40px */
+  font-size: 1rem;
+  font-weight: 400;
+  color: #555555;
+  max-width: 380px;
+  line-height: 1.55;
+  margin-bottom: 22px;
 }
 
 .brand-stats {
   display: flex;
-  gap: 50px;
-  padding-top: 30px; /* Reduced from 40px */
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  gap: 28px;
+  margin-top: 36px;
+  padding-top: 22px;
+  border-top: 1.5px solid rgba(0, 0, 0, 0.12);
 }
 
 .stat-item h3 {
-  font-size: 1.4rem; /* Reduced from 1.6rem */
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   margin: 0;
-  letter-spacing: -0.02em;
+  color: #000000;
+  letter-spacing: 0.02em;
 }
 
 .stat-item p {
-  font-size: 0.75rem;
-  opacity: 0.6;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #333333;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin-top: 5px;
+  letter-spacing: 0.18em;
+  margin-top: 6px;
+}
+
+.auth-branding-visual {
+  flex: 0 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-hero-full-img {
+  max-height: 72vh;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  user-select: none;
+}
+
+.auth-brand-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.auth-card-logo {
+  height: 56px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* Form Section (Right Pane) */
 .auth-form-side {
-  flex: 0.9;
+  flex: 1.05;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   background: #f8fafc;
-  padding: 40px;
+  padding: 30px;
   overflow-y: auto; /* Internal scroll only if content overflows */
   height: 100%;
 }
@@ -144,12 +187,12 @@
 
 .auth-form-card {
   width: 100%;
-  max-width: 460px;
+  max-width: 440px;
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  padding: 48px;
-  border-radius: 32px;
+  padding: 38px 36px;
+  border-radius: 26px;
   box-shadow: var(--shadow-premium);
   border: 1px solid var(--glass-border);
   position: relative;
@@ -160,18 +203,18 @@
   display: flex;
   background: rgba(0, 0, 0, 0.03);
   padding: 5px;
-  border-radius: 16px;
-  margin-bottom: 35px;
+  border-radius: 14px;
+  margin-bottom: 24px;
 }
 
 .auth-tab {
   flex: 1;
-  padding: 12px;
+  padding: 11px 18px;
   border: none;
   background: transparent;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.9rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.92rem;
   color: var(--text-gray);
   cursor: pointer;
   transition: var(--transition-smooth);
@@ -185,29 +228,29 @@
 
 /* Form Styling */
 .form-container h2 {
-  font-size: 2.2rem;
+  font-size: 1.95rem;
   font-weight: 800;
   color: var(--text-dark);
-  margin-bottom: 8px;
-  letter-spacing: -0.03em;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
 }
 
 .form-subtitle {
   color: var(--text-gray);
-  margin-bottom: 32px;
-  font-size: 1rem;
+  margin-bottom: 22px;
+  font-size: 0.92rem;
 }
 
 .input-group {
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .input-group label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--text-dark);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -220,18 +263,18 @@
 
 .input-icon {
   position: absolute;
-  left: 20px;
+  left: 18px;
   color: #94a3b8;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 16px 20px 16px 52px;
+  padding: 13px 18px 13px 48px;
   background: #fff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  font-size: 1rem;
+  border-radius: 13px;
+  font-size: 0.95rem;
   outline: none;
   transition: var(--transition-smooth);
 }
@@ -244,28 +287,28 @@
 
 .password-toggle {
   position: absolute;
-  right: 18px;
+  right: 16px;
   background: none;
   border: none;
   color: #94a3b8;
   cursor: pointer;
   display: flex;
-  padding: 8px;
+  padding: 6px;
 }
 
 .form-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0 32px 0;
-  font-size: 0.9rem;
+  margin: 8px 0 22px 0;
+  font-size: 0.88rem;
 }
 
 .remember-me,
 .terms-check {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: var(--text-gray);
   cursor: pointer;
   font-weight: 500;
@@ -281,9 +324,9 @@
   width: 100%;
   background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
   color: #fff;
-  padding: 18px;
+  padding: 15px;
   border: none;
-  border-radius: 16px;
+  border-radius: 14px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
@@ -293,8 +336,8 @@
 
 .auth-submit-btn:hover {
   background: linear-gradient(135deg, var(--accent-color), var(--dark-pink));
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
 }
 
 /* Social Login */
@@ -413,8 +456,8 @@
 /* Switch Prompt at Bottom of Forms */
 .auth-switch-prompt {
   text-align: center;
-  margin-top: 24px;
-  font-size: 0.9rem;
+  margin-top: 18px;
+  font-size: 0.88rem;
   color: var(--text-gray);
   display: flex;
   justify-content: center;
@@ -430,7 +473,7 @@
   font-weight: 700;
   cursor: pointer;
   padding: 0;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   text-decoration: underline;
   transition: all 0.2s ease;
 }
@@ -440,9 +483,28 @@
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-  .auth-branding { padding: 40px; }
-  .brand-headline { font-size: 2.5rem; }
+@media (max-width: 1300px) {
+  .auth-branding {
+    padding: 30px 20px 30px 35px;
+  }
+  .brand-headline {
+    font-size: 1.9rem;
+  }
+  .brand-stats {
+    gap: 20px;
+  }
+  .stat-item h3 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1050px) {
+  .auth-branding-visual {
+    display: none;
+  }
+  .auth-branding-text {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 900px) {

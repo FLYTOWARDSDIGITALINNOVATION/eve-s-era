@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft, FaPlus, FaCloudUploadAlt, FaTimes } from "react-icons/fa";
 import AdminSizeSelector from "../components/AdminSizeSelector";
+import { compressImageFile } from "../utils/imageCompressor";
 import "./AddProduct.css"; // Reuse styling
 
 const EditProduct = () => {
@@ -76,18 +77,29 @@ const EditProduct = () => {
       });
   }, [id]);
 
-  // Add multiple images, avoid duplicates by name+size
-  const handleImagesChange = (e) => {
-    const newFiles = Array.from(e.target.files);
+  // Add multiple images, auto-compress, avoid duplicates by name+size
+  const handleImagesChange = async (e) => {
+    const rawFiles = Array.from(e.target.files);
+    e.target.value = "";
+    if (rawFiles.length === 0) return;
+
+    // Auto-compress files in browser (resizes to max 1200px, converts to ~200KB JPEG)
+    const processedFiles = await Promise.all(rawFiles.map((f) => compressImageFile(f)));
+
+    const MAX_SIZE = 1 * 1024 * 1024; // 1MB limit
+    const oversized = processedFiles.filter((f) => f.size > MAX_SIZE);
+    if (oversized.length > 0) {
+      alert("Please upload image under 1MB.");
+      return;
+    }
+
     const existing = new Set(images.map((i) => i.file.name + i.file.size));
     const slotsLeft = Math.max(0, 5 - images.length);
-    const toAdd = newFiles
+    const toAdd = processedFiles
       .filter((f) => !existing.has(f.name + f.size))
       .slice(0, slotsLeft)
       .map((file) => ({ file, preview: URL.createObjectURL(file) }));
     setImages((prev) => [...prev, ...toAdd]);
-    // reset input so the same file can be re-added after removal
-    e.target.value = "";
   };
 
   const removeImage = (index) => {
@@ -122,6 +134,11 @@ const EditProduct = () => {
       newErrors.price = "Listing price must be greater than zero.";
     }
 
+    if (currentImages.length === 0 && images.length === 0) {
+      alert("Product must have at least one image. Please upload an image.");
+      return;
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       // Focus the first invalid input field
@@ -152,14 +169,13 @@ const EditProduct = () => {
     formData.append("supplierName", form.supplierName);
     formData.append("email", adminEmail);
     
+    // Retain all current/existing images that weren't removed
+    formData.append("existingImages", JSON.stringify(currentImages));
+
     // Append all newly selected images with "images" field name
     images.forEach(({ file }) => {
       formData.append("images", file);
     });
-
-    if (images.length === 0 && currentImages.length > 0) {
-      formData.append("images", currentImages[0]);
-    }
 
     try {
       const res = await fetch(`${API_BASE_URL}/admin/product/${id}`, {
@@ -170,7 +186,22 @@ const EditProduct = () => {
         body: formData,
       });
 
-      const data = await res.json();
+      if (res.status === 413) {
+        throw new Error("Please upload image under 1MB.");
+      }
+
+      const contentType = res.headers.get("content-type") || "";
+      let data = {};
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        if (text.includes("413") || text.includes("Request Entity Too Large") || text.includes("<html")) {
+          throw new Error("Please upload image under 1MB.");
+        }
+        data = { message: text };
+      }
+
       if (res.ok) {
         alert("Product updated in Eves Era boutique!");
         navigate("/admin?tab=products");
@@ -179,7 +210,7 @@ const EditProduct = () => {
       }
     } catch (err) {
       console.error("Update Product Error:", err);
-      alert("Failed to save product changes.");
+      alert(err.message || "Failed to save product changes.");
     } finally {
       setIsSubmitting(false);
     }
@@ -393,7 +424,7 @@ const EditProduct = () => {
                 <div className="dropzone-msg">
                   <FaCloudUploadAlt className="upload-icon-form" />
                   <span>Click or drag image files here</span>
-                  <span className="file-desc-lbl">PNG, JPG up to 5MB • Max 5 images total</span>
+                  <span className="file-desc-lbl">PNG, JPG up to 1MB • Max 5 images total</span>
                 </div>
               </div>
             )}

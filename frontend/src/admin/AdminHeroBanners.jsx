@@ -30,6 +30,12 @@ const AdminHeroBanners = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (file.size > 1 * 1024 * 1024) {
+      alert("Please upload image under 1MB.");
+      e.target.value = "";
+      return;
+    }
+
     const token = localStorage.getItem("token");
     if (!token) return alert("Unauthorized");
 
@@ -47,12 +53,25 @@ const AdminHeroBanners = () => {
         body: formData,
       });
 
+      if (res.status === 413) {
+        alert("Please upload image under 1MB.");
+        return;
+      }
+
       if (res.ok) {
         alert(`Slide ${slideId} updated successfully!`);
         fetchSlides();
       } else {
-        const errData = await res.json();
-        alert(`Failed to update slide: ${errData.message}`);
+        const contentType = res.headers.get("content-type") || "";
+        let errMsg = "Failed to update slide";
+        if (contentType.includes("application/json")) {
+          const errData = await res.json();
+          errMsg = errData.message || errMsg;
+        } else {
+          const text = await res.text();
+          errMsg = text.includes("413") || text.includes("<html") ? "Please upload image under 1MB." : text;
+        }
+        alert(errMsg);
       }
     } catch (err) {
       console.error(err);

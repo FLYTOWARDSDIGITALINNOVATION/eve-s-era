@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaPlus, FaCloudUploadAlt, FaTimes } from "react-icons/fa";
 import AdminSizeSelector from "../components/AdminSizeSelector";
+import { compressImageFile } from "../utils/imageCompressor";
 import "./AddProduct.css";
 
 const AddProduct = () => {
@@ -37,18 +38,30 @@ const AddProduct = () => {
       });
   }, []);
 
-  // Add multiple images, avoid duplicates by name+size
-  const handleImagesChange = (e) => {
-    const newFiles = Array.from(e.target.files);
+  // Add multiple images, auto-compress, avoid duplicates by name+size
+  const handleImagesChange = async (e) => {
+    const rawFiles = Array.from(e.target.files);
+    e.target.value = "";
+    if (rawFiles.length === 0) return;
+
+    // Auto-compress files in browser (resizes to max 1200px, converts to ~200KB JPEG)
+    const processedFiles = await Promise.all(rawFiles.map((f) => compressImageFile(f)));
+
+    const MAX_SIZE = 1 * 1024 * 1024; // 1MB limit
+    const oversized = processedFiles.filter((f) => f.size > MAX_SIZE);
+    if (oversized.length > 0) {
+      alert("Please upload image under 1MB.");
+      return;
+    }
+
     const existing = new Set(images.map((i) => i.file.name + i.file.size));
     const slotsLeft = Math.max(0, 5 - images.length);
-    const toAdd = newFiles
+    const toAdd = processedFiles
       .filter((f) => !existing.has(f.name + f.size))
       .slice(0, slotsLeft)
       .map((file) => ({ file, preview: URL.createObjectURL(file) }));
     setImages((prev) => [...prev, ...toAdd]);
-    // reset input so the same file can be re-added after removal
-    e.target.value = "";
+    if (errors.images) setErrors((prev) => ({ ...prev, images: null }));
   };
 
   const removeImage = (index) => {
@@ -69,12 +82,14 @@ const AddProduct = () => {
     if (!form.category) newErrors.category = "Boutique category is required.";
     if (!form.price) newErrors.price = "Listing price is required.";
     else if (Number(form.price) <= 0) newErrors.price = "Listing price must be greater than zero.";
+    if (images.length === 0) newErrors.images = "At least one product showcase image is required.";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       if (newErrors.name && nameRef.current) nameRef.current.focus();
       else if (newErrors.category && categoryRef.current) categoryRef.current.focus();
       else if (newErrors.price && priceRef.current) priceRef.current.focus();
+      else if (newErrors.images) alert("Please select at least one showcase image for the product.");
       return;
     }
 
@@ -104,10 +119,21 @@ const AddProduct = () => {
         body: formData,
       });
 
+      if (res.status === 413) {
+        throw new Error("Please upload image under 1MB.");
+      }
+
       const contentType = res.headers.get("content-type") || "";
-      const data = contentType.includes("application/json")
-        ? await res.json()
-        : { message: await res.text() };
+      let data = {};
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        if (text.includes("413") || text.includes("Request Entity Too Large") || text.includes("<html")) {
+          throw new Error("Please upload image under 1MB.");
+        }
+        data = { message: text };
+      }
       if (!res.ok) {
         throw new Error(data.message || "Failed to save product.");
       }
@@ -231,15 +257,16 @@ const AddProduct = () => {
 
             {/* Dropzone */}
             <div
-              className="dropzone-box multi-dropzone"
+              className={`dropzone-box multi-dropzone ${errors.images ? "input-error" : ""}`}
               onClick={() => document.getElementById("productImagesInput").click()}
             >
               <div className="dropzone-msg">
                 <FaCloudUploadAlt className="upload-icon-form" />
                 <span>Click to add images</span>
-                <span className="file-desc-lbl">PNG, JPG — select multiple at once</span>
+                <span className="file-desc-lbl">PNG, JPG — select multiple at once (Max 1MB per image)</span>
               </div>
             </div>
+            {errors.images && <span className="field-error-msg" style={{ display: 'block', marginTop: '6px' }}>{errors.images}</span>}
 
             <input
               type="file"

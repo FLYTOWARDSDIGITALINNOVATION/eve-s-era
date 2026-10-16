@@ -7,6 +7,7 @@ import './AuthPage.css';
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
 import logo from "../assets/logo1.png";
+import authHero from "../assets/auth_hero.jpg";
 
 const AuthPage = () => {
     const [name, setName] = useState("");
@@ -168,70 +169,70 @@ const AuthPage = () => {
                     display: 'flex', 
                     alignItems: 'center', 
                     gap: '10px', 
-                    color: '#fff', 
+                    color: '#222', 
                     textDecoration: 'none',
-                    background: 'rgba(0,0,0,0.3)',
+                    background: 'rgba(255, 255, 255, 0.88)',
                     padding: '10px 20px',
                     borderRadius: '30px',
                     backdropFilter: 'blur(10px)',
                     fontSize: '0.9rem',
                     fontWeight: '600',
-                    border: '1px solid rgba(255,255,255,0.1)'
+                    border: '1px solid rgba(0, 0, 0, 0.08)',
+                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)'
                 }}>
                     <FaArrowLeft /> Home
                 </Link>
             </motion.div>
 
             <div className="auth-content">
-                {/* Left Side: Branding */}
+                {/* Left Side: Full Hero Image & Branding Showcase */}
                 <motion.div
                     className="auth-branding"
                     initial="hidden"
                     animate="visible"
                     variants={brandingVariants}
                 >
-                    <motion.div variants={itemVariants} className="branding-group" style={{ display: 'flex', justifyContent: 'center' }}>
-                        <img src={logo} alt="Eve's Era Logo" style={{ height: '120px', width: 'auto', objectFit: 'contain' }} />
-                    </motion.div>
+                    <div className="auth-branding-text">
+                        <motion.div variants={itemVariants} className="branding-group">
+                            <img src={logo} alt="Eve's Era Logo" style={{ height: '140px', width: 'auto', objectFit: 'contain' }} />
+                        </motion.div>
 
-                    <motion.div variants={itemVariants} className="brand-badge" style={{
-                        background: 'rgba(255,255,255,0.1)',
-                        padding: '6px 16px',
-                        borderRadius: '20px',
-                        fontSize: '0.7rem',
-                        fontWeight: '700',
-                        letterSpacing: '0.2em',
-                        marginBottom: '30px',
-                        marginTop: '20px',
-                        width: 'fit-content',
-                        backdropFilter: 'blur(5px)',
-                        border: '1px solid rgba(255,255,255,0.1)'
-                    }}>
-                        ESTD. 2026
-                    </motion.div>
+                        <motion.div variants={itemVariants} className="brand-badge">
+                            ESTD. 2026
+                        </motion.div>
 
-                    <motion.h2 variants={itemVariants} className="brand-headline">
-                        Elevate Your <br /> <span className="highlight-text">Elegance</span>
-                    </motion.h2>
+                        <motion.h2 variants={itemVariants} className="brand-headline">
+                            Elevate Your <br /> <span className="highlight-text">Elegance</span>
+                        </motion.h2>
 
-                    <motion.p variants={itemVariants} className="brand-subtext">
-                        Discover Eve's Era collections designed for the modern woman.
-                    </motion.p>
+                        <motion.p variants={itemVariants} className="brand-subtext">
+                            Discover Eve's Era collections designed for the modern woman.
+                        </motion.p>
 
-                    <motion.div variants={itemVariants} className="brand-stats">
-                        <div className="stat-item">
-                            <h3>BOUTIQUE</h3>
-                            <p>Eves Era</p>
-                        </div>
-                        <div className="stat-item">
-                            <h3>STYLE</h3>
-                            <p>Eves Era</p>
-                        </div>
-                        <div className="stat-item">
-                            <h3>ATELIER</h3>
-                            <p>Crafted</p>
-                        </div>
-                    </motion.div>
+                        <motion.div variants={itemVariants} className="brand-stats">
+                            <div className="stat-item">
+                                <h3>BOUTIQUE</h3>
+                                <p>Eves Era</p>
+                            </div>
+                            <div className="stat-item">
+                                <h3>STYLE</h3>
+                                <p>Eves Era</p>
+                            </div>
+                            <div className="stat-item">
+                                <h3>ATELIER</h3>
+                                <p>Crafted</p>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    <div className="auth-branding-visual">
+                        <motion.img 
+                            variants={itemVariants}
+                            src={authHero} 
+                            alt="Eve's Era Fashion" 
+                            className="auth-hero-full-img" 
+                        />
+                    </div>
                 </motion.div>
 
                 {/* Right Side: Form */}
@@ -242,6 +243,10 @@ const AuthPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                     >
+                        <div className="auth-brand-header">
+                            <img src={logo} alt="Eve's Era Logo" className="auth-card-logo" />
+                        </div>
+
                         <div className="auth-tabs">
                             <button
                                 className={`auth-tab ${isLogin ? 'active' : ''}`}

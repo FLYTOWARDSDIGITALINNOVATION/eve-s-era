@@ -35,6 +35,11 @@ app.use("/uploads", express.static(uploadsDir, {
   etag: true,
   lastModified: true
 }));
+app.use("/api/uploads", express.static(uploadsDir, {
+  maxAge: '7d',
+  etag: true,
+  lastModified: true
+}));
 
 /* ================= MONGODB ================= */
 mongoose
@@ -180,10 +185,22 @@ const Support = mongoose.model("Support", supportSchema);
 /* ================= IMAGE UPLOAD ================= */
 const storage = multer.diskStorage({
   destination: uploadsDir,
-  filename: (req, file, cb) =>
-    cb(null, Date.now() + path.extname(file.originalname)),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname).toLowerCase());
+  },
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit per image
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype && file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image files (JPG, PNG, WEBP) are allowed!"), false);
+    }
+  },
+});
 
 /* Compress image after upload — resize to 900px wide, ~82% quality */
 const compressImage = async (filePath) => {
@@ -578,7 +595,13 @@ app.post("/admin/hero/:slideId", verifyAdmin, upload.single("image"), async (req
 app.delete("/admin/hero/:slideId", verifyAdmin, async (req, res) => {
   try {
     const slideId = Number(req.params.slideId);
-    await HeroSlide.findOneAndDelete({ slideId });
+    const slide = await HeroSlide.findOneAndDelete({ slideId });
+    if (slide && slide.img && slide.img.startsWith("/uploads/")) {
+      const fullPath = path.join(__dirname, slide.img);
+      if (fs.existsSync(fullPath)) {
+        try { fs.unlinkSync(fullPath); } catch (e) {}
+      }
+    }
     res.json({ message: "Slide removed" });
   } catch (err) {
     res.status(500).json({ message: "Failed to remove hero slide" });
@@ -648,6 +671,12 @@ app.delete("/admin/category/:id", verifyAdmin, async (req, res) => {
     if (!category) {
       return res.status(404).json({ message: "Category not found" });
     }
+    if (category.image && category.image.startsWith("/uploads/")) {
+      const fullPath = path.join(__dirname, category.image);
+      if (fs.existsSync(fullPath)) {
+        try { fs.unlinkSync(fullPath); } catch (e) {}
+      }
+    }
     res.json({ message: "Category deleted successfully", category });
   } catch (err) {
     console.error("Delete Category Error:", err);
@@ -705,7 +734,18 @@ app.post("/admin/product", verifyAdmin, productImageUpload, async (req, res) => 
 
 app.delete("/admin/product/:id", verifyAdmin, async (req, res) => {
   try {
-    await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (product) {
+      const allImgs = [...(product.images || []), product.image].filter(Boolean);
+      allImgs.forEach((imgPath) => {
+        if (typeof imgPath === "string" && imgPath.startsWith("/uploads/")) {
+          const fullPath = path.join(__dirname, imgPath);
+          if (fs.existsSync(fullPath)) {
+            try { fs.unlinkSync(fullPath); } catch (e) {}
+          }
+        }
+      });
+    }
     res.json({ message: "Product deleted" });
   } catch (err) {
     res.status(500).json({ message: "Failed to delete product" });
@@ -719,9 +759,31 @@ app.put("/admin/product/:id", verifyAdmin, productImageUpload, async (req, res) 
       ...(req.files?.images || []),
       ...(req.files?.image || []),
     ];
+    let finalImages = [];
+    if (req.body.existingImages) {
+      try {
+        const parsed = typeof req.body.existingImages === "string"
+          ? JSON.parse(req.body.existingImages)
+          : req.body.existingImages;
+        if (Array.isArray(parsed)) {
+          finalImages.push(...parsed);
+        }
+      } catch (e) {
+        if (typeof req.body.existingImages === "string" && req.body.existingImages.trim()) {
+          finalImages.push(req.body.existingImages.trim());
+        }
+      }
+    } else if (req.body.images && typeof req.body.images === "string" && req.body.images.startsWith("/uploads/")) {
+      finalImages.push(req.body.images);
+    }
+
     if (imageFiles.length > 0) {
       const imagePaths = imageFiles.map((file) => `/uploads/${file.filename}`);
-      data.images = [...new Set(imagePaths)];
+      finalImages.push(...imagePaths);
+    }
+
+    if (finalImages.length > 0) {
+      data.images = [...new Set(finalImages)];
       data.image = data.images[0];
     }
     if (data.sizes) {
@@ -988,5 +1050,16 @@ app.get("/support/history/:email", async (req, res) => {
   }
 });
 
-/* ================= SERVER ================= */
+/* ================= ERROR HANDLER ================= */
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res.status(400).json({ message: "Image size too large! Maximum allowed size is 10MB per image." });
+    }
+    return res.status(400).json({ message: `Upload error: ${err.message}` });
+  } else if (err) {
+    return res.status(400).json({ message: err.message || "An unexpected upload error occurred" });
+  }
+  next();
+});
 

@@ -53,6 +53,11 @@ const AddCategory = () => {
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (file.size > 1 * 1024 * 1024) {
+        showToast("Please upload image under 1MB.", "error");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
@@ -130,7 +135,22 @@ const AddCategory = () => {
         body: formData
       });
 
-      const data = await res.json();
+      if (res.status === 413) {
+        throw new Error("Please upload image under 1MB.");
+      }
+
+      const contentType = res.headers.get("content-type") || "";
+      let data = {};
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        if (text.includes("413") || text.includes("Request Entity Too Large") || text.includes("<html")) {
+          throw new Error("Please upload image under 1MB.");
+        }
+        data = { message: text };
+      }
+
       if (!res.ok) {
         throw new Error(data.message || "Failed to save category");
       }

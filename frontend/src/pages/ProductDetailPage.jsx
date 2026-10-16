@@ -217,7 +217,7 @@ const ProductDetailPage = () => {
                 transition: "opacity 0.35s ease-in-out",
               }}
               loading="eager"
-              fetchpriority="high"
+              fetchPriority="high"
               onError={(e) => {
                 setImageLoaded(true);
                 e.target.src = "https://placehold.co/600x800/ffe6e6/ff66b2?text=Eve%27s+Era";
