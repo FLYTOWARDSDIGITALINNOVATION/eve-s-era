@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import './Checkout.css';
 
 const Checkout = () => {
-  const { cart, clearCart } = useCart();
+  const { cart } = useCart();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -42,6 +42,33 @@ const Checkout = () => {
   const tax = subtotal * 0.08;
   const total = subtotal + tax + shippingCost;
 
+  // Customer Care number from the site's footer, in WhatsApp international format.
+  const whatsappNumber = '918883125228';
+
+  const getWhatsAppOrderMessage = (imageUrls = []) => {
+    const items = cart.map(item =>
+      `• ${item.name}${item.size ? ` (Size: ${item.size})` : ''} × ${item.qty} — ₹${(item.price * item.qty).toFixed(2)}`
+    ).join('\n');
+    const message = [
+      ...imageUrls.filter(Boolean),
+      ...(imageUrls.some(Boolean) ? [''] : []),
+      "Hello Eve's Era, I'd like to place this order:",
+      '',
+      `Name: ${shippingInfo.firstName} ${shippingInfo.lastName}`.trim(),
+      `Email: ${shippingInfo.email || 'Not provided'}`,
+      `Phone: ${shippingInfo.phone}`,
+      `Address: ${shippingInfo.address}`,
+      '',
+      'Items:',
+      items,
+      '',
+      `Shipping: ${selectedShipping} (₹${shippingCost.toFixed(2)})`,
+      `Payment: ${selectedPayment}`,
+      `Total (including 8% tax): ₹${total.toFixed(2)}`
+    ].join('\n');
+    return message;
+  };
+
   const handlePlaceOrder = async () => {
     if (!user) {
       navigate("/auth", { state: { from: "/checkout", isLogin: false } });
@@ -53,109 +80,32 @@ const Checkout = () => {
       return;
     }
 
-    const placeOrdersInDB = async () => {
+    const imageUrls = await Promise.all(cart.map(async item => {
+      const id = item.productId || item._id || item.id;
+      let image = '';
       try {
-        const orderPromises = cart.map(item =>
-          fetch(`${API_BASE_URL}/orders`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              productName: item.name,
-              productId: item._id || item.id,
-              quantity: item.qty,
-              price: item.price * item.qty,
-              size: item.size || "",
-              userEmail: user.email,
-              userName: user.name,
-              shippingAddress: shippingInfo,
-              shippingMethod: selectedShipping,
-              paymentMethod: selectedPayment,
-              shippingCost: shippingCost
-            })
-          })
-        );
-
-        await Promise.all(orderPromises);
-        if (clearCart) clearCart();
-        navigate('/order-success', { state: { purchasedItems: cart } });
-      } catch (error) {
-        console.error("Order failed:", error);
-        alert("Failed to place order. Please try again.");
-      }
-    };
-
-    if (selectedPayment === 'cod') {
-      await placeOrdersInDB();
-      return;
-    }
-
-    // Razorpay Integration
-    try {
-      // 1. Create Order on the Backend
-      const response = await fetch(`${API_BASE_URL}/create-razorpay-order`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: Math.round(total * 100) }),
-      });
-      
-      const data = await response.json();
-      
-      if (!data || !data.order) {
-        alert("Server error. Please try again.");
-        return;
-      }
-
-      // 2. Open Razorpay Checkout Modal
-      const options = {
-        key: data.key_id,
-        amount: data.order.amount,
-        currency: data.order.currency,
-        name: "Eve's Era",
-        description: "Test Transaction",
-        order_id: data.order.id,
-        handler: async function (response) {
-          try {
-            // 3. Verify Payment
-            const verifyRes = await fetch(`${API_BASE_URL}/verify-razorpay-payment`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              }),
-            });
-            const verifyData = await verifyRes.json();
-            
-            if (verifyRes.ok) {
-              await placeOrdersInDB();
-            } else {
-              alert(verifyData.message || "Payment verification failed.");
-            }
-          } catch (error) {
-            console.error(error);
-            alert("Payment verification failed.");
+        if (id) {
+          const response = await fetch(`${API_BASE_URL}/products/${id}`);
+          if (response.ok) {
+            const product = await response.json();
+            image = product.image || product.images?.[0] || '';
           }
-        },
-        prefill: {
-          name: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
-          email: shippingInfo.email,
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
+        }
+        image ||= item.image || item.img || '';
+      } catch {
+        image = item.image || item.img || '';
+      }
+      if (!image) return '';
+      if (image.startsWith('http')) return image;
+      const publicApiBase = /localhost|127\.0\.0\.1/.test(API_BASE_URL)
+        ? 'https://eveseraclothing.com/api'
+        : API_BASE_URL;
+      return `${publicApiBase}${image.startsWith('/') ? image : `/${image}`}`;
+    }));
 
-      const rzp1 = new window.Razorpay(options);
-      rzp1.on("payment.failed", function (response) {
-        alert("Payment Failed. Reason: " + response.error.description);
-      });
-      rzp1.open();
-
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong!");
-    }
+    const message = getWhatsAppOrderMessage(imageUrls);
+    // Open the original WhatsApp order text directly.
+    window.location.assign(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`);
   };
 
   return (
@@ -447,7 +397,7 @@ const Checkout = () => {
 
               <button className="place-order-btn" onClick={handlePlaceOrder}>
                 <Lock size={16} />
-                {selectedPayment === 'cod' ? 'Confirm Order' : 'Place Order'}
+                Continue on WhatsApp
               </button>
             </div>
           </aside>
