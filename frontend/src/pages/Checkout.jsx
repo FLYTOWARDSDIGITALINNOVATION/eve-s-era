@@ -43,7 +43,7 @@ const Checkout = () => {
   const total = subtotal + tax + shippingCost;
 
   // Customer Care number from the site's footer, in WhatsApp international format.
-  const whatsappNumber = '918883125228';
+  const whatsappNumber = '9163742 26455';
 
   const getWhatsAppOrderMessage = (imageUrls = []) => {
     const items = cart.map(item =>
