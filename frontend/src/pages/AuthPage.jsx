@@ -284,7 +284,6 @@ const AuthPage = () => {
                                                 <FaEnvelope className="input-icon" />
                                                 <input
                                                     type="email"
-                                                    placeholder="name@company.com"
                                                     value={email}
                                                     onChange={(e) => setEmail(e.target.value)}
                                                     required
@@ -381,7 +380,6 @@ const AuthPage = () => {
                                                 <FaUser className="input-icon" />
                                                 <input
                                                     type="text"
-                                                    placeholder="John Doe"
                                                     value={name}
                                                     onChange={(e) => setName(e.target.value)}
                                                     required
@@ -395,7 +393,6 @@ const AuthPage = () => {
                                                 <FaEnvelope className="input-icon" />
                                                 <input 
                                                     type="email" 
-                                                    placeholder="name@company.com" 
                                                     value={email} 
                                                     onChange={(e) => setEmail(e.target.value)}
                                                     required

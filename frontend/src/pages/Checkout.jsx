@@ -136,7 +136,6 @@ const Checkout = () => {
                   <input
                     type="text"
                     name="firstName"
-                    placeholder="John"
                     value={shippingInfo.firstName}
                     onChange={handleShippingChange}
                     required
@@ -147,7 +146,6 @@ const Checkout = () => {
                   <input
                     type="text"
                     name="lastName"
-                    placeholder="Doe"
                     value={shippingInfo.lastName}
                     onChange={handleShippingChange}
                   />
@@ -157,7 +155,6 @@ const Checkout = () => {
                   <input
                     type="email"
                     name="email"
-                    placeholder="john@example.com"
                     value={shippingInfo.email}
                     onChange={handleShippingChange}
                     required
@@ -168,7 +165,6 @@ const Checkout = () => {
                   <input
                     type="text"
                     name="address"
-                    placeholder="123 Main Street, City, State - PIN"
                     value={shippingInfo.address}
                     onChange={handleShippingChange}
                     required
@@ -179,7 +175,6 @@ const Checkout = () => {
                   <input
                     type="tel"
                     name="phone"
-                    placeholder="+91 98765 43210"
                     value={shippingInfo.phone}
                     onChange={handleShippingChange}
                     required
