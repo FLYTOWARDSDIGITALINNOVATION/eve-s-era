@@ -1,0 +1,31 @@
+.collections { width: 100%; padding: 82px 4.5% 76px; background: #ffffff; overflow: hidden; }
+.collections-top { display: flex; align-items: end; justify-content: center; margin-bottom: 38px; }
+.collections-heading { text-align: center; }
+.section-kicker { margin: 0 0 10px; color: #c48b9f; font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; }
+.collections h2 { margin: 0; font-family: 'DM Sans', sans-serif; font-size: clamp(30px, 4vw, 46px); font-weight: 400; letter-spacing: -.035em; }
+.carousel-stage { position: relative; width: 100%; }
+.carousel-viewport { overflow: hidden; width: 100%; }
+.carousel-track { display: flex; width: 100%; transition: transform .65s cubic-bezier(.22,.61,.36,1); }
+.category-page { display: grid; flex: 0 0 100%; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(12px, 2vw, 30px); padding: 0 25px 8px; }
+.carousel-arrow { position: absolute; z-index: 2; top: 40%; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #c9bdb2; border-radius: 50%; background: #ffffff; color: #39332e; cursor: pointer; transition: background .2s, color .2s, border-color .2s, transform .2s; }
+.carousel-arrow:hover { background: #292520; color: #fff; border-color: #292520; transform: scale(1.06); }
+.carousel-arrow-left { left: 0; }
+.carousel-arrow-right { right: 0; }
+.category-card { min-width: 0; text-align: center; }
+.category-image-wrap { width: 100%; aspect-ratio: .68; overflow: hidden; border-radius: 50% / 39%; background: #e7ded4; }
+.category-image-wrap img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform .45s ease; }
+.category-card:hover .category-image-wrap img { transform: scale(1.055); }
+.category-card > span { display: block; padding-top: 14px; color: #39332e; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
+@media (max-width: 760px) {
+  .collections { padding: 60px 20px 54px; }
+  .collections-top { align-items: center; margin-bottom: 26px; }
+  .category-page { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; padding: 0 28px 8px; }
+  .category-image-wrap { aspect-ratio: .82; }
+  .carousel-arrow { width: 36px; height: 36px; top: 30%; }
+  .category-card > span { font-size: 10px; padding-top: 11px; }
+}
+@media (max-width: 380px) {
+  .collections { padding-right: 12px; padding-left: 12px; }
+  .category-page { column-gap: 8px; padding-right: 24px; padding-left: 24px; }
+  .carousel-arrow { width: 32px; height: 32px; }
+}

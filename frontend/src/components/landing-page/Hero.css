@@ -1,0 +1,22 @@
+.hero { position: relative; min-height: 100svh; height: 100svh; max-height: none; overflow: hidden; background: #f1dfd5; }
+.hero-image { position: absolute; inset: 0; background-image: url('/assets/Elegant Maroon Embroidered Ethnic Ensemble.png'); background-size: 105% auto; background-position: left 2%; background-repeat: no-repeat; }
+.image-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(246,242,235,.96) 0%, rgba(246,242,235,.9) 28%, rgba(246,242,235,.54) 47%, rgba(246,242,235,.08) 70%, transparent 100%); }
+.hero-copy { position: absolute; z-index: 1; top: 50%; left: 8.2%; transform: translateY(-48%); width: min(450px, 43%); }
+.hero h1 { font-family: 'DM Sans', sans-serif; font-size: clamp(54px, 6.3vw, 88px); font-weight: 400; letter-spacing: -.055em; line-height: .99; margin: 0; }
+.hero h1 em { font-weight: 400; color: #c48b9f; }
+.copy-rule { width: 42px; height: 1px; background: #9e9589; margin: 29px 0 21px; }
+.intro { max-width: 380px; margin: 0; color: #5d5750; font-size: 13px; line-height: 1.9; letter-spacing: .005em; }
+.cta { display: inline-flex; align-items: center; gap: 28px; margin-top: 28px; padding: 12px 13px 12px 16px; border: 1px solid #554f48; font-size: 10px; letter-spacing: .13em; text-transform: uppercase; transition: background .2s, color .2s; }
+.cta span { display: grid; place-items: center; }
+.cta:hover { background: #292520; color: #fff; }
+@media (max-width: 760px) {
+  .hero { min-height: 100svh; height: 100svh; max-height: none; }
+  .hero-image { background-size: cover; background-position: 58% 2%; }
+  .image-shade { background: linear-gradient(0deg, rgba(246,242,235,.96) 0%, rgba(246,242,235,.9) 38%, rgba(246,242,235,.5) 65%, rgba(246,242,235,.04) 100%); }
+  .hero-copy { top: auto; bottom: 11%; left: 8%; transform: none; width: 82%; }
+  .hero h1 { font-size: clamp(54px, 15vw, 78px); }
+  .copy-rule { margin: 22px 0 15px; }
+  .intro { max-width: 460px; font-size: 12px; line-height: 1.75; }
+  .cta { margin-top: 20px; }
+}
+@media (max-width: 390px) { .hero { min-height: 660px; } .hero-copy { bottom: 9%; } .intro { font-size: 11px; } }

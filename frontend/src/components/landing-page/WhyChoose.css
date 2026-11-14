@@ -1,0 +1,17 @@
+.why-choose { display: grid; grid-template-columns: .9fr 1.1fr; align-items: stretch; width: 100%; min-height: 510px; margin: 0 0 86px; background: #f7e9e5; }
+.why-choose-kicker { grid-column: 2; display: flex; justify-content: center; align-items: center; gap: 16px; min-height: 90px; margin: 0; color: #a6465b; font-size: 15px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; }
+.why-choose-kicker::before, .why-choose-kicker::after { content: ''; width: 42px; height: 1px; background: #c76878; }
+.why-choose-image { grid-column: 1; grid-row: 1 / span 2; min-height: 510px; background: #ead6d0 url('/assets/Embroidered Brown Ethnic Ensemble.png') center top / cover no-repeat; }
+.why-choose-copy { grid-column: 2; display: flex; flex-direction: column; justify-content: center; padding: clamp(40px, 7vw, 100px); }
+.why-choose-copy h2 { max-width: 620px; margin: 0; font-family: 'DM Sans', sans-serif; font-size: clamp(36px, 4.6vw, 58px); font-weight: 400; letter-spacing: -.04em; line-height: 1.08; }
+.why-choose-copy h2 em { color: #a6465b; font-weight: 400; }
+.why-choose-rule { width: 48px; height: 2px; margin: 25px 0 20px; background: #c76878; }
+.why-choose-copy > p:last-child { max-width: 650px; margin: 0; color: #5e514e; font-size: 14px; line-height: 1.9; }
+@media (max-width: 760px) {
+  .why-choose { grid-template-columns: 1fr; margin: 0 0 58px; }
+  .why-choose-kicker { grid-column: auto; min-height: 72px; font-size: 13px; }
+  .why-choose-image { grid-column: auto; grid-row: auto; min-height: 340px; background-position: center top; }
+  .why-choose-copy { grid-column: auto; padding: 36px 26px 42px; }
+  .why-choose-copy h2 { font-size: 38px; }
+  .why-choose-copy > p:last-child { font-size: 13px; line-height: 1.8; }
+}

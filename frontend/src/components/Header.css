@@ -1,12 +1,10 @@
 .sh-header {
-  background: var(--white);
+  background: linear-gradient(135deg, var(--secondary-pink), var(--accent-color));
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
   box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  position: static;
   border-bottom: 1px solid rgba(244, 182, 194, 0.2);
 }
 
@@ -129,6 +127,15 @@
   text-decoration: none;
 }
 
+.logo-mark {
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.logo-brand:hover .logo-mark {
+  transform: scale(1.06);
+  box-shadow: 0 5px 16px rgba(111, 35, 66, 0.2) !important;
+}
+
 .logo-icon-pink {
   font-size: 28px;
   animation: pulse 2s infinite ease-in-out;
@@ -200,25 +207,66 @@
   margin-top: 8px;
 }
 
+.header-search-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header-search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #8f3155;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.header-search-icon:hover {
+  color: #6f2342;
+  transform: translateY(-2px);
+}
+
+.header-search-popover {
+  position: absolute;
+  z-index: 1100;
+  top: 50%;
+  right: calc(100% + 12px);
+  left: auto;
+  width: min(420px, 72vw);
+  transform: translateY(-50%);
+}
+
+.header-search-popover .search-bar {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  box-shadow: 0 8px 24px rgba(55, 24, 37, 0.18);
+}
+
 .icon-link {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-decoration: none;
-  color: var(--text-color);
+  color: #3b2630;
   gap: 2px;
   position: relative;
 }
 
 .icon-link svg {
   font-size: 20px;
-  color: var(--accent-color);
+  color: #8f3155;
   transition: var(--transition);
 }
 
 .icon-subtext {
   font-size: 10px;
-  color: #888888;
+  color: #573943;
   font-family: var(--font-accent);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -226,11 +274,11 @@
 
 .icon-link:hover svg {
   transform: translateY(-2px);
-  color: var(--secondary-pink);
+  color: #6f2342;
 }
 
 .icon-link:hover .icon-subtext {
-  color: var(--text-color);
+  color: #2f1d25;
 }
 
 .cart-badge {
@@ -326,8 +374,8 @@
 
 /* Categories Ribbon & Segments */
 .categories-bar {
-  border-top: 1px solid rgba(244, 182, 194, 0.15);
-  background: var(--white);
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  background: transparent;
   width: 100%;
   max-width: 100%;
 }
@@ -481,6 +529,7 @@
     max-width: 100%;
     box-sizing: border-box;
   }
+
   
   .nav-content {
     display: none;
