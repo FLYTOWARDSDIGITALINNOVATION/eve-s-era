@@ -1,16 +1,13 @@
-<<<<<<< HEAD
 import API_BASE_URL from '../api';
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-=======
->>>>>>> 6b1186ee8f99a9e8f76bdb1594b216da6a8d7091
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-<<<<<<< HEAD
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import logo from "../assets/logo1.png";
 import brownThreePieceSet from "../assets/mul-chanderi-brown-three-pcs-set.png";
 import "./HomePage.css";
+import Hero from "../components/landing-page/Hero";
 
 const favourites = [
   {
@@ -349,27 +346,5 @@ const HomePage = () => {
     </div>
   );
 };
-=======
-import Hero from "../components/landing-page/Hero";
-import Collections from "../components/landing-page/Collections";
-import CustomerFavourites from "../components/landing-page/CustomerFavourites";
-import WhyChoose from "../components/landing-page/WhyChoose";
-import FinalCallToAction from "../components/landing-page/FinalCallToAction";
-import "./HomePage.css";
-
-const HomePage = () => (
-  <div className="homepage landing-homepage">
-    <Header />
-    <main className="landing-content">
-      <Hero />
-      <Collections />
-      <CustomerFavourites />
-      <WhyChoose />
-      <FinalCallToAction />
-    </main>
-    <Footer />
-  </div>
-);
->>>>>>> 6b1186ee8f99a9e8f76bdb1594b216da6a8d7091
 
 export default HomePage;

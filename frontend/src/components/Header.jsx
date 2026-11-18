@@ -20,10 +20,7 @@ const Header = ({ onSearch }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
-<<<<<<< HEAD
   const displayName = user?.name || user?.fullName || user?.email?.split("@")[0] || "there";
-=======
->>>>>>> 6b1186ee8f99a9e8f76bdb1594b216da6a8d7091
 
   const { wishlist } = useWishlist();
   const { cart } = useCart();
