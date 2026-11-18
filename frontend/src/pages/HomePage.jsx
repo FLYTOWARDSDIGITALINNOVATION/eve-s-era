@@ -1,20 +1,116 @@
 import API_BASE_URL from '../api';
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
-import BoutiqueCarousel from "../components/BoutiqueCarousel";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import logo from "../assets/logo1.png";
+import brownThreePieceSet from "../assets/mul-chanderi-brown-three-pcs-set.png";
 import "./HomePage.css";
+
+const favourites = [
+  {
+    name: "Mul Chanderi Brush Paint Three Pcs Set",
+    image: "/assets/Vibrant Pink Floral Salwar Kameez.png",
+    href: "/product/6af71b90220380e3f092c2c8",
+    price: "₹1,750",
+  },
+  {
+    name: "Mul Chanderi Three Pcs Set",
+    image: "/assets/Elegant Maroon Embroidered Ethnic Ensemble.png",
+    href: "/product/6af71a40220380e3f092c2aa",
+    price: "₹2,350",
+  },
+  {
+    name: "Aari Emblished Three Pcs Set",
+    image: "/assets/Elegant Lavender Anarkali Portrait.png",
+    href: "/product/6af719f2220380e3f092c29e",
+    price: "₹1,450",
+  },
+  {
+    name: "Mul Chanderi Three Pcs Set",
+    image: brownThreePieceSet,
+    href: "/product/6af71b43220380e3f092c2bc",
+    price: "₹2,150",
+  },
+];
+
+const moreFavourites = [
+  {
+    name: "Mul Chanderi Three Pcs Set",
+    image: "/assets/Vibrant Pink Indian Traditional Ensemble.png",
+    href: "/product/6af719c1220380e3f092c298",
+    price: "₹1,200",
+  },
+  {
+    name: "Mul Chanderi Three Pcs Set",
+    image: "/assets/Embroidered Kurta with Patterned Dupatta.png",
+    href: "/product/6af71996220380e3f092c292",
+    price: "₹1,200",
+  },
+  {
+    name: "Mul Chanderi Three Pcs Set",
+    image: "/assets/Elegant Pink Kurti Portrait.png",
+    href: "/product/6af71af6220380e3f092c2b0",
+    price: "₹1,200",
+  },
+  {
+    name: "Mul Chanderi Three Pcs Set",
+    image: "/assets/Teal Embroidered Salwar Kameez Portrait.png",
+    href: "/product/6af71b1c22038e3f092c2b6",
+    price: "₹1,200",
+  },
+];
+
+const CategoryShowcaseImage = ({ imageUrl, fallbackImageUrl, name, logo }) => {
+  const [source, setSource] = useState(imageUrl || fallbackImageUrl || "");
+
+  useEffect(() => {
+    setSource(imageUrl || fallbackImageUrl || "");
+  }, [imageUrl, fallbackImageUrl]);
+
+  if (!source) {
+    return (
+      <div className="cat-card-no-image">
+        <div className="cat-placeholder-logo-box">
+          <img src={logo} alt="Eve's Era" className="cat-placeholder-logo" />
+        </div>
+        <span className="cat-placeholder-text">Eve's Era</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={source}
+      alt={name}
+      className="cat-card-image"
+      loading="lazy"
+      onError={() => {
+        if (source !== fallbackImageUrl && fallbackImageUrl) setSource(fallbackImageUrl);
+        else setSource("");
+      }}
+    />
+  );
+};
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const categoriesSliderRef = useRef(null);
+
+  const slideCategories = (direction) => {
+    if (!categoriesSliderRef.current) return;
+    categoriesSliderRef.current.scrollBy({
+      left: direction * categoriesSliderRef.current.clientWidth,
+      behavior: "smooth"
+    });
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -39,6 +135,13 @@ const HomePage = () => {
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (location.hash !== "#collections") return;
+    requestAnimationFrame(() => {
+      document.getElementById("collections")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [location.key, location.hash]);
 
   const getCategoryDetails = (cat) => {
     const catName = typeof cat === "string" ? cat : (cat?.name || "");
@@ -66,9 +169,19 @@ const HomePage = () => {
       }
     }
 
+    let fallbackImageUrl = "";
+    if (catProducts.length > 0) {
+      const firstProd = catProducts.find((item) => (item.images?.[0] || item.image));
+      const prodImg = firstProd && ((firstProd.images && firstProd.images[0]) || firstProd.image);
+      if (prodImg && typeof prodImg === "string" && prodImg.trim()) {
+        fallbackImageUrl = prodImg.startsWith("http") ? prodImg : `${API_BASE_URL}${prodImg}`;
+      }
+    }
+
     return {
       count: catProducts.length,
-      imageUrl
+      imageUrl,
+      fallbackImageUrl: imageUrl === fallbackImageUrl ? "" : fallbackImageUrl,
     };
   };
 
@@ -83,15 +196,12 @@ const HomePage = () => {
       <Hero />
 
       {/* Categories Showcase Section — Exclusively Categories on HomePage */}
-      <section className="categories-showcase-section container">
+      <section id="collections" className="categories-showcase-section container">
         <div className="categories-showcase-header">
-          <span className="badge-new">✨ EXCLUSIVE COLLECTIONS</span>
+          <span className="categories-eyebrow">EXPLORE OUR COLLECTIONS</span>
           <h2 className="categories-showcase-title">
-            Shop By <span className="highlight-text">Category</span>
+            Find Your Favourite Styles
           </h2>
-          <p className="categories-showcase-subtitle">
-            Explore our boutique couture, designer sarees, co-ord sets, and curated feminine silhouettes.
-          </p>
 
           {searchTerm && (
             <div className="search-status-bar">
@@ -121,7 +231,18 @@ const HomePage = () => {
             )}
           </div>
         ) : (
-          <div className="categories-showcase-grid animate-fade-in">
+          <div className="categories-carousel">
+            {displayedCategories.length > 4 && (
+              <div className="categories-slider-controls">
+                <button type="button" onClick={() => slideCategories(-1)} aria-label="Previous collections">
+                  <FaArrowLeft />
+                </button>
+                <button type="button" onClick={() => slideCategories(1)} aria-label="Next collections">
+                  <FaArrowRight />
+                </button>
+              </div>
+            )}
+            <div className="categories-showcase-grid animate-fade-in" ref={categoriesSliderRef}>
             {displayedCategories.map((cat) => {
               const details = getCategoryDetails(cat);
               return (
@@ -131,24 +252,13 @@ const HomePage = () => {
                   onClick={() => navigate(`/category/${encodeURIComponent(cat.name)}`)}
                 >
                   <div className="cat-card-image-wrap">
-                    {details.imageUrl ? (
-                      <>
-                        <img
-                          src={details.imageUrl}
-                          alt={cat.name}
-                          className="cat-card-image"
-                          loading="lazy"
-                        />
-                        <div className="cat-card-overlay"></div>
-                      </>
-                    ) : (
-                      <div className="cat-card-no-image">
-                        <div className="cat-placeholder-logo-box">
-                          <img src={logo} alt="Eve's Era" className="cat-placeholder-logo" />
-                        </div>
-                        <span className="cat-placeholder-text">Eve's Era</span>
-                      </div>
-                    )}
+                    <CategoryShowcaseImage
+                      imageUrl={details.imageUrl}
+                      fallbackImageUrl={details.fallbackImageUrl}
+                      name={cat.name}
+                      logo={logo}
+                    />
+                    <div className="cat-card-overlay"></div>
                     <div className="cat-card-badge">
                       <span>{details.count > 0 ? `${details.count} Designs` : "Boutique Fit"}</span>
                     </div>
@@ -163,11 +273,75 @@ const HomePage = () => {
                 </div>
               );
             })}
+            </div>
           </div>
         )}
       </section>
 
-      <BoutiqueCarousel />
+      <section className="home-favourites-section" aria-labelledby="favourites-title">
+        <div className="home-favourites-heading">
+          <span className="home-favourites-eyebrow">CUSTOMER FAVOURITES</span>
+          <h2 id="favourites-title">Styles You’ll Love to Wear</h2>
+          <p>
+            Explore our bestselling collection and find beautiful outfits that match your style.
+            <br />Your next favourite look might be waiting here!
+          </p>
+        </div>
+        <div className="home-favourites-grid">
+          {[...favourites, ...moreFavourites].map((product) => (
+            <Link className="home-favourite-card" key={product.href} to={product.href}>
+              <img src={product.image} alt={product.name} loading="lazy" />
+              <h3>{product.name}</h3>
+              <span className="home-favourite-rating" aria-label="Customer favourite">★★★★★</span>
+              <span className="home-favourite-price">{product.price}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* <BoutiqueCarousel /> */}
+      <section className="why-choose-section">
+        <div className="why-choose-eyebrow">
+          <span></span>
+          <h2>WHY CHOOSE EVES_ERA</h2>
+          <span></span>
+        </div>
+        <div className="why-choose-content">
+          <div className="why-choose-image-wrap">
+            <img
+              src="/assets/Teal Kurta Fashion Portrait with Potted Plant.png"
+              alt="Model wearing an elegant teal kurta from Eve's Era"
+              className="why-choose-image"
+              loading="lazy"
+            />
+          </div>
+          <div className="why-choose-copy">
+            <h3>Find Clothes That<br />Feel <span>Right for You</span></h3>
+            <div className="why-choose-rule"></div>
+            <p>
+              Shopping for clothes is more than just picking an outfit. It's about finding colours, designs and styles that you enjoy wearing. At Eve-S-Era, you can explore a range of women's clothing for everyday outings, casual days and special occasions. Take your time, discover new looks and choose outfits that suit your taste and make you feel comfortable. Whatever your style, there's always something new to explore at Eve-S-Era.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section className="home-cta-section">
+        <div className="home-cta-copy">
+          <span className="home-cta-brand">Eve-S-Era</span>
+          <h2>Ready to Find Your<br />Next Favourite Outfit?</h2>
+          <p>Find your style and love every look with Eve-S-Era!</p>
+          <a className="home-cta-button" href="#collections">
+            Shop Your Style <FaArrowRight aria-hidden="true" />
+          </a>
+        </div>
+        <div className="home-cta-image-wrap">
+          <img
+            src="/assets/Elegant Lavender Anarkali Portrait.png"
+            alt="Model wearing a lavender outfit from Eve's Era"
+            className="home-cta-image"
+            loading="lazy"
+          />
+        </div>
+      </section>
       <Footer />
     </div>
   );

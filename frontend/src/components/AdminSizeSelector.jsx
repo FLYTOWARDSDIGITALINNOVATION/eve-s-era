@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { FaCheck, FaTimes, FaPlus } from "react-icons/fa";
 import "./AdminSizeSelector.css";
 
-const STANDARD_SIZES = ["S", "M", "L", "XL", "XXL"];
-const EXCLUDED_SIZES = new Set(["XS", "3XL", "FREE SIZE", "FREESIZE"]);
+const STANDARD_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "XXXL", "4XL", "5XL"];
 
 const AdminSizeSelector = ({ value = "", onChange }) => {
   const [customSize, setCustomSize] = useState("");
 
-  // Parse incoming value into an array of clean size strings, excluding XS, 3XL, Free Size
+  // Parse incoming value into an array of clean size strings.
   const parseSizes = (val) => {
     if (!val) return [];
     let list = [];
@@ -17,7 +16,7 @@ const AdminSizeSelector = ({ value = "", onChange }) => {
     } else if (typeof val === "string") {
       list = val.split(",").map(s => s.trim()).filter(Boolean);
     }
-    return list.filter(s => !EXCLUDED_SIZES.has(s.toUpperCase()));
+    return list;
   };
 
   const selectedSizes = parseSizes(value);
@@ -52,13 +51,13 @@ const AdminSizeSelector = ({ value = "", onChange }) => {
   const handleAddCustom = (e) => {
     if (e) e.preventDefault();
     const trimmed = customSize.trim().toUpperCase();
-    if (trimmed && !EXCLUDED_SIZES.has(trimmed) && !selectedSizes.includes(trimmed)) {
+    if (trimmed && !selectedSizes.includes(trimmed)) {
       updateSizes([...selectedSizes, trimmed]);
       setCustomSize("");
     }
   };
 
-  // Select all standard S - XXL
+  // Select all standard sizes.
   const handleSelectAllStandard = () => {
     const merged = Array.from(new Set([...selectedSizes, ...STANDARD_SIZES]));
     updateSizes(merged);
@@ -72,15 +71,15 @@ const AdminSizeSelector = ({ value = "", onChange }) => {
   return (
     <div className="admin-size-selector-wrap">
       <div className="admin-size-header-row">
-        <span className="admin-size-lbl">Available Sizes (S, M, L, XL, XXL)</span>
+        <span className="admin-size-lbl">Available Sizes ({STANDARD_SIZES.join(", ")})</span>
         <div className="admin-size-presets">
           <button
             type="button"
             className="preset-btn"
             onClick={handleSelectAllStandard}
-            title="Select all standard sizes S to XXL"
+            title="Select all standard sizes"
           >
-            ✓ All S – XXL
+            ✓ All Sizes
           </button>
           <button
             type="button"
@@ -93,7 +92,7 @@ const AdminSizeSelector = ({ value = "", onChange }) => {
         </div>
       </div>
 
-      {/* Quick Toggle Buttons strictly for S, M, L, XL, XXL */}
+      {/* Quick toggle buttons for standard apparel sizes */}
       <div className="admin-size-pills-row">
         {STANDARD_SIZES.map((size) => {
           const isSelected = selectedSizes.includes(size);
@@ -119,7 +118,7 @@ const AdminSizeSelector = ({ value = "", onChange }) => {
           defaultValue=""
         >
           <option value="" disabled>
-            ➕ Pick size from dropdown (S – XXL)...
+            ➕ Pick size from dropdown...
           </option>
           {STANDARD_SIZES.map((size) => (
             <option
@@ -175,7 +174,7 @@ const AdminSizeSelector = ({ value = "", onChange }) => {
           ))
         ) : (
           <span className="no-sizes-hint">
-            No sizes chosen yet. Click S, M, L, XL, XXL above to enable them.
+          No sizes chosen yet. Select sizes above to enable them.
           </span>
         )}
       </div>

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-    FaInstagram, FaPhoneAlt, 
-    FaMapMarkerAlt, FaChevronUp,
-    FaCcVisa, FaCcMastercard, FaCcApplePay, FaPaypal
+    FaInstagram, FaYoutube, FaWhatsapp, FaPhoneAlt, 
+    FaChevronUp
 } from 'react-icons/fa';
-import { SiGooglepay } from 'react-icons/si';
 import logo from "../assets/logo1.png";
 import './Footer.css';
 import API_BASE_URL from '../api';
@@ -61,19 +59,37 @@ const Footer = () => {
                             Crafting timeless luxury and sustainable couture. Discover Eve's Era collections designed for the modern woman.
                         </p>
 
-                        {/* Instagram Icon with ID next to it */}
+                        {/* Social links */}
                         <div className="brand-social-wrapper">
                             <a 
                                 href="https://www.instagram.com/eves__era?igsh=MWY4OXg4a291aGJkcA==" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                className="instagram-handle-badge"
-                                title="Instagram: eves__era"
+                                className="social-icon instagram"
+                                title="Instagram"
+                                aria-label="Visit Eve's Era on Instagram"
                             >
-                                <span className="social-icon instagram">
-                                    <FaInstagram />
-                                </span>
-                                <span className="instagram-id-text">eves__era</span>
+                                <FaInstagram />
+                            </a>
+                            <a
+                                href="https://youtube.com/@evesera1?si=t3019ixM1gYFLzHE"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="social-icon youtube"
+                                title="YouTube"
+                                aria-label="Visit Eve's Era on YouTube"
+                            >
+                                <FaYoutube />
+                            </a>
+                            <a
+                                href="https://wa.me/916374226455"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="social-icon whatsapp"
+                                title="WhatsApp"
+                                aria-label="Message Eve's Era on WhatsApp"
+                            >
+                                <FaWhatsapp />
                             </a>
                         </div>
                     </div>
@@ -108,7 +124,6 @@ const Footer = () => {
                         <h4 className="footer-heading">Support</h4>
                         <ul className="footer-list">
                             <li><Link to="/customer-service">Contact Us</Link></li>
-                            <li><Link to="/customer-service">Help & FAQs</Link></li>
                         </ul>
                         <div className="footer-contact-info">
                             <span className="contact-subtitle">Customer Care</span>
@@ -128,24 +143,11 @@ const Footer = () => {
                         <div className="legal-links">
                             <Link to="/privacy">Privacy</Link>
                             <Link to="/terms">Terms</Link>
-                            <Link to="/cookies">Cookies</Link>
                         </div>
                     </div>
                     
-                    <div className="payment-methods">
-                        <FaCcVisa title="Visa" />
-                        <FaCcMastercard title="Mastercard" />
-                        <SiGooglepay title="Google Pay" />
-                        <FaCcApplePay title="Apple Pay" />
-                        <FaPaypal title="PayPal" />
-                    </div>
                 </div>
 
-                {/* Footer Last - Address */}
-                <div className="footer-address">
-                    <FaMapMarkerAlt />
-                    <span>205 c Gnanagiri road, Near Anso Sports Academy, Sivakasi - 626123</span>
-                </div>
             </div>
 
             {/* Back to Top Button */}

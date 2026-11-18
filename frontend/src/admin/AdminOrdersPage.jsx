@@ -103,7 +103,7 @@ const AdminOrdersPage = () => {
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
             body {
-              font-family: 'Outfit', sans-serif;
+              font-family: var(--font-family, 'Poppins'), sans-serif;
               color: #333;
               margin: 0;
               padding: 20px;

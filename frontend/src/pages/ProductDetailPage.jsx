@@ -1,6 +1,6 @@
 import API_BASE_URL from '../api';
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { FaStar, FaShoppingCart, FaArrowLeft, FaGem, FaLeaf } from "react-icons/fa";
@@ -10,6 +10,7 @@ import "./ProductDetailPage.css";
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
@@ -41,6 +42,10 @@ const ProductDetailPage = () => {
       })
       .then((data) => {
         setProduct(data);
+        const availableStock = Number(data.stock);
+        if (Number.isFinite(availableStock)) {
+          setQuantity((currentQuantity) => Math.min(currentQuantity, Math.max(1, availableStock)));
+        }
         setSelectedImageIndex(0);
         let parsedSizes = [];
         if (Array.isArray(data.sizes)) {
@@ -128,7 +133,7 @@ const ProductDetailPage = () => {
   };
 
   const handleAddToCart = () => {
-    if (product) {
+    if (product && quantity <= Number(product.stock ?? Infinity) && Number(product.stock ?? 0) > 0) {
       addToCart({
         ...product,
         qty: quantity,
@@ -139,7 +144,7 @@ const ProductDetailPage = () => {
   };
 
   const handleBuyNow = () => {
-    if (product) {
+    if (product && quantity <= Number(product.stock ?? Infinity) && Number(product.stock ?? 0) > 0) {
       addToCart({
         ...product,
         qty: quantity,
@@ -178,6 +183,10 @@ const ProductDetailPage = () => {
     );
   }
 
+  const stockValue = Number(product.stock);
+  const availableStock = Number.isFinite(stockValue) ? Math.max(0, stockValue) : Infinity;
+  const isOutOfStock = availableStock === 0;
+
   const isManufactured = product.businessModel === "manufactured";
   const rawSizes = Array.isArray(product.sizes)
     ? product.sizes.flatMap(s => typeof s === "string" ? s.split(",") : s)
@@ -188,6 +197,13 @@ const ProductDetailPage = () => {
     .filter(s => !["XS", "3XL", "FREE SIZE", "FREESIZE"].includes(s.toUpperCase()));
   const productImages = product.images && product.images.length > 0 ? product.images : (product.image ? [product.image] : []);
   const displayImage = productImages[selectedImageIndex] || product.image;
+  const productCategory = Array.isArray(product.category)
+    ? product.category[0]
+    : product.category;
+  const collectionReturnTo = location.state?.returnTo
+    || (productCategory
+      ? `/category/${encodeURIComponent(productCategory)}`
+      : "/home#collections");
 
   return (
     <div className="product-detail-page animate-fade-in">
@@ -195,7 +211,7 @@ const ProductDetailPage = () => {
 
       <div className="container detail-container">
         {/* Custom luxury pink return path button */}
-        <button className="back-btn" onClick={() => navigate(-1)}>
+        <button className="back-btn" onClick={() => navigate(collectionReturnTo)}>
           <FaArrowLeft size={12} /> Return to collection
         </button>
 
@@ -273,8 +289,8 @@ const ProductDetailPage = () => {
 
             <div className="detail-price-box">
               <span className="price-lbl">₹{product.price}</span>
-              {product.stock && product.stock <= 3 && (
-                <span className="stock-warning">⚠️ Only {product.stock} items remaining!</span>
+              {availableStock <= 3 && (
+                <span className="stock-warning">⚠️ Only {availableStock} items remaining!</span>
               )}
             </div>
 
@@ -312,18 +328,18 @@ const ProductDetailPage = () => {
             <div className="selection-group">
               <span className="sel-title">Quantity:</span>
               <div className="quantity-control">
-                <button className="qty-adj-btn" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+                <button type="button" className="qty-adj-btn" onClick={() => setQuantity(Math.max(1, quantity - 1))} disabled={quantity <= 1}>-</button>
                 <span className="qty-val">{quantity}</span>
-                <button className="qty-adj-btn" onClick={() => setQuantity(quantity + 1)}>+</button>
+                <button type="button" className="qty-adj-btn" onClick={() => setQuantity(Math.min(availableStock, quantity + 1))} disabled={quantity >= availableStock}>+</button>
               </div>
             </div>
 
             {/* CTA action buttons */}
             <div className="action-buttons">
-              <button className="add-to-cart-outline" onClick={handleAddToCart}>
+              <button className="add-to-cart-outline" onClick={handleAddToCart} disabled={isOutOfStock}>
                 <FaShoppingCart /> Add to Bag
               </button>
-              <button className="buy-now-btn" onClick={handleBuyNow}>
+              <button className="buy-now-btn" onClick={handleBuyNow} disabled={isOutOfStock}>
                 Buy Now
               </button>
             </div>

@@ -1,7 +1,6 @@
 import API_BASE_URL from '../api';
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -15,7 +14,6 @@ import "./Profile.css";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { removeFromWishlist, setWishlist } = useWishlist();
   const { addToCart } = useCart();
 
   const userLocal = localStorage.getItem("user")
@@ -44,15 +42,13 @@ const Profile = () => {
     
     Promise.all([
       fetch(`${API_BASE_URL}/user/${userEmail}`).then(r => r.json()).catch(() => null),
-      fetch(`${API_BASE_URL}/orders/${userEmail}`).then(r => r.json()).catch(() => []),
-      fetch(`${API_BASE_URL}/wishlist/${userEmail}`).then(r => r.json()).catch(() => [])
+      fetch(`${API_BASE_URL}/orders/${userEmail}`).then(r => r.json()).catch(() => [])
     ])
-      .then(([userData, ordersData, wishlistData]) => {
+      .then(([userData, ordersData]) => {
         const safeUser = userData && userData.email ? userData : userLocal;
         setUser(safeUser);
         setAddresses(safeUser?.addresses || []);
         setOrders(ordersData || []);
-        setWishlist(wishlistData || []);
       })
       .catch(() => {
         setUser(userLocal);

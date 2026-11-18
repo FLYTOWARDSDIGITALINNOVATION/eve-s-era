@@ -15,7 +15,9 @@ const AddProduct = () => {
     description: "",
     businessModel: "manufactured",
     materials: "",
-    sizes: "S, M, L, XL, XXL", // standard boutique sizes by default
+    sizes: "XS, S, M, L, XL, XXL, XXXL, 4XL, 5XL",
+    colors: "",
+    stock: "0",
   });
 
   // Multi-image state: array of { file, preview }
@@ -105,6 +107,8 @@ const AddProduct = () => {
     formData.append("businessModel", form.businessModel);
     formData.append("materials", form.materials);
     formData.append("sizes", form.sizes);     // may be empty string — that's fine
+    formData.append("colors", form.colors);
+    formData.append("stock", form.stock);
     formData.append("email", adminEmail);
 
     // Append all selected images
@@ -222,6 +226,31 @@ const AddProduct = () => {
                 value={form.sizes}
                 onChange={(val) => setForm({ ...form, sizes: val })}
               />
+            </div>
+
+            <div className="form-row-double">
+              <div className="input-group-field">
+                <label>Colour</label>
+                <input
+                  placeholder="e.g. Blush Pink, Soft Rose"
+                  value={form.colors}
+                  onChange={(e) => handleInputChange("colors", e.target.value)}
+                  className="pink-admin-input"
+                />
+                <span className="optional-label">Enter one or more colours, separated by commas.</span>
+              </div>
+              <div className="input-group-field">
+                <label>Stock Quantity</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  value={form.stock}
+                  onChange={(e) => handleInputChange("stock", e.target.value)}
+                  className="pink-admin-input"
+                />
+              </div>
             </div>
 
             {/* Material composition — only for manufactured */}

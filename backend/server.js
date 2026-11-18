@@ -1,6 +1,7 @@
 // server.js
-// Force Node.js to use Google DNS (fixes SRV lookup ECONNREFUSED on some ISPs)
-const dns = require("dns");
+const dns = require("node:dns");
+// Some ISP DNS resolvers refuse MongoDB Atlas SRV lookups. Use public resolvers
+// so mongodb+srv connection strings can resolve their seed list.
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const express = require("express");
@@ -17,6 +18,7 @@ const { OAuth2Client } = require('google-auth-library');
 require("dotenv").config();
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com");
+
 
 const app = express();
 const fs = require("fs");
@@ -42,10 +44,10 @@ app.use("/api/uploads", express.static(uploadsDir, {
 }));
 
 /* ================= MONGODB ================= */
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+mongoose.set("bufferCommands", false);
+const databaseConnection = mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 15000,
+});
 
 /* ================= SCHEMAS ================= */
 
@@ -376,8 +378,60 @@ app.delete("/admin/support/:id", verifyAdmin, async (req, res) => {
 });
 
 /* ================= SERVER ================= */
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5011;
+
+// PROFILE
+app.get("/user/:email", async (req, res) => {
+  try {
+    const email = decodeURIComponent(req.params.email).trim();
+    const user = await User.findOne({ email: { $regex: `^${email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, $options: "i" } })
+      .select("-password")
+      .lean();
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (err) {
+    console.error("Failed to fetch profile:", err);
+    res.status(500).json({ message: "Failed to fetch profile" });
+  }
+});
+
+app.post("/user/address", async (req, res) => {
+  try {
+    const { email, label, address } = req.body;
+    if (!email || !address?.trim()) {
+      return res.status(400).json({ message: "Email and address are required" });
+    }
+    const user = await User.findOneAndUpdate(
+      { email: email.trim() },
+      { $push: { addresses: { label: label || "Other", address: address.trim() } } },
+      { new: true, runValidators: true }
+    ).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (err) {
+    console.error("Failed to add delivery address:", err);
+    res.status(500).json({ message: "Failed to add address" });
+  }
+});
+
+app.put("/user/update-password", async (req, res) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+    if (!email || !currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Email and both passwords are required" });
+    }
+    const user = await User.findOne({ email: email.trim() });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    const matches = await bcrypt.compare(currentPassword, user.password);
+    if (!matches) return res.status(400).json({ message: "Current password is incorrect" });
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+    res.json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.error("Failed to update password:", err);
+    res.status(500).json({ message: "Failed to update password" });
+  }
+});
 
 // SIGNUP
 app.post("/signup", async (req, res) => {
@@ -688,6 +742,7 @@ app.get("/categories", async (req, res) => {
   try {
     res.json(await Category.find());
   } catch (err) {
+    console.error("Fetch categories error:", err);
     res.status(500).json({ message: "Failed to fetch categories" });
   }
 });
@@ -859,7 +914,14 @@ app.get("/hero", async (req, res) => {
 });
 
 // PRODUCTS
-app.get("/products", async (req, res) => res.json(await Product.find()));
+app.get("/products", async (req, res) => {
+  try {
+    res.json(await Product.find());
+  } catch (err) {
+    console.error("Fetch products error:", err);
+    res.status(500).json({ message: "Failed to fetch products" });
+  }
+});
 app.get("/products/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -1058,8 +1120,19 @@ app.use((err, req, res, next) => {
     }
     return res.status(400).json({ message: `Upload error: ${err.message}` });
   } else if (err) {
-    return res.status(400).json({ message: err.message || "An unexpected upload error occurred" });
+    console.error("Unhandled API error:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
   next();
 });
+
+databaseConnection
+  .then(() => {
+    console.log("MongoDB Connected");
+    app.listen(PORT, "127.0.0.1", () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error("MongoDB connection failed:", err.message);
+    process.exitCode = 1;
+  });
 

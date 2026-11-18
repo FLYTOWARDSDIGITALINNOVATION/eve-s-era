@@ -270,6 +270,17 @@
   background: var(--light-pink);
 }
 
+.qty-adj-btn:disabled,
+.add-to-cart-outline:disabled,
+.buy-now-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.qty-adj-btn:disabled:hover {
+  background: var(--white);
+}
+
 .qty-val {
   padding: 0 16px;
   font-size: 14px;

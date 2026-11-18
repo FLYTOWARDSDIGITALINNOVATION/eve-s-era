@@ -16,6 +16,13 @@ const ProductCard = ({ product }) => {
 
   const pid = product._id || product.id;
   const isWishlisted = wishlist.some(p => (p._id || p.id) === pid);
+  const openProduct = (event) => {
+    event?.stopPropagation();
+    const returnTo = location.pathname.startsWith("/category/")
+      ? `${location.pathname}${location.search}${location.hash}`
+      : "/home#collections";
+    navigate(`/product/${pid}`, { state: { returnTo } });
+  };
 
   const toggleWishlist = (e) => {
     e.stopPropagation();
@@ -42,7 +49,7 @@ const ProductCard = ({ product }) => {
   const isManufactured = product.businessModel === "manufactured";
 
   return (
-    <div className="card" onClick={() => navigate(`/product/${pid}`)}>
+    <div className="card" onClick={openProduct}>
       <div className="image-box">
         {/* Model Badge */}
         <div className={`model-badge ${isManufactured ? "manufactured" : "resell"}`}>
@@ -82,7 +89,7 @@ const ProductCard = ({ product }) => {
         {showAdded && <div className="added-toast">Added to bag 🛍️</div>}
 
         <div className="overlay-actions">
-          <button className="quick-view-btn" onClick={() => navigate(`/product/${pid}`)}>
+          <button className="quick-view-btn" onClick={openProduct}>
             <FaEye /> View Detail
           </button>
         </div>
