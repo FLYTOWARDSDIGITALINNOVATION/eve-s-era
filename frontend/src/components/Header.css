@@ -4,9 +4,7 @@
   max-width: 100%;
   overflow-x: clip;
   box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  position: static;
   border-bottom: 1px solid rgba(244, 182, 194, 0.2);
 }
 

@@ -1,0 +1,27 @@
+.favourites { padding: 88px 5.25% 96px; background: #ffffff; }
+.favourites-heading { max-width: 640px; margin: 0 auto 38px; text-align: center; }
+.favourites-kicker { margin: 0 0 10px; color: #c48b9f; font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; }
+.favourites-heading h2 { margin: 0; font-family: 'DM Sans', sans-serif; font-size: clamp(32px, 4vw, 46px); font-weight: 400; letter-spacing: -.035em; }
+.favourites-intro { max-width: 540px; margin: 15px auto 0; color: #69635c; font-size: 13px; line-height: 1.8; }
+.favourite-products { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.favourite-products-more { margin-top: 42px; }
+.favourite-product { min-width: 0; }
+.product-image-wrap { position: relative; overflow: hidden; aspect-ratio: .76; background: #e8e5e1; }
+.product-image-wrap a { display: block; width: 100%; height: 100%; }
+.product-image-wrap img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform .45s ease; }
+.favourite-product:hover .product-image-wrap img { transform: scale(1.04); }
+.discount-badge { position: absolute; top: 12px; left: 12px; padding: 6px 8px; border-radius: 20px; background: #a85f4a; color: #fff; font-size: 9px; letter-spacing: .06em; }
+.favourite-product h3 { margin: 13px 0 5px; color: #302c28; font-size: 12px; font-weight: 500; }
+.product-rating { color: #292520; font-size: 11px; letter-spacing: .1em; }
+.product-price { display: flex; gap: 9px; align-items: center; margin: 6px 0 0; font-size: 11px; }
+.product-price strong { color: #c48b9f; font-weight: 500; }
+.product-price del { color: #96908a; font-size: 10px; }
+@media (max-width: 760px) {
+  .favourites { padding: 62px 20px 68px; }
+  .favourites-heading { margin-bottom: 28px; }
+  .favourites-intro { font-size: 12px; }
+  .favourite-products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
+  .favourite-products-more { margin-top: 26px; }
+  .discount-badge { top: 8px; left: 8px; font-size: 8px; }
+  .favourite-product h3 { font-size: 11px; }
+}

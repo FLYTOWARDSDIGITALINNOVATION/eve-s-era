@@ -1,0 +1,15 @@
+.final-cta { display: grid; grid-template-columns: 1fr 1fr; width: 100%; min-height: 490px; margin: 0 0 86px; overflow: hidden; background: #f5e9df; }
+.final-cta-copy { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: clamp(38px, 7vw, 95px); isolation: isolate; background: #f8f1e9; }
+.final-cta-copy::before { content: ''; position: absolute; z-index: -1; inset: 0; background: radial-gradient(ellipse 76% 43% at -5% -13%, #d6a77f 0 32%, #f0dcc8 33% 48%, transparent 49%), radial-gradient(ellipse 90% 47% at 11% 112%, #c99060 0 32%, #e8c8a9 33% 47%, transparent 48%), linear-gradient(112deg, #fcf7f0 0%, #f8eee3 100%); }
+.final-cta-kicker { margin: 0 0 20px; color: #c48b9f; font-family: 'DM Sans', sans-serif; font-size: 18px; font-style: italic; }
+.final-cta-copy h2 { max-width: 540px; margin: 0; color: #29241f; font-family: 'DM Sans', sans-serif; font-size: clamp(38px, 4.4vw, 58px); font-weight: 400; letter-spacing: -.04em; line-height: 1.08; }
+.final-cta-copy > p:not(.final-cta-kicker) { margin: 18px 0 0; color: #675d54; font-size: 14px; line-height: 1.7; }
+.final-cta-button { display: inline-flex; align-items: center; gap: 26px; margin-top: 27px; padding: 14px 19px; border-radius: 30px; background: #28231f; color: #fff; font-size: 10px; letter-spacing: .13em; text-transform: uppercase; transition: background .2s, transform .2s; }
+.final-cta-button:hover { background: #a85f4a; transform: translateY(-2px); }
+.final-cta-image { min-height: 490px; background: #e5d3c4 url('/assets/Lavender Anarkali in Elegant Studio.png') center top / cover no-repeat; }
+@media (max-width: 760px) {
+  .final-cta { grid-template-columns: 1fr; margin: 0 0 58px; }
+  .final-cta-copy { padding: 38px 27px 42px; }
+  .final-cta-copy h2 { font-size: 40px; }
+  .final-cta-image { min-height: 350px; background-position: center top; }
+}
