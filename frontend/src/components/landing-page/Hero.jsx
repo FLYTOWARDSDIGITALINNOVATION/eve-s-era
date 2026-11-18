@@ -1,4 +1,5 @@
 import { ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './Hero.css';
 
 export default function Hero() {
@@ -10,7 +11,7 @@ export default function Hero() {
         <h1 id="hero-title">Your style,<br /><em>your choice.</em></h1>
         <div className="copy-rule" />
         <p className="intro">Looking for outfits that match your style? Eve-S-Era brings you a fresh collection of fashion, making your search for online women’s clothing stores a little more exciting. Find pieces you’ll love wearing, every day and on every occasion.</p>
-        <a className="cta" id="collection" href="https://eveseraclothing.com/category/all">Explore the collection <span><ArrowUpRight size={17} strokeWidth={1.6} /></span></a>
+        <Link className="cta" id="collection" to="/category/all">Explore the collection <span><ArrowUpRight size={17} strokeWidth={1.6} /></span></Link>
       </div>
     </section>
   );
