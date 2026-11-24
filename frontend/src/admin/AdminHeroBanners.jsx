@@ -1,14 +1,48 @@
 import React, { useEffect, useState } from "react";
-import API_BASE_URL from "../api";
+import API_BASE_URL, { REMOTE_API_BASE_URL } from "../api";
 import { FaTrash } from "react-icons/fa";
 import "./AdminHeroBanners.css";
 
-const getProductImage = (product) => product?.image || product?.images?.[0] || "";
+const getProductImageCandidates = (product) => {
+  const paths = [product.image, ...(Array.isArray(product.images) ? product.images : [])]
+    .filter((image) => typeof image === "string" && image.trim());
+  const localDevelopment = API_BASE_URL.startsWith("http://127.0.0.1")
+    || API_BASE_URL.startsWith("http://localhost");
 
-const getImageUrl = (image) => {
-  if (!image) return "";
-  if (/^(https?:|data:)/i.test(image)) return image;
-  return `${API_BASE_URL}${image.startsWith("/") ? "" : "/"}${image}`;
+  return [...new Set(paths.flatMap((image) => {
+    if (/^(https?:|data:)/i.test(image)) return [image];
+    const path = image.startsWith("/") ? image : `/${image}`;
+    if (path.startsWith("/assets/")) return [path];
+    const localUrl = `${API_BASE_URL}${path}`;
+    if (!localDevelopment || !path.startsWith("/uploads/")) return [localUrl];
+
+    const timestamp = Number(path.match(/\/uploads\/(\d{13})(?:-\d+)?\.[^/]+$/)?.[1]);
+    const likelyArchivedUpload = Number.isFinite(timestamp)
+      && Date.now() - timestamp > 24 * 60 * 60 * 1000;
+    const productionUrl = `${REMOTE_API_BASE_URL}${path}`;
+    return likelyArchivedUpload ? [productionUrl, localUrl] : [localUrl, productionUrl];
+  }))];
+};
+
+const FavouriteProductImage = ({ product }) => {
+  const [candidateIndex, setCandidateIndex] = useState(0);
+  const candidates = getProductImageCandidates(product);
+
+  useEffect(() => {
+    setCandidateIndex(0);
+  }, [product._id]);
+
+  if (!candidates[candidateIndex]) {
+    return <div className="no-image-placeholder"><p>No product image available</p></div>;
+  }
+
+  return (
+    <img
+      src={candidates[candidateIndex]}
+      alt={product.name}
+      onError={() => setCandidateIndex((index) => index + 1)}
+    />
+  );
 };
 
 const AdminHeroBanners = () => {
@@ -145,11 +179,7 @@ const AdminHeroBanners = () => {
                     <span className="badge">On home page</span>
                   </div>
                   <div className="banner-img-preview">
-                    {getProductImage(product) ? (
-                      <img src={getImageUrl(getProductImage(product))} alt={product.name} />
-                    ) : (
-                      <div className="no-image-placeholder"><p>No product image</p></div>
-                    )}
+                    <FavouriteProductImage product={product} />
                   </div>
                   <p className="favourite-admin-price">₹{Number(product.price || 0).toLocaleString("en-IN")}</p>
                   <div className="banner-actions">

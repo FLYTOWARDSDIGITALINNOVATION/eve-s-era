@@ -345,6 +345,12 @@
 }
 
 .table-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  min-width: 64px;
+  white-space: nowrap;
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 10px;
