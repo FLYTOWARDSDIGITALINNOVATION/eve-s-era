@@ -164,6 +164,13 @@ const heroSlideSchema = new mongoose.Schema({
 });
 const HeroSlide = mongoose.model("HeroSlide", heroSlideSchema);
 
+// CUSTOMER FAVOURITES
+const customerFavouriteSchema = new mongoose.Schema({
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true, unique: true },
+  createdAt: { type: Date, default: Date.now },
+});
+const CustomerFavourite = mongoose.model("CustomerFavourite", customerFavouriteSchema);
+
 // CUSTOMER SUPPORT
 // CUSTOMER SUPPORT CHAT
 const messageSchema = new mongoose.Schema({
@@ -646,6 +653,39 @@ app.post("/admin/hero/:slideId", verifyAdmin, upload.single("image"), async (req
   }
 });
 
+// CUSTOMER FAVOURITES
+app.post("/admin/customer-favourites", verifyAdmin, async (req, res) => {
+  try {
+    const { productId } = req.body;
+    if (!mongoose.isValidObjectId(productId)) {
+      return res.status(400).json({ message: "Choose a valid product" });
+    }
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    const favourite = await CustomerFavourite.findOneAndUpdate(
+      { productId },
+      { productId },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+    res.json(favourite);
+  } catch (err) {
+    console.error("Customer Favourite Add Error:", err);
+    res.status(500).json({ message: "Failed to add Customer Favourite" });
+  }
+});
+
+app.delete("/admin/customer-favourites/:productId", verifyAdmin, async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.productId)) {
+      return res.status(400).json({ message: "Invalid product" });
+    }
+    await CustomerFavourite.findOneAndDelete({ productId: req.params.productId });
+    res.json({ message: "Customer Favourite removed" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to remove Customer Favourite" });
+  }
+});
+
 app.delete("/admin/hero/:slideId", verifyAdmin, async (req, res) => {
   try {
     const slideId = Number(req.params.slideId);
@@ -910,6 +950,17 @@ app.get("/hero", async (req, res) => {
     res.json(slides);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch hero slides" });
+  }
+});
+
+app.get("/customer-favourites", async (req, res) => {
+  try {
+    const favourites = await CustomerFavourite.find().sort({ createdAt: 1 }).lean();
+    const products = await Promise.all(favourites.map(({ productId }) => Product.findById(productId).lean()));
+    res.json(products.filter(Boolean));
+  } catch (err) {
+    console.error("Customer Favourite Fetch Error:", err);
+    res.status(500).json({ message: "Failed to fetch Customer Favourites" });
   }
 });
 
