@@ -1,10 +1,11 @@
 import API_BASE_URL from '../api';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { FaStar, FaShoppingCart, FaArrowLeft, FaGem, FaLeaf } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
+import { trackEvent } from "../utils/metaPixel";
 import "./ProductDetailPage.css";
 
 const ProductDetailPage = () => {
@@ -20,6 +21,7 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const lastViewedProductId = useRef(null);
 
   // Review State
   const [reviews, setReviews] = useState([]);
@@ -73,6 +75,19 @@ const ProductDetailPage = () => {
         setLoading(false);
       });
   }, [id]);
+
+  useEffect(() => {
+    if (!product || lastViewedProductId.current === id) return;
+
+    lastViewedProductId.current = id;
+    trackEvent("ViewContent", {
+      content_name: product.name,
+      content_ids: [String(product._id ?? id)],
+      content_type: "product",
+      value: Number(product.price),
+      currency: "INR",
+    });
+  }, [id, product]);
 
   useEffect(() => {
     fetchReviews();
@@ -139,6 +154,13 @@ const ProductDetailPage = () => {
         qty: quantity,
         size: selectedSize,
 
+      });
+      trackEvent("AddToCart", {
+        content_name: product.name,
+        content_ids: [String(product._id ?? id)],
+        content_type: "product",
+        value: Number(product.price) * quantity,
+        currency: "INR",
       });
     }
   };

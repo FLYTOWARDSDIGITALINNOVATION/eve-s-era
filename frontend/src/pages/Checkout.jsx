@@ -346,7 +346,10 @@ const Checkout = () => {
 
               <div className="itemized-list">
                 {cart.map(item => (
-                  <div key={item.id} className="summary-product">
+                  <div
+                    key={item._id || `${item.productId || item.id || item.name}-${item.size || "default"}`}
+                    className="summary-product"
+                  >
                     {/* ✅ Robust Image Loading Logic */}
                     <img
                       src={(item.image || item.img || "").startsWith("/")

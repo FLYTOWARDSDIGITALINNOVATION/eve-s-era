@@ -54,7 +54,7 @@ const Header = ({ onSearch }) => {
       {/* Main Luxury Nav */}
       <div className="main-nav container">
         <Link to="/home" className="logo-brand" style={{ marginLeft: '-15px' }}>
-          <div className="logo-mark" style={{ height: '100px', width: '100px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+          <div className="logo-mark" style={{ height: '75px', width: '75px', borderRadius: '50%', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
             <img src={logo} alt="Eve's Era Logo" style={{ maxHeight: '70%', maxWidth: '70%', objectFit: 'contain' }} />
           </div>
         </Link>
