@@ -904,6 +904,12 @@
   background: #f8f2ee;
 }
 
+.home-favourite-image-unavailable {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: #f8f2ee;
+}
+
 .home-favourite-card h3 {
   margin: 16px 0 10px;
   color: #333;

@@ -1,76 +1,71 @@
-import API_BASE_URL from '../api';
+import API_BASE_URL, { REMOTE_API_BASE_URL } from '../api';
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import logo from "../assets/logo1.png";
-import brownThreePieceSet from "../assets/mul-chanderi-brown-three-pcs-set.png";
 import "./HomePage.css";
 import Hero from "../components/landing-page/Hero";
 
-const favourites = [
-  {
-    name: "Mul Chanderi Brush Paint Three Pcs Set",
-    image: "/assets/Vibrant Pink Floral Salwar Kameez.png",
-    href: "/product/6af71b90220380e3f092c2c8",
-    price: "₹1,750",
-  },
-  {
-    name: "Mul Chanderi Three Pcs Set",
-    image: "/assets/Elegant Maroon Embroidered Ethnic Ensemble.png",
-    href: "/product/6af71a40220380e3f092c2aa",
-    price: "₹2,350",
-  },
-  {
-    name: "Aari Emblished Three Pcs Set",
-    image: "/assets/Elegant Lavender Anarkali Portrait.png",
-    href: "/product/6af719f2220380e3f092c29e",
-    price: "₹1,450",
-  },
-  {
-    name: "Mul Chanderi Three Pcs Set",
-    image: brownThreePieceSet,
-    href: "/product/6af71b43220380e3f092c2bc",
-    price: "₹2,150",
-  },
-];
+const getImageCandidates = (imagePaths) => {
+  const candidates = imagePaths.flatMap((image) => {
+    if (typeof image !== "string" || !image.trim()) return [];
+    if (/^(https?:|data:)/i.test(image)) return [image];
+    const path = image.startsWith("/") ? image : `/${image}`;
+    if (path.startsWith("/assets/")) return [path];
+    const localImageUrl = `${API_BASE_URL}${path}`;
+    const localDevelopment = API_BASE_URL.startsWith("http://127.0.0.1")
+      || API_BASE_URL.startsWith("http://localhost");
+    if (!localDevelopment || !path.startsWith("/uploads/")) return [localImageUrl];
 
-const moreFavourites = [
-  {
-    name: "Mul Chanderi Three Pcs Set",
-    image: "/assets/Vibrant Pink Indian Traditional Ensemble.png",
-    href: "/product/6af719c1220380e3f092c298",
-    price: "₹1,200",
-  },
-  {
-    name: "Mul Chanderi Three Pcs Set",
-    image: "/assets/Embroidered Kurta with Patterned Dupatta.png",
-    href: "/product/6af71996220380e3f092c292",
-    price: "₹1,200",
-  },
-  {
-    name: "Mul Chanderi Three Pcs Set",
-    image: "/assets/Elegant Pink Kurti Portrait.png",
-    href: "/product/6af71af6220380e3f092c2b0",
-    price: "₹1,200",
-  },
-  {
-    name: "Mul Chanderi Three Pcs Set",
-    image: "/assets/Teal Embroidered Salwar Kameez Portrait.png",
-    href: "/product/6af71b1c22038e3f092c2b6",
-    price: "₹1,200",
-  },
-];
+    const timestamp = Number(path.match(/\/uploads\/(\d{13})(?:-\d+)?\.[^/]+$/)?.[1]);
+    const likelyArchivedUpload = Number.isFinite(timestamp)
+      && Date.now() - timestamp > 24 * 60 * 60 * 1000;
+    const productionImageUrl = `${REMOTE_API_BASE_URL}${path}`;
+    return likelyArchivedUpload
+      ? [productionImageUrl, localImageUrl]
+      : [localImageUrl, productionImageUrl];
+  });
+  return [...new Set(candidates)];
+};
 
-const CategoryShowcaseImage = ({ imageUrl, fallbackImageUrl, name, logo }) => {
-  const [source, setSource] = useState(imageUrl || fallbackImageUrl || "");
+const getFavouriteImageCandidates = (product) => getImageCandidates([
+  product.image,
+  ...(Array.isArray(product.images) ? product.images : []),
+]);
+
+const FavouriteProductImage = ({ product }) => {
+  const [candidateIndex, setCandidateIndex] = useState(0);
+  const imageCandidates = getFavouriteImageCandidates(product);
 
   useEffect(() => {
-    setSource(imageUrl || fallbackImageUrl || "");
-  }, [imageUrl, fallbackImageUrl]);
+    setCandidateIndex(0);
+  }, [product._id]);
 
-  if (!source) {
+  if (!imageCandidates[candidateIndex]) {
+    return <div className="home-favourite-image-unavailable" role="img" aria-label={`${product.name} image unavailable`} />;
+  }
+
+  return (
+    <img
+      src={imageCandidates[candidateIndex]}
+      alt={product.name}
+      loading="lazy"
+      onError={() => setCandidateIndex((index) => index + 1)}
+    />
+  );
+};
+
+const CategoryShowcaseImage = ({ imageCandidates, name, logo }) => {
+  const [candidateIndex, setCandidateIndex] = useState(0);
+  const candidatesKey = imageCandidates.join("|");
+
+  useEffect(() => {
+    setCandidateIndex(0);
+  }, [candidatesKey]);
+
+  if (!imageCandidates[candidateIndex]) {
     return (
       <div className="cat-card-no-image">
         <div className="cat-placeholder-logo-box">
@@ -83,14 +78,11 @@ const CategoryShowcaseImage = ({ imageUrl, fallbackImageUrl, name, logo }) => {
 
   return (
     <img
-      src={source}
+      src={imageCandidates[candidateIndex]}
       alt={name}
       className="cat-card-image"
       loading="lazy"
-      onError={() => {
-        if (source !== fallbackImageUrl && fallbackImageUrl) setSource(fallbackImageUrl);
-        else setSource("");
-      }}
+      onError={() => setCandidateIndex((index) => index + 1)}
     />
   );
 };
@@ -101,8 +93,18 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [favouriteProducts, setFavouriteProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const categoriesSliderRef = useRef(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/customer-favourites`)
+      .then((res) => res.ok ? res.json() : [])
+      .then((data) => {
+        if (Array.isArray(data)) setFavouriteProducts(data);
+      })
+      .catch((err) => console.error("Failed to fetch customer favourites:", err));
+  }, []);
 
   const slideCategories = (direction) => {
     if (!categoriesSliderRef.current) return;
@@ -149,39 +151,15 @@ const HomePage = () => {
     const catProducts = products.filter(
       p => p.category && p.category.toLowerCase().trim() === trimmed
     );
-
-    // 1. Image explicitly uploaded by Admin for Category
-    let imageUrl = "";
-    if (cat && typeof cat === "object" && cat.image && cat.image.trim()) {
-      imageUrl = cat.image.startsWith("http")
-        ? cat.image
-        : `${API_BASE_URL}${cat.image}`;
-    }
-
-    // 2. Automatic fallback: Use first product's photo from this category
-    if (!imageUrl && catProducts.length > 0) {
-      const firstProd = catProducts[0];
-      const prodImg = (firstProd.images && firstProd.images.length > 0 && firstProd.images[0]) || firstProd.image;
-      if (prodImg && typeof prodImg === "string" && prodImg.trim()) {
-        imageUrl = prodImg.startsWith("http")
-          ? prodImg
-          : `${API_BASE_URL}${prodImg}`;
-      }
-    }
-
-    let fallbackImageUrl = "";
-    if (catProducts.length > 0) {
-      const firstProd = catProducts.find((item) => (item.images?.[0] || item.image));
-      const prodImg = firstProd && ((firstProd.images && firstProd.images[0]) || firstProd.image);
-      if (prodImg && typeof prodImg === "string" && prodImg.trim()) {
-        fallbackImageUrl = prodImg.startsWith("http") ? prodImg : `${API_BASE_URL}${prodImg}`;
-      }
-    }
-
     return {
       count: catProducts.length,
-      imageUrl,
-      fallbackImageUrl: imageUrl === fallbackImageUrl ? "" : fallbackImageUrl,
+      imageCandidates: getImageCandidates([
+        cat && typeof cat === "object" ? cat.image : "",
+        ...catProducts.flatMap((product) => [
+          product.image,
+          ...(Array.isArray(product.images) ? product.images : []),
+        ]),
+      ]),
     };
   };
 
@@ -253,8 +231,7 @@ const HomePage = () => {
                 >
                   <div className="cat-card-image-wrap">
                     <CategoryShowcaseImage
-                      imageUrl={details.imageUrl}
-                      fallbackImageUrl={details.fallbackImageUrl}
+                      imageCandidates={details.imageCandidates}
                       name={cat.name}
                       logo={logo}
                     />
@@ -288,13 +265,13 @@ const HomePage = () => {
           </p>
         </div>
         <div className="home-favourites-grid">
-          {[...favourites, ...moreFavourites].map((product) => (
-            <Link className="home-favourite-card" key={product.href} to={product.href}>
-              <img src={product.image} alt={product.name} loading="lazy" />
-              <h3>{product.name}</h3>
-              <span className="home-favourite-rating" aria-label="Customer favourite">★★★★★</span>
-              <span className="home-favourite-price">{product.price}</span>
-            </Link>
+          {favouriteProducts.map((product) => (
+              <Link className="home-favourite-card" key={product._id} to={`/product/${product._id}`}>
+                <FavouriteProductImage product={product} />
+                <h3>{product.name}</h3>
+                <span className="home-favourite-rating" aria-label="Customer favourite">★★★★★</span>
+                <span className="home-favourite-price">₹{Number(product.price || 0).toLocaleString("en-IN")}</span>
+              </Link>
           ))}
         </div>
       </section>

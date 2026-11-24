@@ -58,6 +58,78 @@
   object-fit: cover;
 }
 
+.favourite-add-form {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(240px, 2fr) auto;
+  align-items: end;
+  gap: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  background: #fff;
+  border: 1px solid #f9ebed;
+  border-radius: 12px;
+}
+
+.favourite-add-form label {
+  grid-column: 1 / -1;
+  color: #333;
+  font-weight: 600;
+}
+
+.favourite-add-form select,
+.favourite-add-form button {
+  min-height: 44px;
+  border: 1px solid #f0c9d4;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font: inherit;
+}
+
+.favourite-add-form button {
+  border: 0;
+  background: #d15b76;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.favourite-add-form button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.favourite-admin-price {
+  margin: -8px 0 0;
+  color: #c48b9f;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.favourite-remove-btn {
+  min-height: 42px;
+  width: 100%;
+}
+
+.no-favourites-message {
+  padding: 28px 20px;
+  margin-top: 24px;
+  border: 1px dashed #e9bdca;
+  border-radius: 12px;
+  color: #64748b;
+  text-align: center;
+  background: #fff;
+}
+
+@media (max-width: 700px) {
+  .favourite-add-form {
+    grid-template-columns: 1fr;
+  }
+
+  .favourite-add-form label {
+    grid-column: auto;
+  }
+}
+
 .no-image-placeholder {
   display: flex;
   flex-direction: column;

@@ -1,178 +1,171 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import API_BASE_URL from "../api";
-import { FaImage, FaUpload, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import "./AdminHeroBanners.css";
 
-const AdminHeroBanners = () => {
-  const [slides, setSlides] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(null);
+const getProductImage = (product) => product?.image || product?.images?.[0] || "";
 
-  const fetchSlides = async () => {
+const getImageUrl = (image) => {
+  if (!image) return "";
+  if (/^(https?:|data:)/i.test(image)) return image;
+  return `${API_BASE_URL}${image.startsWith("/") ? "" : "/"}${image}`;
+};
+
+const AdminHeroBanners = () => {
+  const [products, setProducts] = useState([]);
+  const [favourites, setFavourites] = useState([]);
+  const [selectedProductId, setSelectedProductId] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const fetchData = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/hero`);
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        setSlides(data);
+      const [productsResponse, favouritesResponse] = await Promise.all([
+        fetch(`${API_BASE_URL}/products`),
+        fetch(`${API_BASE_URL}/customer-favourites`),
+      ]);
+      if (!productsResponse.ok || !favouritesResponse.ok) {
+        throw new Error("Could not load products or Customer Favourites.");
       }
+      const [productData, favouriteData] = await Promise.all([
+        productsResponse.json(),
+        favouritesResponse.json(),
+      ]);
+      setProducts(Array.isArray(productData) ? productData : []);
+      setFavourites(Array.isArray(favouriteData) ? favouriteData : []);
     } catch (err) {
-      console.error("Failed to fetch hero slides", err);
+      console.error("Failed to load Customer Favourites", err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchSlides();
+    fetchData();
   }, []);
 
-  const handleImageUpload = async (slideId, e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (file.size > 1 * 1024 * 1024) {
-      alert("Please upload image under 1MB.");
-      e.target.value = "";
-      return;
-    }
-
+  const handleAddFavourite = async (event) => {
+    event.preventDefault();
+    if (!selectedProductId) return;
     const token = localStorage.getItem("token");
     if (!token) return alert("Unauthorized");
 
-    setUploading(slideId);
-
-    const formData = new FormData();
-    formData.append("image", file);
-
+    setSaving(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/admin/hero/${slideId}`, {
+      const response = await fetch(`${API_BASE_URL}/admin/customer-favourites`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: formData,
+        body: JSON.stringify({ productId: selectedProductId }),
       });
-
-      if (res.status === 413) {
-        alert("Please upload image under 1MB.");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        alert(data.message || "Failed to add product.");
         return;
       }
-
-      if (res.ok) {
-        alert(`Slide ${slideId} updated successfully!`);
-        fetchSlides();
-      } else {
-        const contentType = res.headers.get("content-type") || "";
-        let errMsg = "Failed to update slide";
-        if (contentType.includes("application/json")) {
-          const errData = await res.json();
-          errMsg = errData.message || errMsg;
-        } else {
-          const text = await res.text();
-          errMsg = text.includes("413") || text.includes("<html") ? "Please upload image under 1MB." : text;
-        }
-        alert(errMsg);
-      }
+      setSelectedProductId("");
+      await fetchData();
+      alert("Added to Customer Favourites successfully!");
     } catch (err) {
       console.error(err);
-      alert("An error occurred during upload.");
+      alert("Could not add this product. Please try again.");
     } finally {
-      setUploading(null);
-      // Reset file input
-      e.target.value = "";
+      setSaving(false);
     }
   };
 
-  const handleRemoveSlide = async (slideId) => {
-    if (!window.confirm("Are you sure you want to revert to the default image?")) return;
-    
+  const handleRemoveFavourite = async (productId) => {
+    const product = favourites.find((item) => item._id === productId);
+    if (!window.confirm(`Remove ${product?.name || "this product"} from Customer Favourites?`)) return;
     const token = localStorage.getItem("token");
     if (!token) return alert("Unauthorized");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/admin/hero/${slideId}`, {
+      const response = await fetch(`${API_BASE_URL}/admin/customer-favourites/${productId}`, {
         method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (res.ok) {
-        fetchSlides();
-      } else {
-        alert("Failed to remove slide.");
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        alert(data.message || "Failed to remove product.");
+        return;
       }
+      await fetchData();
     } catch (err) {
       console.error(err);
-      alert("Error removing slide.");
+      alert("Could not remove this product. Please try again.");
     }
   };
 
-  const slideIds = [1, 2, 3, 4, 5, 6];
+  const availableProducts = products.filter(
+    (product) => !favourites.some((favourite) => favourite._id === product._id)
+  );
 
   return (
     <div className="admin-hero-banners animate-fade-in">
-      <h2>Hero Banners Management</h2>
-      <p className="admin-subtitle">Update the showcase images for the 6 hero slides on the storefront.</p>
+      <h2>Customer Favourites</h2>
+      <p className="admin-subtitle">Choose products to show on the home page. Their current product image and price will be displayed automatically.</p>
 
       {loading ? (
         <div className="loading-state">
           <div className="spinner-pink"></div>
-          <p>Loading banners...</p>
+          <p>Loading products...</p>
         </div>
       ) : (
-        <div className="hero-banners-grid">
-          {slideIds.map((id) => {
-            const customSlide = slides.find((s) => s.slideId === id);
-            return (
-              <div key={id} className="hero-banner-card shadow-sm">
-                <div className="banner-header">
-                  <h3>Slide {id}</h3>
-                  <span className="badge">
-                    {customSlide ? "Customized" : "Default"}
-                  </span>
-                </div>
-                
-                <div className="banner-img-preview">
-                  {customSlide ? (
-                    <img src={`${API_BASE_URL}${customSlide.img}`} alt={`Slide ${id}`} />
-                  ) : (
-                    <div className="no-image-placeholder">
-                      <FaImage size={40} />
-                      <p>Using System Default Image</p>
-                    </div>
-                  )}
-                </div>
+        <>
+          <form className="favourite-add-form" onSubmit={handleAddFavourite}>
+            <label htmlFor="favourite-product-select">Add a product</label>
+            <select
+              id="favourite-product-select"
+              value={selectedProductId}
+              onChange={(event) => setSelectedProductId(event.target.value)}
+            >
+              <option value="">Select a product</option>
+              {availableProducts.map((product) => (
+                <option key={product._id} value={product._id}>
+                  {product.name} — ₹{Number(product.price || 0).toLocaleString("en-IN")}
+                </option>
+              ))}
+            </select>
+            <button type="submit" disabled={!selectedProductId || saving}>
+              {saving ? "Adding..." : "Add to Customer Favourites"}
+            </button>
+          </form>
 
-                <div className="banner-actions">
-                  <input 
-                    type="file" 
-                    id={`upload-slide-${id}`} 
-                    hidden 
-                    accept="image/*"
-                    onChange={(e) => handleImageUpload(id, e)}
-                  />
-                  <button 
-                    className="upload-banner-btn"
-                    onClick={() => document.getElementById(`upload-slide-${id}`).click()}
-                    disabled={uploading === id}
-                  >
-                    <FaUpload /> {uploading === id ? "Uploading..." : "Upload"}
-                  </button>
-                  {customSlide && (
-                    <button 
-                      className="remove-banner-btn"
-                      onClick={() => handleRemoveSlide(id)}
-                      title="Remove Custom Image"
-                    >
-                      <FaTrash />
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+          {favourites.length === 0 ? (
+            <div className="no-favourites-message">No Customer Favourites yet. Add a product above to show it on the home page.</div>
+          ) : (
+            <div className="hero-banners-grid">
+              {favourites.map((product) => (
+                <article key={product._id} className="hero-banner-card shadow-sm">
+                  <div className="banner-header">
+                    <h3>{product.name}</h3>
+                    <span className="badge">On home page</span>
+                  </div>
+                  <div className="banner-img-preview">
+                    {getProductImage(product) ? (
+                      <img src={getImageUrl(getProductImage(product))} alt={product.name} />
+                    ) : (
+                      <div className="no-image-placeholder"><p>No product image</p></div>
+                    )}
+                  </div>
+                  <p className="favourite-admin-price">₹{Number(product.price || 0).toLocaleString("en-IN")}</p>
+                  <div className="banner-actions">
+                    <button
+                      type="button"
+                      className="remove-banner-btn favourite-remove-btn"
+                      onClick={() => handleRemoveFavourite(product._id)}
+                      aria-label={`Remove ${product.name} from Customer Favourites`}
+                      title="Remove from home page"
+                    ><FaTrash /></button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

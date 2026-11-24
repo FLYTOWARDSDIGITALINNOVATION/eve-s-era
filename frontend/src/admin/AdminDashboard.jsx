@@ -135,8 +135,8 @@ const AdminDashboard = () => {
           <button className={`tab-menu-btn`} onClick={() => { navigate("/admin/add-category"); setSidebarOpen(false); }}>
             <FaLayerGroup /> <span>Manage Categories</span>
           </button>
-          <button className={`tab-menu-btn ${activeTab === "hero" ? "active" : ""}`} onClick={() => { setActiveTab("hero"); setSidebarOpen(false); }}>
-            <FaImage /> <span>Hero Banners</span>
+          <button className={`tab-menu-btn ${activeTab === "favourites" ? "active" : ""}`} onClick={() => { setActiveTab("favourites"); setSidebarOpen(false); }}>
+            <FaImage /> <span>Customer Favourites</span>
           </button>
         </aside>
 
@@ -347,8 +347,8 @@ const AdminDashboard = () => {
                 </div>
               )}
 
-              {/* TAB 4: HERO BANNERS */}
-              {activeTab === "hero" && (
+              {/* TAB 4: CUSTOMER FAVOURITES */}
+              {activeTab === "favourites" && (
                 <AdminHeroBanners />
               )}
 
